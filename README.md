@@ -1,4 +1,3 @@
-```markdown
 # HJS Core
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
@@ -70,4 +69,4 @@ cargo run --bin hjs -- judge \
 ## License
 
 Apache-2.0 — See [LICENSE](LICENSE)
-```
+
