@@ -43,7 +43,7 @@ cargo run --bin hjs -- judge \
 | 6.3 | State Machine | 🚧 In Progress |
 | 6.4 | Data Format (JCS) | 🚧 In Progress |
 | 6.5 | Receipt Format | 🚧 In Progress |
-| 7.2 | HTTP API | ❌ Out of scope (see hjs-api) |
+| 7.2 | HTTP API | ❌ Out of scope (see [hjs-api](https://github.com/hjs-protocol/api)) |
 
 ## Architecture
 
@@ -63,10 +63,11 @@ cargo run --bin hjs -- judge \
 
 ## Related Repositories
 
-- [hjs-api](https://github.com/schchit/hjs-api) — Production SaaS implementation
-- [hjs-aip-integration](https://github.com/schchit/hjs-aip-integration) — AIP protocol integration
+- [hjs-api](https://github.com/hjs-protocol/api) — Production SaaS implementation
+- [hjs-spec](https://github.com/hjs-protocol/spec) — Protocol specification and IETF draft
+- [hjs-sdk-py](https://github.com/hjs-protocol/sdk-py) — Python SDK
+- [hjs-sdk-js](https://github.com/hjs-protocol/sdk-js) — JavaScript SDK
 
 ## License
 
 Apache-2.0 — See [LICENSE](LICENSE)
-
