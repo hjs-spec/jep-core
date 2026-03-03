@@ -183,5 +183,3 @@ Thank you for helping make HJS better!
 **© 2026 Human Judgment Systems Foundation Ltd.**  
 This document is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 ```
-
----
