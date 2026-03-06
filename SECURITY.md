@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-We currently support the following versions of HJS Core with security updates:
+We currently support the following versions of JEP Core with security updates:
 
 | Version | Supported          |
 |---------|-------------------|
@@ -11,7 +11,7 @@ We currently support the following versions of HJS Core with security updates:
 
 ## Reporting a Vulnerability
 
-We take the security of HJS Core seriously. If you believe you have found a security vulnerability, please report it to us as described below.
+We take the security of JEP Core seriously. If you believe you have found a security vulnerability, please report it to us as described below.
 
 ### Please Do NOT
 
@@ -54,7 +54,7 @@ We follow a coordinated disclosure process:
 
 ## Security Features
 
-HJS Core implements several security features:
+JEP Core implements several security features:
 
 | Feature | Description |
 |---------|-------------|
@@ -71,5 +71,5 @@ We thank the following individuals for responsibly disclosing security issues:
 
 ---
 
-**© 2026 Human Judgment Systems Foundation Ltd.**  
+**© 2026 HJS Foundation Ltd.**  
 This document is licensed under the [MIT License](https://opensource.org/licenses/MIT).
