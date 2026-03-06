@@ -9,7 +9,7 @@ Rust implementation of **JEP: A Judgment Event Protocol** for cross-platform AI 
 
 ## Overview
 
-HJS provides minimal, portable, cryptographically verifiable proof of who is responsible for AI decisions. This crate implements the core protocol:
+JEP provides minimal, portable, cryptographically verifiable proof of who is responsible for AI decisions. This crate implements the core protocol:
 
 - **4 Primitives**: Judge, Delegate, Terminate, Verify
 - **Portable Receipts**: Self-contained verification credentials
