@@ -30,7 +30,7 @@ Submit code changes, fixes, or improvements.
 8. **Push to your fork** and submit a Pull Request
 
 ### 💬 Discussions
-Join the conversation on [GitHub Discussions](https://github.com/hjs-protocol/core/discussions) or reach out via [signal@humanjudgment.org](mailto:signal@humanjudgment.org).
+reach out via [signal@humanjudgment.org](mailto:signal@humanjudgment.org).
 
 ## Development Setup
 
