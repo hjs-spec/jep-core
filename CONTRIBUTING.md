@@ -150,13 +150,6 @@ core/
 └── README.md         # This file
 ```
 
-## Related Resources
-
-- [HJS Protocol Specification](https://github.com/hjs-protocol/spec)
-- [IETF Draft](https://datatracker.ietf.org/doc/draft-wang-hjs-judgment-event/)
-- [API Reference](https://github.com/hjs-protocol/api)
-- [Rust Documentation](https://doc.rust-lang.org/)
-
 ## Recognition
 
 Contributors will be recognized in:
@@ -169,14 +162,12 @@ Contributors will be recognized in:
 
 Feel free to:
 
-- Open an [issue](https://github.com/hjs-protocol/core/issues)
-- Start a [discussion](https://github.com/hjs-protocol/core/discussions)
 - Email [signal@humanjudgment.org](mailto:signal@humanjudgment.org)
 
 Thank you for helping make HJS better!
 
 ---
 
-**© 2026 Human Judgment Systems Foundation Ltd.**  
+**© 2026 HJS Ltd.**  
 This document is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 ```
