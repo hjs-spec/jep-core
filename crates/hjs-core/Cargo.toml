@@ -1,5 +1,5 @@
 [package]
-name = "hjs-core"
+name = "jep-core"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
