@@ -1,6 +1,6 @@
-# Contributing to HJS Core
+# Contributing to JEP Core
 
-Thank you for your interest in contributing to **HJS Core**, the Rust reference implementation of the HJS protocol! We welcome contributions from everyone, whether you're fixing a bug, improving documentation, or proposing new features.
+Thank you for your interest in contributing to **JEP Core**, the Rust reference implementation of the JEP protocol! We welcome contributions from everyone, whether you're fixing a bug, improving documentation, or proposing new features.
 
 ## Code of Conduct
 
@@ -14,7 +14,7 @@ Report bugs, suggest improvements, or ask questions via [GitHub Issues](https://
 | Issue Type | Guidelines |
 |------------|------------|
 | **Bug reports** | Include steps to reproduce, expected behavior, and actual behavior |
-| **Feature suggestions** | Explain the use case and alignment with HJS core primitives |
+| **Feature suggestions** | Explain the use case and alignment with JEP core primitives |
 | **Questions** | Use issues for technical questions about the implementation |
 
 ### 🔧 Pull Requests
@@ -44,7 +44,7 @@ reach out via [signal@humanjudgment.org](mailto:signal@humanjudgment.org).
 
 ```bash
 # Clone the repository
-git clone https://github.com/hjs-protocol/core.git
+git clone https://github.com/jep-protocol/core.git
 cd core
 
 # Build the project
@@ -54,7 +54,7 @@ cargo build
 cargo test
 
 # Run the CLI
-cargo run --bin hjs -- --help
+cargo run --bin jep -- --help
 ```
 
 ### Development Workflow
@@ -164,7 +164,7 @@ Feel free to:
 
 - Email [signal@humanjudgment.org](mailto:signal@humanjudgment.org)
 
-Thank you for helping make HJS better!
+Thank you for helping make JEP better!
 
 ---
 
