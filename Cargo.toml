@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/hjs-core", "crates/hjs-cli"]
+members = ["crates/hjs-core", "crates/jep-cli"]
 resolver = "2"
 
 [workspace.package]
@@ -7,8 +7,8 @@ version = "0.1.0-alpha.1"
 authors = ["Yuqiang Wang <signal@humanjudgment.org>"]
 edition = "2021"
 license = "Apache-2.0"
-repository = "https://github.com/hjs-spec/hjs-core"
+repository = "https://github.com/jep-spec/hjs-core"
 homepage = "https://humanjudgment.org"
-description = "Core implementation of HJS: A Judgment Event Protocol (IETF draft)"
-keywords = ["hjs", "judgment-event", "ai-accountability", "ietf", "verifiable-credentials"]
+description = "Core implementation of JEP: A Judgment Event Protocol (IETF draft)"
+keywords = ["jep", "judgment-event", "ai-accountability", "ietf", "verifiable-credentials"]
 categories = ["cryptography", "authentication"]
