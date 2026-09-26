@@ -5,7 +5,7 @@ on:
     branches:
       - draft/jep-07-core
     paths:
-      - draft-wang-jep-judgment-event-protocol.md
+      - draft-wang-jep-judgment-event-protocol-07.md
       - .github/workflows/ietf-jep07.yml
   workflow_dispatch:
 
@@ -25,7 +25,7 @@ jobs:
       - name: Check kramdown RFCXML structure
         run: |
           gem install kramdown-rfc --no-document
-          kramdown-rfc draft-wang-jep-judgment-event-protocol.md > /tmp/jep07.xml
+          kramdown-rfc draft-wang-jep-judgment-event-protocol-07.md > /tmp/jep07.xml
           python - <<'PY'
           from pathlib import Path
           import xml.etree.ElementTree as ET
@@ -47,7 +47,7 @@ jobs:
             -w "%{http_code}" \
             https://author-tools.ietf.org/api/validate \
             -X POST \
-            -F "file=@draft-wang-jep-judgment-event-protocol.md" \
+            -F "file=@draft-wang-jep-judgment-event-protocol-07.md" \
             -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json)
           cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json
           test "$code" = "200"
@@ -67,12 +67,23 @@ jobs:
             -w "%{http_code}" \
             https://author-tools.ietf.org/api/render/xml \
             -X POST \
-            -F "file=@draft-wang-jep-judgment-event-protocol.md" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml)
-          if [ "$code" != "200" ]; then
-            cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
-            exit 1
-          fi
+            -F "file=@draft-wang-jep-judgment-event-protocol-07.md" \
+            -o /tmp/render-xml.json)
+          cat /tmp/render-xml.json
+          test "$code" = "200"
+          python - <<'PY'
+          import json, urllib.request
+          from pathlib import Path
+          data=json.loads(Path("/tmp/render-xml.json").read_text())
+          if data.get("errors"):
+              raise SystemExit(repr(data["errors"]))
+          url=data.get("url")
+          if not url:
+              raise SystemExit("IETF Author Tools returned no RFCXML URL")
+          Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml").write_bytes(
+              urllib.request.urlopen(url).read()
+          )
+          PY
 
       - name: Render plaintext with IETF Author Tools
         run: |
@@ -80,12 +91,23 @@ jobs:
             -w "%{http_code}" \
             https://author-tools.ietf.org/api/render/text \
             -X POST \
-            -F "file=@draft-wang-jep-judgment-event-protocol.md" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt)
-          if [ "$code" != "200" ]; then
-            cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
-            exit 1
-          fi
+            -F "file=@draft-wang-jep-judgment-event-protocol-07.md" \
+            -o /tmp/render-text.json)
+          cat /tmp/render-text.json
+          test "$code" = "200"
+          python - <<'PY'
+          import json, urllib.request
+          from pathlib import Path
+          data=json.loads(Path("/tmp/render-text.json").read_text())
+          if data.get("errors"):
+              raise SystemExit(repr(data["errors"]))
+          url=data.get("url")
+          if not url:
+              raise SystemExit("IETF Author Tools returned no plaintext URL")
+          Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt").write_bytes(
+              urllib.request.urlopen(url).read()
+          )
+          PY
 
       - name: Validate rendered RFCXML
         run: |
@@ -120,6 +142,14 @@ jobs:
             -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt)
           cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
           test "$code" = "200"
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          s=Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt").read_text()
+          m=re.search(r"Summary:\s+(\d+) error.*?(\d+) flaw", s, re.S)
+          if m and (int(m.group(1)) or int(m.group(2))):
+              raise SystemExit("idnits reports submission errors/flaws")
+          PY
 
       - name: Sanity checks
         run: |
@@ -128,7 +158,7 @@ jobs:
           grep -q 'docName="draft-wang-jep-judgment-event-protocol-07"' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
           grep -q 'Judgment Event Protocol (JEP)' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
           ! grep -q 'ERR_NONCE_REPLAY' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
-          ! grep -q '| `nonce` | REQUIRED' draft-wang-jep-judgment-event-protocol.md
+          ! grep -q '| `nonce` | REQUIRED' draft-wang-jep-judgment-event-protocol-07.md
 
       - name: Commit validated submission artifacts
         run: |
