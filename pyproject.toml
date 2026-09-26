@@ -22,7 +22,9 @@ packages = ["jep_conformance"]
 package-dir = {jep_conformance = "reference-validator"}
 
 [project.scripts]
-jep-validate = "jep_conformance.jep_validate_07:main"\njep-validate-07 = "jep_conformance.jep_validate_07:main"\njep-validate-06 = "jep_conformance.jep_validate:main"
+jep-validate = "jep_conformance.jep_validate_07:main"
+jep-validate-07 = "jep_conformance.jep_validate_07:main"
+jep-validate-06 = "jep_conformance.jep_validate:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
