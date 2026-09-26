@@ -36,7 +36,7 @@ This document defines the Judgment Event Protocol (JEP), a verifiable
 event format for judgment-related statements in human,
 organizational, software, and autonomous agent systems.
 
-JEP specifies four immutable event verbs: Judgment (J), Delegation (D),
+JEP specifies four Core event verbs: Judgment (J), Delegation (D),
 Termination (T), and Verification (V). It defines a signed JSON event
 structure, stable event identity, signature verification over JSON
 Canonicalization Scheme (JCS) canonicalized payloads, a detached JSON
@@ -46,12 +46,10 @@ validation checks, idempotent acceptance semantics, structured
 validation results, extension handling, trust-profile interfaces, and
 determinability boundaries.
 
-JEP-Core defines protocol properties rather than mandating one replay
-mechanism. In particular, JEP-Core does not require a top-level nonce.
-An acceptance processor MUST prevent the same JEP event from applying
-acceptance effects more than once within the same acceptance domain.
-Profiles MAY additionally require nonces, challenges, sequence numbers,
-trusted timestamps, ledger positions, or equivalent mechanisms.
+JEP-Core does not mandate a replay-protection mechanism. An acceptance
+processor MUST apply the acceptance effect of a given Event Identity
+at most once within an acceptance domain. Profiles MAY impose
+additional freshness or replay requirements.
 
 JEP-Core does not determine the substantive truth, authority, legality,
 policy consequence, causality, or external effect of the statements it
