@@ -1,187 +1,28 @@
-name: Build IETF JEP-07 submission artifacts
+name: Verify frozen IETF JEP-07 publication
 
 on:
-  push:
-    branches:
-      - draft/jep-07-core
-    paths:
-      - draft-wang-jep-judgment-event-protocol-07.md
-      - .github/workflows/ietf-jep07.yml
   workflow_dispatch:
+  pull_request:
+    paths:
+      - releases/draft-07/**
+      - ietf-rendered/draft-wang-jep-judgment-event-protocol-07.*
+      - draft-wang-jep-judgment-event-protocol-07.md
+      - scripts/check_repository.py
+      - .github/workflows/ietf-jep07.yml
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build:
+  verify-publication:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/setup-python@v5
         with:
-          ruby-version: '3.3'
-
-      - name: Check kramdown RFCXML structure
-        run: |
-          gem install kramdown-rfc --no-document
-          kramdown-rfc draft-wang-jep-judgment-event-protocol-07.md > /tmp/jep07.xml
-          python - <<'PY'
-          from pathlib import Path
-          import xml.etree.ElementTree as ET
-          p=Path("/tmp/jep07.xml")
-          try:
-              ET.parse(p)
-          except Exception as exc:
-              print(exc)
-              lines=p.read_text(errors="replace").splitlines()
-              for n,line in enumerate(lines[-80:], start=max(1,len(lines)-79)):
-                  print(f"{n:04d}: {line}")
-              raise
-          PY
-
-      - name: Preflight validate Markdown source
-        run: |
-          mkdir -p ietf-rendered
-          code=$(curl -sS --retry 3 --retry-delay 2 \
-            -w "%{http_code}" \
-            https://author-tools.ietf.org/api/validate \
-            -X POST \
-            -F "file=@draft-wang-jep-judgment-event-protocol-07.md" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json)
-          cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json
-          test "$code" = "200"
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json")
-          data = json.loads(p.read_text())
-          errors = data.get("errors") or []
-          if errors:
-              raise SystemExit("IETF Author Tools source validation errors: " + repr(errors))
-          PY
-
-      - name: Render RFCXML v3 with IETF Author Tools
-        run: |
-          code=$(curl -sS --retry 3 --retry-delay 2 \
-            -w "%{http_code}" \
-            https://author-tools.ietf.org/api/render/xml \
-            -X POST \
-            -F "file=@draft-wang-jep-judgment-event-protocol-07.md" \
-            -o /tmp/render-xml.json)
-          cat /tmp/render-xml.json
-          test "$code" = "200"
-          python - <<'PY'
-          import json, urllib.request
-          from pathlib import Path
-          data=json.loads(Path("/tmp/render-xml.json").read_text())
-          if data.get("errors"):
-              raise SystemExit(repr(data["errors"]))
-          url=data.get("url")
-          if not url:
-              raise SystemExit("IETF Author Tools returned no RFCXML URL")
-          Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml").write_bytes(
-              urllib.request.urlopen(url).read()
-          )
-          PY
-
-      - name: Render plaintext with IETF Author Tools
-        run: |
-          code=$(curl -sS --retry 3 --retry-delay 2 \
-            -w "%{http_code}" \
-            https://author-tools.ietf.org/api/render/text \
-            -X POST \
-            -F "file=@draft-wang-jep-judgment-event-protocol-07.md" \
-            -o /tmp/render-text.json)
-          cat /tmp/render-text.json
-          test "$code" = "200"
-          python - <<'PY'
-          import json, urllib.request
-          from pathlib import Path
-          data=json.loads(Path("/tmp/render-text.json").read_text())
-          if data.get("errors"):
-              raise SystemExit(repr(data["errors"]))
-          url=data.get("url")
-          if not url:
-              raise SystemExit("IETF Author Tools returned no plaintext URL")
-          Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt").write_bytes(
-              urllib.request.urlopen(url).read()
-          )
-          PY
-
-      - name: Validate rendered RFCXML
-        run: |
-          code=$(curl -sS --retry 3 --retry-delay 2 \
-            -w "%{http_code}" \
-            https://author-tools.ietf.org/api/validate \
-            -X POST \
-            -F "file=@ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json)
-          cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json
-          test "$code" = "200"
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json")
-          data = json.loads(p.read_text())
-          errors = data.get("errors") or []
-          if errors:
-              raise SystemExit("IETF Author Tools RFCXML validation errors: " + repr(errors))
-          PY
-
-      - name: Run IETF submission nits check
-        run: |
-          code=$(curl -sS --retry 3 --retry-delay 2 \
-            -w "%{http_code}" \
-            https://author-tools.ietf.org/api/idnits \
-            -X POST \
-            -F "file=@ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt" \
-            -F "verbose=2" \
-            -F "hidetext=1" \
-            -F "submitcheck=1" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt)
-          cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
-          test "$code" = "200"
-          python - <<'PY'
-          import re
-          from pathlib import Path
-          s=Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt").read_text()
-          m=re.search(r"Summary:\s+(\d+) error.*?(\d+) flaw", s, re.S)
-          if m and (int(m.group(1)) or int(m.group(2))):
-              raise SystemExit("idnits reports submission errors/flaws")
-          PY
-
-      - name: Sanity checks
-        run: |
-          test -s ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
-          test -s ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
-          grep -q 'docName="draft-wang-jep-judgment-event-protocol-07"' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
-          grep -q 'Judgment Event Protocol (JEP)' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
-          ! grep -q 'ERR_NONCE_REPLAY' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
-          ! grep -q '| `nonce` | REQUIRED' draft-wang-jep-judgment-event-protocol-07.md
-
-      - name: Upload IETF submission bundle
-        uses: actions/upload-artifact@v4
+          python-version: '3.12'
+      - run: python scripts/check_repository.py
+      - uses: actions/upload-artifact@v4
         with:
-          name: jep-07-ietf-submission
-          path: |
-            draft-wang-jep-judgment-event-protocol-07.md
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
-
-      - name: Commit validated submission artifacts
-        run: |
-          git config user.name "JEP IETF Build"
-          git config user.email "signal@humanjudgment.org"
-          git add \
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml \
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt \
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json \
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json \
-            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
-          if ! git diff --cached --quiet; then
-            git commit -m "build: render validated IETF JEP -07 artifacts"
-            git push
-          fi
+          name: jep-07-frozen-publication
+          path: releases/draft-07/

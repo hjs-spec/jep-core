@@ -2,7 +2,7 @@ name: Publish versioned release
 on:
   push:
     branches: [main]
-    paths: [VERSION, '.github/workflows/release.yml']
+    paths: [VERSION]
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,7 +20,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install build twine pytest pytest-asyncio httpx -e .
+      - run: pip install build twine pytest-asyncio httpx -e '.[test]'
+      - run: python scripts/check_repository.py
       - run: python -m pytest tests -q
       - run: python -m build && twine check dist/*
       - uses: actions/setup-node@v4

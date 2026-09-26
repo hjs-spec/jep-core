@@ -21,3 +21,9 @@ needed to reproduce historical 0.6 tests.
 
 Do not invoke the legacy validator automatically after a 0.7 failure.
 Historical decoding must be explicitly selected.
+
+Missing verification keys produce `indeterminate`, not proof of invalidity.
+Malformed input produces structured errors. Missing/corrupt/locked acceptance
+state produces an indeterminate acceptance outcome without replacing the state.
+The filesystem reference store serializes a local acceptance decision; it does
+not atomically apply an external business effect or provide multi-host consensus.

@@ -184,6 +184,10 @@ def _validate_ref(value: Any, field: str = "ref") -> None:
 
 def validate_shape(event: Any) -> Mapping[str, Any]:
     _require(isinstance(event, dict), "ERR_INVALID_FIELD_TYPE", "event must be an object")
+    try:
+        _validate_i_json(event)
+    except (TypeError, ValueError) as exc:
+        raise Fault("ERR_INVALID_JSON", str(exc), "syntax") from exc
     unknown = sorted(set(event) - TOP_LEVEL_FIELDS)
     _require(not unknown, "ERR_INVALID_FIELD_TYPE", f"unknown top-level member(s): {', '.join(unknown)}")
     for name in ("jep", "id", "verb", "who", "when", "what"):
@@ -215,8 +219,8 @@ def validate_shape(event: Any) -> Mapping[str, Any]:
             _require(isinstance(body, dict), "ERR_INVALID_FIELD_TYPE", f"extension {ext_id} must be object")
     if "ext_crit" in event:
         crit = event["ext_crit"]
-        _require(isinstance(crit, list) and len(crit) == len(set(crit)), "ERR_INVALID_FIELD_TYPE", "ext_crit must be unique array")
-        _require(all(isinstance(x, str) and bool(x) for x in crit), "ERR_INVALID_FIELD_TYPE", "ext_crit entries invalid")
+        _require(isinstance(crit, list) and all(isinstance(x, str) and bool(x) for x in crit)
+                 and len(crit) == len(set(crit)), "ERR_INVALID_FIELD_TYPE", "ext_crit must be a unique string array")
     _require(isinstance(event["sig"], str) and bool(event["sig"]),
              "ERR_SIGNATURE_CONTAINER_INVALID", "baseline sig must be detached compact JWS", "cryptographic")
 
@@ -238,7 +242,9 @@ def validate_shape(event: Any) -> Mapping[str, Any]:
         for name in ("verification_scope", "result"):
             _require(name in what, "ERR_MISSING_REQUIRED_FIELD", f"V requires what.{name}")
         scopes = what["verification_scope"]
-        _require(isinstance(scopes, list) and bool(scopes) and len(scopes) == len(set(scopes)),
+        _require(isinstance(scopes, list) and bool(scopes)
+                 and all(isinstance(x, str) and bool(x) for x in scopes)
+                 and len(scopes) == len(set(scopes)),
                  "ERR_INVALID_FIELD_TYPE", "verification_scope must be non-empty unique array")
         _require(all(isinstance(x, str) and bool(x) for x in scopes), "ERR_INVALID_FIELD_TYPE", "verification scopes invalid")
     return event
@@ -269,10 +275,13 @@ def verify_jws(event: Mapping[str, Any], keys: Mapping[str, Mapping[str, Any]]) 
     _require(isinstance(kid, str) and bool(kid), "ERR_SIGNATURE_CONTAINER_INVALID", "protected header requires kid", "cryptographic")
     if "crit" in header:
         raise Fault("ERR_SIGNATURE_CONTAINER_INVALID", "baseline implements no JOSE critical parameters", "cryptographic")
+    _require(header.get("b64", True) is True, "ERR_SIGNATURE_CONTAINER_INVALID",
+             "baseline requires base64url-encoded payload", "cryptographic")
+    _require(isinstance(keys, Mapping), "ERR_KEY_UNRESOLVED", "key store must be a mapping", "cryptographic")
     jwk = keys.get(kid)
     if jwk is None:
-        raise Fault("ERR_KEY_UNRESOLVED", f"no key for kid {kid}", "cryptographic")
-    _require(jwk.get("kty") == "OKP" and jwk.get("crv") == "Ed25519",
+        raise Fault("ERR_KEY_UNRESOLVED", f"no key for kid {kid}", "cryptographic", indeterminate=True)
+    _require(isinstance(jwk, Mapping) and jwk.get("kty") == "OKP" and jwk.get("crv") == "Ed25519",
              "ERR_ALG_KEY_TYPE_MISMATCH", "Ed25519 requires OKP/Ed25519 JWK", "cryptographic")
     raw_key = b64u_decode(jwk.get("x"), "JWK x")
     raw_sig = b64u_decode(signature, "signature")
@@ -316,13 +325,20 @@ def _checks() -> dict[str, str]:
 
 
 def _result(status: str, mode: str, checks: Mapping[str, str], *, event=None, errors=(), acceptance=None, profile=CORE_PROFILE):
+    artifact_hash = None
+    if isinstance(event, dict) and "sig" in event:
+        try:
+            _validate_i_json(event)
+            artifact_hash = event_hash(event)
+        except (Fault, TypeError, ValueError):
+            pass  # Malformed input must still produce a structured diagnostic.
     out = {
         "status": status,
         "mode": mode,
         "profile": profile,
         "conformance_class": BASELINE_CLASS,
         "event_identity": {"who": event["who"], "id": event["id"]} if isinstance(event, dict) and "who" in event and "id" in event else None,
-        "event_hash": event_hash(event) if isinstance(event, dict) and "sig" in event else None,
+        "event_hash": artifact_hash,
         "checks": dict(checks),
         "warnings": [],
         "errors": list(errors),
@@ -340,9 +356,21 @@ def _identity_key(event: Mapping[str, Any]) -> str:
 def _load_state(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
-    data = load_json(path)
-    if not isinstance(data, dict):
-        raise Fault("ERR_ACCEPTANCE_STATE_UNAVAILABLE", "acceptance state must be object", "event_identity", indeterminate=True)
+    try:
+        data = load_json(path)
+        if not isinstance(data, dict):
+            raise ValueError("acceptance state must be object")
+        for record in data.values():
+            if not isinstance(record, dict):
+                raise ValueError("acceptance record must be object")
+            for name in ("payload_digest", "event_hash"):
+                value = record.get(name)
+                if not isinstance(value, str) or not __import__("re").fullmatch(r"sha256:[0-9a-f]{64}", value):
+                    raise ValueError(f"invalid acceptance record {name}")
+            if type(record.get("accepted_at")) is not int:
+                raise ValueError("invalid acceptance timestamp")
+    except (Fault, ValueError) as exc:
+        raise Fault("ERR_ACCEPTANCE_STATE_UNAVAILABLE", str(exc), "event_identity", indeterminate=True) from exc
     return data
 
 
@@ -474,7 +502,10 @@ def validate_file(path: str | Path, **kwargs) -> dict[str, Any]:
     except Fault as fault:
         checks = _checks()
         checks[fault.check] = "fail"
-        return _result("invalid", kwargs.get("mode","archival"), checks, errors=[fault.diagnostic()])
+        mode = kwargs.get("mode", "archival")
+        return _result("invalid", mode, checks, errors=[fault.diagnostic()],
+                       acceptance={"outcome": "rejected", "effect_applied": False}
+                       if mode == "acceptance" else None)
     return validate_event(event, **kwargs)
 
 
