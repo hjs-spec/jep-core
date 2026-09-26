@@ -33,4 +33,4 @@ Only then consider a dedicated `jep-evidence` implementation repository or a cle
 
 ## Evidence reviewed
 
-The current Core reference verifier, Agent SDK event verifier/exporter, API verification endpoints and AIP sidecar receipt implementation were inspected. The historically referenced `hjs-spec/hjs-05` repository returned 404 during this review, so its current implementation or availability is not assumed. This does not establish whether that repository was renamed, removed or had its access changed.
+The current Core reference verifier, Agent SDK event verifier/exporter, API verification endpoints and AIP sidecar receipt implementation were inspected. The owner confirmed on 2026-09-26 that `hjs-spec/hjs-05` was intentionally deleted. This plan does not depend on or recreate that repository. HJS archival-profile concepts remain distinct from the existing JEP Core event and verification implementations.
