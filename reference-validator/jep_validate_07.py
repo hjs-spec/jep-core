@@ -76,8 +76,7 @@ def _validate_i_json(value: Any, path: str = "$") -> None:
     if value is None or isinstance(value, bool):
         return
     if isinstance(value, int):
-        if abs(value) > SAFE_INTEGER_MAX:
-            raise ValueError(f"{path}: integer exceeds IEEE-754 safe range")
+        _binary64_numbers(value)
         return
     if isinstance(value, float):
         if not math.isfinite(value):
@@ -117,9 +116,31 @@ def load_json(path: str | Path) -> Any:
         raise Fault("ERR_INVALID_JSON", f"invalid JSON: {exc}", "syntax") from exc
 
 
+def _binary64_numbers(value):
+    """Adapt exactly representable Python integers to the JCS binary64 domain.
+
+    JSON.stringify(1e20) emits an integer token. Parsing that token into a
+    Python int must not invalidate the same JCS number or silently round a
+    genuinely higher-precision integer. This returns a copy, never edits input.
+    """
+    if type(value) is int and abs(value) > 2**53 - 1:
+        try:
+            number = float(value)
+            if not math.isfinite(number) or int(number) != value:
+                raise ValueError("Integer cannot be represented exactly as binary64")
+        except OverflowError as exc:
+            raise ValueError("Integer exceeds binary64 range") from exc
+        return number
+    if isinstance(value, dict):
+        return {key: _binary64_numbers(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_binary64_numbers(item) for item in value]
+    return value
+
+
 def canonicalize(value: Any) -> bytes:
     try:
-        return rfc8785.dumps(value)
+        return rfc8785.dumps(_binary64_numbers(value))
     except Exception as exc:
         raise Fault("ERR_CANONICALIZATION_FAILED", str(exc), "cryptographic") from exc
 
@@ -202,6 +223,7 @@ def validate_shape(event: Any) -> Mapping[str, Any]:
              "ERR_UNKNOWN_VERB", "verb must be J, D, T, or V")
     _require(isinstance(event["who"], str) and bool(event["who"]), "ERR_INVALID_FIELD_TYPE", "who must be non-empty")
     _require(isinstance(event["when"], int) and not isinstance(event["when"], bool), "ERR_INVALID_TIMESTAMP", "when must be integer")
+    _require(abs(event["when"]) <= SAFE_INTEGER_MAX, "ERR_INVALID_TIMESTAMP", "when exceeds interoperable integer range")
     _require(isinstance(event["what"], (dict, str)), "ERR_INVALID_FIELD_TYPE", "what must be object or permitted digest")
     if isinstance(event["what"], str):
         _validate_digest(event["what"], "what")
@@ -337,7 +359,8 @@ def _result(status: str, mode: str, checks: Mapping[str, str], *, event=None, er
         "mode": mode,
         "profile": profile,
         "conformance_class": BASELINE_CLASS,
-        "event_identity": {"who": event["who"], "id": event["id"]} if isinstance(event, dict) and "who" in event and "id" in event else None,
+        "event_identity": {"who": event["who"], "id": event["id"]} if (isinstance(event, dict) and isinstance(event.get("who"), str) and event["who"]
+            and isinstance(event.get("id"), str) and event["id"] and event["id"].isascii()) else None,
         "event_hash": artifact_hash,
         "checks": dict(checks),
         "warnings": [],

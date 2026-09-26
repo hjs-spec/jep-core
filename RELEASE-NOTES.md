@@ -1,3 +1,13 @@
+# Software 0.7.3 follow-up
+
+- Preserve JCS signatures when exactly representable large numbers arrive in integer-token form after JavaScript serialization (for example `1e20`). Reject precision-losing integers and keep `when` within its existing interoperable integer range.
+
+Malformed event identities now produce `event_identity: null` in structured failure results, rather than copying empty or mistyped members that violate the result schema. Rejection remains side-effect free in acceptance mode.
+
+A current cross-repository interoperability gate checks signed Binding/02 carriers, Core-only empty extensions, independent signature/hash agreement, client transport and malformed-identity diagnostics. It complements the retained historical 0.6 harnesses.
+
+The published Core -07, Binding/02 and historical signed artifacts are unchanged.
+
 # JEP Core 0.7
 
 JEP Core 0.7 corresponds to `draft-wang-jep-judgment-event-protocol-07`, published as an Internet-Draft on 2026-09-26.

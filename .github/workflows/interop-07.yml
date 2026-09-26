@@ -1,0 +1,70 @@
+name: Current Core 0.7 interoperability
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  signed-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: hjs-spec/jep-api
+          ref: 409a916aa542f632039495614ffb7895b56be65d
+          path: ecosystem/jep-api
+      - uses: actions/checkout@v4
+        with:
+          repository: hjs-spec/jep-agent-sdk
+          ref: 62f60ea0e0d77d39809f5f95f6187c44f0c92b67
+          path: ecosystem/jep-agent-sdk
+      - uses: actions/checkout@v4
+        with:
+          repository: hjs-spec/sdk-go
+          ref: e9faad983df66cc61169227228080bae5633b9a2
+          path: ecosystem/sdk-go
+      - uses: actions/checkout@v4
+        with:
+          repository: hjs-spec/Agent-Blackbox
+          ref: 2ebc7982d1f58fca84cb2c1d74039aa794c279ce
+          path: ecosystem/Agent-Blackbox
+      - uses: actions/checkout@v4
+        with:
+          repository: hjs-spec/sdk-py
+          ref: 3e475be981bfeb92169cbf315adffe875dd92291
+          path: ecosystem/sdk-py
+      - uses: actions/checkout@v4
+        with:
+          repository: hjs-spec/sdk-js
+          ref: 74c79804e6be8fe2ed1c6388ccec22a290b725a7
+          path: ecosystem/sdk-js
+      - uses: actions/checkout@v4
+        with:
+          repository: cognitive-emergence/tsto-spec
+          ref: 91512d67f30d2efab863f1c42fe5136b6a2a795b
+          path: ecosystem/tsto-spec
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+          cache: false
+      - name: Install verifier and client dependencies
+        run: |
+          pip install -e '.[test]' \
+            -r ecosystem/jep-api/requirements.txt \
+            -r ecosystem/tsto-spec/scripts/requirements-binding-02.txt \
+            -e ecosystem/jep-agent-sdk -e ecosystem/sdk-py -e ecosystem/Agent-Blackbox
+      - name: Check signed artifact transport and Binding/02 references
+        run: python integration/verify_current_07.py --workspace ecosystem | tee interop-07-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: current-07-interop-report
+          path: interop-07-report.json

@@ -65,3 +65,22 @@ def test_event_identity_conflict_is_rejected(tmp_path: Path):
     assert conflict["status"] == "invalid"
     assert conflict["errors"][0]["code"] == "ERR_EVENT_ID_CONFLICT"
     assert conflict["acceptance"]["effect_applied"] is False
+
+
+def test_malformed_identity_results_follow_result_schema(tmp_path):
+    from jsonschema import Draft202012Validator
+
+    schema = Draft202012Validator(json.loads((ROOT / "schemas/jep-validation-result.schema.json").read_text()))
+    base = json.loads((VECTORS / "valid/J-basic.json").read_text())
+    cases = [{}, [], {**base, "id": 3}, {**base, "id": ""}, {**base, "who": ""}, {**base, "who": []}]
+    for i, event in enumerate(cases):
+        source = tmp_path / f"malformed-{i}.json"
+        source.write_text(json.dumps(event))
+        state = tmp_path / f"acceptance-{i}.json"
+        process, result = run("validate", source, "--keys", KEYS, "--mode", "acceptance", "--acceptance-state", state)
+        assert process.returncode == 1
+        assert result["status"] == "invalid"
+        assert result["event_identity"] is None
+        schema.validate(result)
+        assert result["acceptance"]["effect_applied"] is False
+        assert not state.exists()
