@@ -33,6 +33,10 @@ Exact published RFCXML:
 SHA-256:
 `601809b4053d485fa68367db22f5e43919e859c4f0227609b8f851c627e9caab`
 
-## Companion migration
+## Current implementation delivery
 
-The existing Conformance/00, Profiles/00, schemas, vectors, and validators originated against pre-07 semantics. They remain useful as historical and compatibility assets, but they are not automatically JEP Core 0.7 conformance definitions. Their migration is tracked separately.
+Software release **0.7.1** publishes `jep-core-conformance` with the current Python validator, schemas and vectors. Conformance/01 and Profiles/01 describe the Core 0.7 migration. Explicit legacy validators and historical vectors remain available.
+
+This release repairs malformed-input handling, unresolved-key results, acceptance-state failure handling, and schema alignment. It also verifies the published -07 hashes in CI. Legacy Go binaries are named `jep-validate-06-*` to identify their actual protocol target. The default Python command is `jep-validate` (Core 0.7).
+
+The earlier software tag `v0.7.0` contained legacy 0.6 artifacts; it is retained as published history. No published Internet-Draft bytes are changed by this software release.
