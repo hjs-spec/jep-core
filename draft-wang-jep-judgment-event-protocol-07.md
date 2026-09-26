@@ -1,17 +1,36 @@
-# Judgment Event Protocol (JEP)
-## A Neutral Verifiable Event Format for Judgment-Related Acts
-### draft-wang-jep-judgment-event-protocol-07
-
-Author: Yuqiang Wang  
-Intended status: Experimental  
-Version: -07 working draft  
-Companion work:
-- draft-wang-jep-profiles
-- draft-wang-jep-conformance
-
 ---
+title: "Judgment Event Protocol (JEP)"
+abbrev: "JEP"
+docname: draft-wang-jep-judgment-event-protocol-07
+category: exp
+submissiontype: IETF
+ipr: trust200902
+date: 2026-09-26
+keyword:
+ - judgment
+ - delegation
+ - verification
+ - accountability
+ - AI agents
 
-## Abstract
+stand_alone: yes
+smart_quotes: no
+pi: [toc, sortrefs, symrefs]
+
+author:
+ -
+    ins: Y. Wang
+    name: Yuqiang Wang
+    email: signal@humanjudgment.org
+    uri: https://github.com/hjs-spec
+
+normative:
+
+informative:
+
+...
+
+--- abstract
 
 This document defines the Judgment Event Protocol (JEP), a neutral
 verifiable event format for judgment-related acts in human,
@@ -39,27 +58,9 @@ global truth, causal-chain enforcement, or mandatory support for any
 specific credential, identity, AI platform, agent framework, transport,
 or blockchain system.
 
----
+--- middle
 
-## Status of This Memo
-
-This document is an Internet-Draft style working draft. It updates
-`draft-wang-jep-judgment-event-protocol-06`.
-
-Internet-Drafts are working documents and may be updated, replaced, or
-obsoleted at any time. It is inappropriate to cite Internet-Drafts as
-final reference material other than as "work in progress."
-
-The `-06` and earlier revisions were pre-stable development artifacts.
-This draft retains the wire-major value `jep: "1"` and treats this
-revision as the first intended stable interpretation of that wire-major
-version. Implementations that retain historical pre-`-07` decoders
-MUST select them explicitly and MUST NOT silently fall back by guessing
-from field presence.
-
----
-
-## Companion Drafts
+# Companion Drafts
 
 This draft defines JEP-Core. Optional identity, credential, attestation,
 chain, archival, mandate, and domain bindings are defined by companion
@@ -74,9 +75,7 @@ Schemas, test vectors, validation-result structure, and reference
 validator behavior for JEP-Core 0.7 are expected to be defined by a
 matching conformance revision.
 
----
-
-## 1. Introduction
+# Introduction
 
 Autonomous and semi-autonomous systems increasingly make, assist with,
 delegate, terminate, verify, or record judgments across organizational,
@@ -112,11 +111,9 @@ external target facts. In partially observed systems, a signed event log
 can support audit and accountability workflows without guaranteeing
 complete or zero-error determination of external facts.
 
----
+# Protocol Objective and Non-Goals
 
-## 2. Protocol Objective and Non-Goals
-
-### 2.1 Objective
+# Objective
 
 JEP-Core defines a neutral event layer for verifiable judgment-related
 acts. Subject to the applicable validation mode and trust profile, a
@@ -136,7 +133,7 @@ conforming implementation can support determination that:
 8. an acceptance processor does not apply acceptance effects more than
    once for the same event identity within one acceptance domain.
 
-### 2.2 Non-Goals
+# Non-Goals
 
 JEP-Core does not define:
 
@@ -165,9 +162,7 @@ presented as proof that an underlying real-world assertion is true unless
 an applicable external profile and evidence policy makes that
 determination.
 
----
-
-## 3. Design Principles
+# Design Principles
 
 JEP-Core follows these principles:
 
@@ -208,18 +203,11 @@ JEP-Core follows these principles:
     under the rules that produced them and MUST NOT be silently rewritten
     into newer JEP representations.
 
----
+# Requirements Language
 
-## 4. Requirements Language
+{::boilerplate bcp14-tagged}
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in BCP 14
-when, and only when, they appear in all capitals.
-
----
-
-## 5. Terminology
+# Terminology
 
 **Actor:** The entity identified by `who` that is claimed by the event.
 An actor MAY be a human, organization, model, agent, tool, service,
@@ -292,11 +280,9 @@ cryptographic, actor-binding, chain-integrity, credential-status, policy
 compliance, human review, external evidence, factual claim, or archival
 integrity.
 
----
+# Core Event Object
 
-## 6. Core Event Object
-
-A JEP event is a JSON object. Producers MUST emit I-JSON-compatible JSON
+A JEP event is a JSON object {{!RFC8259}}. Producers MUST emit I-JSON-compatible JSON {{!RFC7493}}
 and MUST NOT emit duplicate JSON member names. Verifiers MUST reject
 events containing duplicate JSON member names.
 
@@ -322,11 +308,9 @@ The top-level extensibility mechanism is `ext`. Producers SHOULD NOT add
 new top-level members outside this specification unless defined by a
 future JEP revision.
 
----
+# Field Semantics
 
-## 7. Field Semantics
-
-### 7.1 `jep`
+# `jep`
 
 The `jep` member identifies the wire-format major version. For this
 draft, the value is `"1"`.
@@ -341,7 +325,7 @@ contract for `jep: "1"`.
 A verifier MUST NOT infer Internet-Draft revision number or release
 maturity solely from `jep`.
 
-### 7.2 `id`
+# `id`
 
 `id` identifies one event instance within the namespace of `who`.
 Event Identity is the pair `(who, id)`.
@@ -357,7 +341,7 @@ The `id` value:
 - MUST NOT be treated as a secret, bearer token, authorization grant, or
   proof of freshness.
 
-UUID URNs, other collision-resistant URIs, or equivalent opaque
+UUID URNs {{?RFC9562}}, other collision-resistant URIs, or equivalent opaque
 identifiers are suitable choices. JEP-Core does not require a specific
 identifier-generation algorithm.
 
@@ -372,7 +356,7 @@ JCS-canonicalized unsigned event content, it MUST report
 Re-signing an otherwise identical unsigned event MAY produce a different
 Event Hash while retaining the same Event Identity.
 
-### 7.3 `verb`
+# `verb`
 
 The `verb` member identifies the event verb. It MUST be one of `J`,
 `D`, `T`, or `V`.
@@ -380,7 +364,7 @@ The `verb` member identifies the event verb. It MUST be one of `J`,
 Event verbs do not determine cryptographic algorithms, storage policy,
 privacy mode, identity method, transport, or legal effect.
 
-### 7.4 `who`
+# `who`
 
 `who` identifies the actor claimed by the event.
 
@@ -398,7 +382,7 @@ applicable trust profile.
 Because Event Identity includes `who`, two different actors MAY use the
 same `id` string without creating the same Event Identity.
 
-### 7.5 `when`
+# `when`
 
 `when` is an actor-declared event time in Unix seconds.
 
@@ -421,7 +405,7 @@ An acceptance profile MAY define a permitted time window using `when`,
 but such a window is a profile or deployment rule rather than proof that
 `when` is externally accurate.
 
-### 7.6 `what`
+# `what`
 
 `what` carries the event claim, digest, descriptor, or report. It
 records what the actor asserted, judged, delegated, terminated, or
@@ -444,7 +428,7 @@ Additional domain semantics belong to profiles or extensions.
 When `what` is represented as a digest where permitted, the digest MUST
 be an algorithm-tagged digest string.
 
-### 7.7 `aud`
+# `aud`
 
 `aud` indicates an intended audience or validation context.
 
@@ -454,7 +438,7 @@ interactive acceptance or cross-domain replay isolation.
 `aud` does not by itself enforce access control. Access control,
 retention, redaction, and disclosure policy are outside JEP-Core.
 
-### 7.8 `ref`
+# `ref`
 
 `ref` is a reference field. A reference does not by itself imply
 endorsement, truth, authorization validity, legal effect, or causality.
@@ -502,7 +486,7 @@ A bare Event Hash MAY be used when an application intentionally refers
 only to an exact signed artifact, but it MUST NOT be described as the
 stable Event Identity.
 
-### 7.9 `ext` and `ext_crit`
+# `ext` and `ext_crit`
 
 `ext` contains named extension objects. `ext_crit` contains the
 identifiers of critical extensions.
@@ -516,17 +500,15 @@ identifier, ledger position, or similar mechanism SHOULD carry that
 mechanism in a registered extension or transport/profile layer rather
 than redefining JEP-Core fields.
 
-### 7.10 `sig`
+# `sig`
 
 `sig` carries the detached signature container. JEP-Core uses detached
 JWS over the JCS-canonicalized unsigned event unless another registered
 signature profile applies.
 
----
+# Event Verb Semantics
 
-## 8. Event Verb Semantics
-
-### 8.1 J — Judgment
+# J - Judgment
 
 A Judgment event records that an actor made, accepted, produced,
 approved, selected, rejected, ranked, classified, or otherwise committed
@@ -544,7 +526,7 @@ Typical uses include:
 - recommendation acceptance;
 - evidence assessment.
 
-### 8.2 D — Delegation
+# D - Delegation
 
 A Delegation event records that an actor declared a delegation of a task,
 authority, responsibility, capability, or judgment context to another
@@ -564,7 +546,7 @@ organizational, or technical authority to delegate.
 Permission-chain enforcement and downstream authorization are outside
 JEP-Core.
 
-### 8.3 T — Termination
+# T - Termination
 
 A Termination event records that an actor declared a previous
 delegation, authority, session, capability, workflow context,
@@ -582,15 +564,16 @@ Cascade semantics, downstream effects, authority consequences, and
 lifecycle enforcement are defined by chain, mandate, domain, or policy
 profiles.
 
-### 8.4 V — Verification
+# V - Verification
 
 A Verification event records that an actor performed a validation, audit,
 review, confirmation, rejection, or verification action over an event,
 digest, subject, credential, policy, evidence, chain result, or external
 object.
 
-A V event MUST declare its verification scope. A V event MUST NOT imply
-verification beyond its declared scope.
+A V event MUST identify its verification target through `ref` and MUST
+declare its verification scope. A V event MUST NOT imply verification
+beyond its declared scope.
 
 Initial verification scopes include:
 
@@ -610,11 +593,9 @@ Initial verification scopes include:
 - `factual_claim`;
 - `archival_integrity`.
 
----
+# Event Identity, Delivery, and Acceptance
 
-## 9. Event Identity, Delivery, and Acceptance
-
-### 9.1 Event Identity
+# Event Identity
 
 The Event Identity is `(who, id)`.
 
@@ -629,7 +610,7 @@ Event Identity, a digest of the JEP Signing Payload or an equivalent
 collision-resistant representation sufficient to detect conflicting
 reuse.
 
-### 9.2 Delivery Is Not Event Creation
+# Delivery Is Not Event Creation
 
 Network delivery, queue delivery, storage import, export, retry, or
 replication of an existing signed event does not create a new JEP event.
@@ -639,7 +620,7 @@ A sender MAY retransmit the same event when delivery outcome is unknown.
 A receiver MUST NOT require a new JEP Event Identity merely because a
 transport retry occurs.
 
-### 9.3 Idempotent Acceptance
+# Idempotent Acceptance
 
 An acceptance processor MUST NOT apply acceptance effects more than once
 for the same Event Identity within one acceptance domain.
@@ -660,7 +641,7 @@ A conforming acceptance processor MUST distinguish at least:
 If the same Event Identity is presented with different unsigned event
 content, the event MUST be rejected with `ERR_EVENT_ID_CONFLICT`.
 
-### 9.4 Atomicity
+# Atomicity
 
 The operation that records first acceptance and the operation that
 applies its state-changing acceptance effect MUST be atomic or provide an
@@ -680,7 +661,7 @@ Database uniqueness constraints, transactional insertion, durable
 compare-and-set, ledger consumption, or equivalent mechanisms are
 suitable approaches.
 
-### 9.5 Acceptance-State Lifetime
+# Acceptance-State Lifetime
 
 An implementation claiming at-most-once acceptance MUST preserve enough
 acceptance state to prevent reapplication for as long as the event
@@ -692,7 +673,7 @@ effect or dependent state.
 
 Archival verification MUST NOT consume acceptance state.
 
-### 9.6 Optional Challenge and Replay Profiles
+# Optional Challenge and Replay Profiles
 
 JEP-Core does not require a nonce.
 
@@ -713,9 +694,7 @@ Such mechanisms MAY establish properties that stable Event Identity alone
 does not establish, including current liveness, server challenge
 freshness, total order, or single-use authority.
 
----
-
-## 10. References and Chain Boundaries
+# References and Chain Boundaries
 
 A JEP reference proves only that one signed event referenced another
 object. It does not prove causality, endorsement, truth, authorization,
@@ -737,24 +716,18 @@ profiles or application-specific systems.
 A chain system MUST NOT reinterpret a JEP Event Hash as the stable Event
 Identity.
 
----
-
-## 11. Algorithm-Tagged Digest Strings
+# Algorithm-Tagged Digest Strings
 
 JEP uses algorithm-tagged digest strings for Event Hashes, content
 digests, exact-artifact pins, and other digest references.
 
-Syntax:
-
-```text
-<hash-algorithm>:<lowercase-hex-digest>
-```
+Syntax: `<hash-algorithm>:<lowercase-hex-digest>`
 
 The hash algorithm identifier MUST be lower-case ASCII. The digest value
 MUST be lower-case hexadecimal.
 
 Implementations conforming to the JEP-Core 0.7 baseline MUST support
-`sha256`.
+`sha256` as specified for SHA-256 in {{!RFC6234}}.
 
 Example:
 
@@ -765,12 +738,10 @@ sha256:3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7
 Additional digest algorithms MAY be defined by conformance profiles,
 trust profiles, or registered extensions.
 
----
-
-## 12. Signing Input and Event Hash
+# Signing Input and Event Hash
 
 The JEP Signing Payload is the unsigned event object with `sig` omitted,
-canonicalized using JCS and encoded as UTF-8 octets.
+canonicalized using JCS {{!RFC8785}} and encoded as UTF-8 octets.
 
 The Event Hash identifies the full signed event object, including `sig`.
 
@@ -791,13 +762,11 @@ A different valid signature representation over otherwise identical
 unsigned event content MAY result in a different Event Hash without
 creating a different Event Identity.
 
----
-
-## 13. Signature, Hash, and Algorithm Agility
+# Signature, Hash, and Algorithm Agility
 
 JEP-Core preserves algorithm agility.
 
-A JEP event is protected by a detached JWS signature over a
+A JEP event is protected by a detached JWS signature {{!RFC7515}} over a
 JCS-canonicalized unsigned event payload.
 
 JEP-Core does not assign cryptographic algorithms to event verbs. J, D,
@@ -808,7 +777,8 @@ acceptability policy are determined by JOSE headers, conformance
 profiles, and trust profiles.
 
 A baseline conformance class MAY define a required-to-implement
-algorithm set for interoperability. Such a conformance class does not
+algorithm set for interoperability. Ed25519 {{?RFC8032}} is one possible
+baseline signature algorithm. Such a conformance class does not
 make one algorithm the only algorithm allowed by JEP-Core semantics.
 
 A trust profile MUST define which algorithms are acceptable for its
@@ -823,9 +793,7 @@ A verifier SHOULD distinguish real-time acceptance validation from
 archival validation. An algorithm MAY be acceptable for historical
 verification while being prohibited for newly produced events.
 
----
-
-## 14. Trust Profile Interface
+# Trust Profile Interface
 
 JEP-Core does not define a global identity or trust framework.
 
@@ -850,11 +818,9 @@ Support for DID, VC, X.509, OAuth, RATS, blockchain anchoring, or any
 specific identity system is OPTIONAL and MUST NOT be required for
 JEP-Core conformance.
 
----
+# Validation Model
 
-## 15. Validation Model
-
-### 15.1 Independent Validation Checks
+# Independent Validation Checks
 
 JEP-Core does not define cumulative validation levels.
 
@@ -888,7 +854,7 @@ complete it from the available evidence or state.
 
 A verifier MUST NOT report an unperformed check as `pass`.
 
-### 15.2 Overall Validation Status
+# Overall Validation Status
 
 The overall validation status is one of:
 
@@ -906,7 +872,7 @@ For a requested mode and profile:
 Checks not required by the requested mode or profile MAY be
 `not_checked`.
 
-### 15.3 Validation Modes
+# Validation Modes
 
 Initial validation modes are:
 
@@ -929,7 +895,7 @@ Policy mode invokes a domain, organizational, legal, regulatory, or
 deployment policy. Policy results MUST NOT be presented as intrinsic
 properties of JEP-Core.
 
-### 15.4 Deterministic Core Validation Order
+# Deterministic Core Validation Order
 
 A JEP-Core verifier SHOULD process an event in this order:
 
@@ -955,11 +921,11 @@ A JEP-Core verifier SHOULD process an event in this order:
 19. return a structured validation result.
 
 An implementation MUST perform cryptographic validation before writing
-new acceptance state for an untrusted input.
+new acceptance state for an untrusted input. Deployments SHOULD bound
+acceptance-state resource use according to their trust, audience, retention,
+and abuse-control policy.
 
----
-
-## 16. Validation Result Object
+# Validation Result Object
 
 A verifier SHOULD return a structured validation result.
 
@@ -1032,13 +998,11 @@ A validation result MUST distinguish:
 - chain analysis from JEP-Core validity;
 - policy outcome from JEP-Core validity.
 
----
-
-## 17. Failure Codes
+# Failure Codes
 
 A conforming validator SHOULD return structured failure codes.
 
-### 17.1 Syntax and Identity Errors
+# Syntax and Identity Errors
 
 - `ERR_INVALID_JSON`
 - `ERR_DUPLICATE_MEMBER`
@@ -1050,7 +1014,7 @@ A conforming validator SHOULD return structured failure codes.
 - `ERR_EVENT_ID_INVALID`
 - `ERR_EVENT_ID_CONFLICT`
 
-### 17.2 Cryptographic Errors
+# Cryptographic Errors
 
 - `ERR_CANONICALIZATION_FAILED`
 - `ERR_CANONICALIZATION_VERSION_UNSUPPORTED`
@@ -1067,7 +1031,7 @@ A conforming validator SHOULD return structured failure codes.
 - `ERR_ARCHIVAL_ALG_STATUS_UNKNOWN`
 - `ERR_ALG_DEPRECATED_FOR_NEW_EVENTS`
 
-### 17.3 Actor and Trust Errors
+# Actor and Trust Errors
 
 - `ERR_ACTOR_UNRESOLVED`
 - `ERR_KEY_UNRESOLVED`
@@ -1076,7 +1040,7 @@ A conforming validator SHOULD return structured failure codes.
 - `ERR_KEY_NOT_VALID_AT_EVENT_TIME`
 - `ERR_TRUST_PROFILE_UNSUPPORTED`
 
-### 17.4 Freshness and Acceptance Errors
+# Freshness and Acceptance Errors
 
 - `ERR_EVENT_EXPIRED`
 - `ERR_TIMESTAMP_OUT_OF_WINDOW`
@@ -1085,7 +1049,7 @@ A conforming validator SHOULD return structured failure codes.
 
 `already_accepted` is an acceptance outcome, not an error code.
 
-### 17.5 Reference Errors
+# Reference Errors
 
 - `ERR_REF_UNRESOLVED`
 - `ERR_REF_HASH_MISMATCH`
@@ -1095,22 +1059,20 @@ Chain-specific failure codes, including delegation-scope, termination
 cascade, cycle, and complete-log failures, belong to the applicable
 chain profile rather than JEP-Core.
 
-### 17.6 Extension Errors
+# Extension Errors
 
 - `ERR_UNKNOWN_CRITICAL_EXTENSION`
 - `ERR_EXTENSION_SCHEMA_INVALID`
 - `ERR_EXTENSION_VALIDATION_FAILED`
 - `ERR_EXTENSION_CONFLICT`
 
-### 17.7 Policy Errors
+# Policy Errors
 
 - `ERR_POLICY_REJECTED`
 - `ERR_AUTHORIZATION_CONTEXT_MISSING`
 - `ERR_DOMAIN_REQUIREMENT_UNSATISFIED`
 
----
-
-## 18. Extension Rules and Conflict Handling
+# Extension Rules and Conflict Handling
 
 An extension MUST declare:
 
@@ -1141,11 +1103,9 @@ include:
 - registered short names;
 - experimental `x-*` identifiers.
 
----
+# Conformance Requirements
 
-## 19. Conformance Requirements
-
-### 19.1 Producer Conformance
+# Producer Conformance
 
 A JEP-Core-0.7 producer MUST support:
 
@@ -1160,7 +1120,7 @@ A JEP-Core-0.7 producer MUST support:
 A producer MUST NOT reuse one Event Identity for different unsigned event
 content.
 
-### 19.2 Verifier Conformance
+# Verifier Conformance
 
 A JEP-Core-0.7 verifier MUST support:
 
@@ -1179,7 +1139,7 @@ A verifier MUST NOT require support for any optional identity,
 credential, attestation, blockchain, AI platform, agent framework,
 challenge, transport, or chain profile.
 
-### 19.3 Acceptance-Processor Conformance
+# Acceptance-Processor Conformance
 
 An implementation claiming JEP-Core-0.7 acceptance-processor conformance
 MUST additionally support:
@@ -1195,7 +1155,7 @@ MUST additionally support:
 A profile MAY add freshness, audience, challenge-response, authorization,
 or single-use-authority requirements.
 
-### 19.4 Baseline Algorithm Conformance
+# Baseline Algorithm Conformance
 
 A baseline conformance class MAY require detached JWS using JCS
 canonicalization, `sha256` algorithm-tagged digest strings, and Ed25519
@@ -1208,13 +1168,11 @@ or post-quantum profiles, provided that their identifiers, key
 representations, downgrade policies, and validation behavior are
 specified.
 
----
-
-## 20. Determinability Boundary
+# Determinability Boundary
 
 JEP distinguishes observable protocol facts from external target facts.
 
-### 20.1 Observable Protocol Facts
+# Observable Protocol Facts
 
 JEP can support determination of protocol-level facts such as:
 
@@ -1229,7 +1187,7 @@ JEP can support determination of protocol-level facts such as:
 - whether a critical extension was processed;
 - which validation checks were actually performed.
 
-### 20.2 External Target Facts
+# External Target Facts
 
 JEP alone does not determine external target facts such as:
 
@@ -1245,9 +1203,7 @@ JEP alone does not determine external target facts such as:
 A profile MAY define evidence rules for external target facts. Such rules
 are outside JEP-Core.
 
----
-
-## 21. Observed Log Assumptions
+# Observed Log Assumptions
 
 An observed JEP log is not necessarily a complete log.
 
@@ -1270,9 +1226,7 @@ or partial log assumptions.
 JEP-Core does not itself compute chain completeness, termination cascade,
 or responsibility lineage.
 
----
-
-## 22. Relationship to HJS and JAC
+# Relationship to HJS and JAC
 
 JEP defines atomic signed judgment-related events.
 
@@ -1291,9 +1245,7 @@ A JEP reference does not by itself imply causality. Causal,
 authorization, lifecycle, and termination-cascade interpretations are
 defined by JAC or another chain/profile layer.
 
----
-
-## 23. Security Considerations
+# Security Considerations
 
 JEP-Core provides mechanisms and invariants for:
 
@@ -1321,7 +1273,7 @@ JEP-Core does not by itself prevent:
 - repeated authority consumption when the applicable authority profile
   requires stronger single-use semantics than event acceptance.
 
-### 23.1 Event ID Security
+# Event ID Security
 
 `id` is not a secret and MUST NOT be used as an authorization token.
 
@@ -1336,7 +1288,7 @@ Predictable Event IDs do not weaken signature integrity, but they may
 increase correlation or enumeration risk in systems that expose lookup
 interfaces. Profiles MAY impose stronger identifier-generation rules.
 
-### 23.2 Replay and Safe Retry
+# Replay and Safe Retry
 
 A copied, unmodified signed event can remain cryptographically valid.
 Signature validity alone therefore does not prevent repeated delivery.
@@ -1350,7 +1302,7 @@ freshness, strict request ordering, or single-use authority SHOULD use an
 appropriate challenge, nonce, sequence, timestamp, counter, reservation,
 or ledger profile in addition to JEP-Core.
 
-### 23.3 Acceptance-State Failure
+# Acceptance-State Failure
 
 If an implementation cannot reliably determine whether an Event Identity
 was already accepted, it MUST NOT claim a fresh `accepted` outcome.
@@ -1359,28 +1311,26 @@ If required acceptance state or atomicity guarantees are unavailable, the
 result MUST be `indeterminate` or rejected according to the applicable
 profile.
 
-### 23.4 Downgrade Resistance
+# Downgrade Resistance
 
 A verifier MUST reject algorithms prohibited by the applicable profile. A
 verifier MUST NOT accept a weaker algorithm merely because it is
 syntactically valid in JOSE.
 
-### 23.5 Human-in-the-Loop Semantics
+# Human-in-the-Loop Semantics
 
 A human-review event records that a human actor emitted or endorsed a
 review-related claim. It does not prove that the human fully understood
 the underlying material, that the judgment was correct, or that legal
 compliance was satisfied.
 
-### 23.6 AI Actor Semantics
+# AI Actor Semantics
 
 JEP-Core does not mandate any specific AI actor identity scheme. AI
 actor identity, model identity, tool identity, service identity, and
 session identity are defined by trust profiles or extensions.
 
----
-
-## 24. Privacy Considerations
+# Privacy Considerations
 
 JEP events may reveal actor identity, event identity, subject identity,
 judgment timing, delegation structure, organizational workflow, tool
@@ -1407,9 +1357,7 @@ JEP is an accountability protocol component. It SHOULD NOT be deployed as
 a general monitoring mechanism without data-minimization, retention,
 access-control, and redaction policies.
 
----
-
-## 25. Registry Considerations
+# Registry Considerations
 
 JEP registries SHOULD cover:
 
@@ -1429,11 +1377,9 @@ New verb registrations are NOT RECOMMENDED. New verbs require an update
 to JEP-Core explaining why existing verbs plus extensions are
 insufficient.
 
----
+# Versioning and Compatibility
 
-## 26. Versioning and Compatibility
-
-### 26.1 Wire Version
+# Wire Version
 
 For JEP-Core 0.7, `jep` remains `"1"`.
 
@@ -1441,7 +1387,7 @@ The `-06` and earlier Internet-Draft encodings are pre-stable draft
 artifacts. Their use of `jep: "1"` does not require JEP-Core 0.7 to
 preserve their field set.
 
-### 26.2 Historical Verification
+# Historical Verification
 
 Implementations MAY retain historical pre-`-07` decoders.
 
@@ -1458,7 +1404,7 @@ An implementation MUST NOT:
 2. observe failure;
 3. silently retry as JEP-Core 0.6 based only on field presence.
 
-### 26.3 Future Compatibility
+# Future Compatibility
 
 Future revisions MAY add optional fields or extensions without changing
 the wire major when the core event object remains compatible.
@@ -1471,11 +1417,9 @@ Unknown critical extensions MUST fail the
 `extension_processing` check. Unknown non-critical extensions MAY be
 ignored.
 
----
+# Examples
 
-## 27. Examples
-
-### 27.1 Minimal Judgment Event Shape
+# Minimal Judgment Event Shape
 
 ```json
 {
@@ -1489,7 +1433,7 @@ ignored.
 }
 ```
 
-### 27.2 Judgment Event with Audience and Event Reference
+# Judgment Event with Audience and Event Reference
 
 ```json
 {
@@ -1517,9 +1461,7 @@ ignored.
 
 Full signed test vectors belong in the matching conformance revision.
 
----
-
-## 28. Changes from -06
+# Changes from -06
 
 Major changes from `draft-wang-jep-judgment-event-protocol-06`:
 
@@ -1557,9 +1499,7 @@ Major changes from `draft-wang-jep-judgment-event-protocol-06`:
 - Expanded security considerations for Event ID conflicts, safe retry,
   acceptance-state failure, and optional challenge profiles.
 
----
-
-## 29. IANA Considerations
+# IANA Considerations
 
 This document requests no IANA actions.
 
@@ -1567,54 +1507,10 @@ A future standards-track revision may request registries for JEP verbs,
 extension identifiers, validation checks, acceptance outcomes, trust
 profiles, conformance classes, or related identifiers.
 
----
+--- back
 
-## 30. References
+# Acknowledgments
+{:numbered="false"}
 
-### 30.1 Normative References
-
-- RFC 2119, "Key words for use in RFCs to Indicate Requirement Levels".
-- RFC 8174, "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words".
-- RFC 8259, "The JavaScript Object Notation (JSON) Data Interchange
-  Format".
-- RFC 8785, "JSON Canonicalization Scheme (JCS)".
-- RFC 7515, "JSON Web Signature (JWS)".
-
-### 30.2 Informative References
-
-- Companion JEP profile, conformance, chain, semantic-interoperability,
-  archival, mandate, and TSTO-binding specifications are work in
-  progress and are revised independently.
-
----
-
-## Author's Address
-
-Yuqiang Wang  
-Email: signal@humanjudgment.org  
-URI: https://github.com/hjs-spec
-
-
-## JEP-Core 0.7 Upgrade Note
-
-JEP-Core 0.7 is a structural narrowing of JEP-Core rather than an
-expansion of its domain authority.
-
-The revision moves JEP-Core from mechanism-specific replay handling and
-cumulative validation levels toward stable event identity, idempotent
-acceptance, independent validation checks, and explicit Core/Profile/
-Chain boundaries.
-
-The intended invariant is:
-
-```text
-facts and event identity     -> JEP-Core
-cryptographic authenticity  -> JEP-Core + trust profile
-challenge mechanisms         -> optional profiles
-chain and lifecycle state    -> chain/profile layers
-domain meaning and policy    -> semantic/policy layers
-external consequence         -> external systems
-```
-
-Historical pre-`-07` signed artifacts remain historical artifacts and
-are not rewritten.
+The author thanks implementers and reviewers who provided interoperability,
+security, and deployment feedback on earlier JEP draft revisions.
