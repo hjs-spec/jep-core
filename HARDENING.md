@@ -1,5 +1,7 @@
 # Conformance and interoperability follow-up
 
+> **Legacy compatibility note:** This document describes the pre-07 conformance/implementation hardening track retained for historical verification and migration. It is not the JEP Core 0.7 conformance specification. See README.md and releases/draft-07/ for the current Core boundary.
+
 The conformance repair now incorporates current main and the Binding/01 note. The completed one-shot alignment dispatcher is retired.
 
 Python and TypeScript reject non-canonical base64url and identity-key forgeries. Ed25519 verification uses PyNaCl/libsodium and strict noble-curves verification respectively, with OpenSSL retained for normal key/signature operations. Sources: https://pynacl.readthedocs.io/en/latest/signing/ and the pinned @noble/curves 1.9.7 source.

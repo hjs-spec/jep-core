@@ -1,4 +1,4 @@
-name: JEP v0.6 conformance
+name: Legacy JEP 0.6 conformance (pre-07 compatibility)
 
 on:
   pull_request:

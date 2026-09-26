@@ -1,78 +1,101 @@
-# JEP v0.6 Draft Set
+# Judgment Event Protocol (JEP) — Core
 
-This repository contains the JEP-Core `-06` working draft, optional profile bindings, and the companion conformance seed.
+This is the canonical repository for **JEP Core**, the narrow-waist event layer of the Judgment Event Protocol.
 
-## Public mirrors
+JEP Core defines signed judgment-related statements and their protocol-observable properties. It defines the four Core event verbs — Judgment (J), Delegation (D), Termination (T), and Verification (V) — without deciding substantive truth, authority, legality, causality, policy consequence, or external effect.
 
-- Hugging Face Space: https://huggingface.co/spaces/yuqiangJEP/jep-v06-spec-demo/tree/main
-- Hugging Face Conformance Dataset: https://huggingface.co/datasets/yuqiangJEP/jep-v06-conformance-suite
-- IETF JEP-Core Draft: https://datatracker.ietf.org/doc/draft-wang-jep-judgment-event-protocol/
-- IETF JEP-Conformance Draft: https://datatracker.ietf.org/doc/draft-wang-jep-conformance/
-- IETF JEP-Profiles Draft: https://datatracker.ietf.org/doc/draft-wang-jep-profiles/
+## Current status
 
-## Drafts
-
-1. `draft-wang-jep-judgment-event-protocol-06.md` — the neutral J/D/T/V event core.
-2. `draft-wang-jep-profiles-00.md` — optional trust and interoperability profiles.
-3. `draft-wang-jep-conformance-00.md` — conformance classes, schemas, vectors, and validator behavior.
-
-The Internet-Drafts are normative for this package. The schemas and validators are executable conformance aids; they do not make legal, policy, factual, or external-target determinations.
-
-## Conformance implementations
-
-| Implementation | Declared boundary |
+| Item | Current value |
 |---|---|
-| `reference-validator/` | Python Level 0/1 baseline, optional local Level 2 binding, and seed Level 3 chain checks |
-| `typescript-validator/` | TypeScript Level 0/1 baseline plus optional local binding and acceptance replay/freshness checks |
-| `go-validator/` | Independent RFC 8785 / Ed25519, actor-profile, chain and acceptance verifier; explicit `syntax` mode remains Level 0 |
+| Latest published Internet-Draft | `draft-wang-jep-judgment-event-protocol-07` |
+| Core release | `JEP-Core 0.7` |
+| Wire major | `jep: "1"` |
+| Published date | 2026-09-26 |
+| Editor's Copy | [draft-wang-jep-judgment-event-protocol.md](draft-wang-jep-judgment-event-protocol.md) |
+| Frozen -07 snapshot | [releases/draft-07/](releases/draft-07/) |
+| IETF Datatracker | https://datatracker.ietf.org/doc/draft-wang-jep-judgment-event-protocol/ |
 
-The Python and TypeScript Level 1 paths use RFC 8785 JCS and detached compact JWS/Ed25519 processing for the repository baseline. A validator reports only the highest validation level it actually completed.
+The published `-07` snapshot is immutable. Any later correction or semantic change belongs to a subsequent Internet-Draft revision; the published `-07` artifact is never rewritten.
 
-## Run
+## Core invariants in 0.7
 
-```bash
-python -m pip install -e '.[test]'
-make test
-make conformance
-make go
+- **Event Identity:** `(who, id)` identifies the event instance.
+- **Artifact identity:** Event Hash identifies an exact signed artifact and is not the Event Identity.
+- **Safe retry:** delivery may repeat; an acceptance processor applies the acceptance effect of one Event Identity at most once within one acceptance domain.
+- **Replay mechanisms:** Core does not mandate nonce, challenge, counter, ledger, or other freshness mechanisms; profiles may add them.
+- **Orthogonal validation:** Core checks are separated from trust/acceptance-profile checks and companion/external checks.
+- **Substantive neutrality:** protocol validity does not itself establish truth, authority, legality, policy outcome, causality, or external consequence.
+- **Layer boundary:** chain reconstruction, termination cascade, authorization consequences, and domain policy remain outside JEP Core.
+
+## Repository model
+
+```text
+repository identity     hjs-spec/jep-core
+main                    current Editor's Copy and maintained Core assets
+published revision      immutable release snapshot
+future changes          next Internet-Draft revision, not a rewrite of -07
 ```
 
-For TypeScript:
+The unversioned Editor's Copy is the working source for future evolution. Versioned files such as `draft-wang-jep-judgment-event-protocol-07.*` are historical snapshots.
 
-```bash
-cd typescript-validator
-npm install
-npm run check
+## Published JEP-07
+
+The exact published RFCXML is preserved at:
+
+- [releases/draft-07/draft-wang-jep-judgment-event-protocol-07.xml](releases/draft-07/draft-wang-jep-judgment-event-protocol-07.xml)
+- [ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml](ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml)
+
+SHA-256:
+
+```text
+601809b4053d485fa68367db22f5e43919e859c4f0227609b8f851c627e9caab
 ```
 
-The manifest-driven suite checks exact validity, failure code, completed level, and selected event hashes. It must not treat an unrelated early failure as success for a later-stage test.
+See [releases/draft-07/README.md](releases/draft-07/README.md) for the freeze record.
 
-## Scope discipline
+## Migration status of companion assets
 
-This alignment pass does not change JEP's four verbs or expand JEP-Core into a legal-liability, authorization, policy, or external-truth engine. Profile-specific bindings remain outside the core.
+JEP Core 0.7 changed identity, replay/acceptance, validation, and chain boundaries. Therefore older companion material MUST NOT be assumed to describe 0.7 merely because it remains in this repository.
 
-## Guides
+| Asset | Status |
+|---|---|
+| JEP Core `-07` | Current / frozen publication |
+| Editor's Copy | Current working Core source |
+| `draft-wang-jep-judgment-event-protocol-06.md` | Historical pre-07 draft |
+| `draft-wang-jep-conformance-00.md` | Pre-07 companion; migration required |
+| `draft-wang-jep-profiles-00.md` | Pre-07 companion; migration required |
+| Existing 0.6 schemas/test vectors/validators | Legacy compatibility/conformance aids until explicitly revised for 0.7 |
 
-Additional implementation and review guidance is under `docs/`.
-- `IMPLEMENTER-GUIDE.md`
-- `PROFILE-AUTHOR-GUIDE.md`
-- `SECURITY-REVIEW-NOTES.md`
-- `PRIVACY-REVIEW-NOTES.md`
-- `ONE-PAGE-OVERVIEW.md`
-- `END-TO-END-DEMO.md`
-- `CONFORMANCE-LEVELS.md`
-- `INTEROPERABILITY-REPORT-TEMPLATE.md`
+Historical material is retained for auditability and migration. It does not override JEP Core 0.7.
 
-## JEP-TSTO Binding/01
+## Implementation boundary
 
-The [Binding/01 integration note](docs/JEP-TSTO-BINDING-01.md) declares the joint Schema, signature and immutable-reference validation path, historical compatibility, and algorithm boundaries without changing JEP-Core 0.6.
+The repository also contains historical schemas, test vectors, reference validators, and implementation aids. These are non-normative unless a specific JEP Core revision or conformance specification explicitly binds them.
 
-## Runtime and verification notes
+For JEP Core 0.7, do not infer:
+- mandatory Core nonce semantics from pre-07 validators;
+- cumulative Validation Levels 0–4 from pre-07 conformance material;
+- chain or termination-cascade semantics as Core behavior;
+- Event Hash as stable Event Identity.
 
-See [HARDENING.md](HARDENING.md) for supported behavior, regression checks, and compatibility boundaries.
+## Versioning
 
-[Cross-repository hardening review map and verification evidence](docs/ECOSYSTEM-HARDENING-2026-09.md).
+Repository identity is stable; versions are snapshots.
 
-## Released implementations
+```text
+Repo        = protocol component identity
+main        = Editor's Copy
+draft-XX    = immutable Internet-Draft snapshot
+Datatracker = external publication record
+```
 
-See [release delivery status](docs/RELEASE-DELIVERY-2026-09.md) for downloadable versions, installation checks and outstanding registry/deployment configuration.
+See [docs/VERSIONING.md](docs/VERSIONING.md).
+
+## Companion ecosystem
+
+JEP Core is intentionally narrower than the wider JEP ecosystem. Profiles, conformance rules, semantic bindings, chain composition, runtime behavior, SDKs, and application integrations may evolve independently, but MUST NOT silently redefine Core semantics.
+
+## Historical repository identity
+
+This repository was previously named `hjs-spec/jep-v06`. The repository was renamed to `hjs-spec/jep-core` so that repository identity no longer tracks a particular draft revision.
