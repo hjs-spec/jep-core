@@ -160,6 +160,17 @@ jobs:
           ! grep -q 'ERR_NONCE_REPLAY' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
           ! grep -q '| `nonce` | REQUIRED' draft-wang-jep-judgment-event-protocol-07.md
 
+      - name: Upload IETF submission bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: jep-07-ietf-submission
+          path: |
+            draft-wang-jep-judgment-event-protocol-07.md
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
+
       - name: Commit validated submission artifacts
         run: |
           git config user.name "JEP IETF Build"
