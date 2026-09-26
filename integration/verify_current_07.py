@@ -53,7 +53,27 @@ def run(workspace):
     }
     events.append(
         sign_event(
-            build_event("J", "did:example:interop", {"value": 1e20}, ext={}, ext_crit=[]), key, kid=kid
+            build_event(
+                "J",
+                "did:example:interop",
+                {
+                    "value": 1e20,
+                    "shortest": 1.0000000000000001e18,
+                    "negative": -1.0000000000000001e18,
+                    "boundaries": [
+                        9007199254740992.0,
+                        1.0000000000000003e18,
+                        1.0000000000000002e20,
+                        1e21,
+                        1e-7,
+                        -0.0,
+                    ],
+                },
+                ext={},
+                ext_crit=[],
+            ),
+            key,
+            kid=kid,
         )
     )
     with tempfile.TemporaryDirectory(prefix="jep07-interop-") as directory:

@@ -16,7 +16,8 @@ python integration/verify_current_07.py --workspace /path/to/ecosystem
 The gate covers:
 
 - 10 published Binding/02 signed carriers plus an independently signed Core event
-  with explicit empty extensions and a large, exactly representable JCS number.
+  with explicit empty extensions and positive/negative large JCS numbers,
+  including canonical shortest-decimal integer spellings.
 - Original, Python SDK, JavaScript SDK, Go SDK and Blackbox serialization paths;
   all 55 roundtrips must preserve signatures and exact Event Hashes.
 - Core, API, Agent SDK and Blackbox verification; Core/API/Agent SDK result schemas.

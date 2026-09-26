@@ -102,7 +102,7 @@ def test_repository_guard_and_frozen_artifact(tmp_path):
 
 
 def test_jcs_large_integer_wire_form_preserves_signature(event):
-    event["what"] = {"value": 1e20}
+    event["what"] = {"value": 1e20, "shortest": 1.0000000000000001e18, "negative": -1.0000000000000001e18}
     key = SigningKey.generate()
     protected = core.b64u(b'{"alg":"Ed25519","kid":"number-test"}')
     payload = core.b64u(core.canonicalize({k:v for k,v in event.items() if k != "sig"}))
@@ -116,6 +116,6 @@ def test_jcs_large_integer_wire_form_preserves_signature(event):
     assert result["status"] == "valid"
     assert result["event_hash"] == core.event_hash(event)
     assert type(event["what"]["value"]) is float
-    for bad in (2**53 + 1, 10**400):
+    for bad in (2**53 + 1, 1000000000000000101, 10**400):
         with pytest.raises(ValueError):
             core.parse_json(json.dumps({"value":bad}))
