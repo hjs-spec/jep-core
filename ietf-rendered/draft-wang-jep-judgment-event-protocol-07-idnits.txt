@@ -25,50 +25,50 @@ draft-wang-jep-judgment-event-protocol-07.txt(517): RFC 2119 keyword:    compati
 draft-wang-jep-judgment-event-protocol-07.txt(517): update_references(    compatible JSON [RFC7493] and MUST NOT emit duplicate JSON member)
 .
 draft-wang-jep-judgment-event-protocol-07.txt(518): RFC 2119 keyword:    names.  Verifiers MUST reject events containing duplicate JSON member.
-draft-wang-jep-judgment-event-protocol-07.txt(568): RFC 2119 keyword:        | jep      | REQUIRED    | Wire-format major version.  For  |.
-draft-wang-jep-judgment-event-protocol-07.txt(571): RFC 2119 keyword:        | id       | REQUIRED    | Opaque event identifier.  Event  |.
-draft-wang-jep-judgment-event-protocol-07.txt(574): RFC 2119 keyword:        | verb     | REQUIRED    | One of "J", "D", "T", "V".       |.
-draft-wang-jep-judgment-event-protocol-07.txt(576): RFC 2119 keyword:        | who      | REQUIRED    | Actor identifier claimed by the  |.
-draft-wang-jep-judgment-event-protocol-07.txt(579): RFC 2119 keyword:        | when     | REQUIRED    | Actor-declared event time, Unix  |.
-draft-wang-jep-judgment-event-protocol-07.txt(582): RFC 2119 keyword:        | what     | REQUIRED    | Verb-specific claim, descriptor, |.
-draft-wang-jep-judgment-event-protocol-07.txt(585): RFC 2119 keyword:        | aud      | OPTIONAL    | Intended audience or validation  |.
-draft-wang-jep-judgment-event-protocol-07.txt(591): RFC 2119 keyword:        | ext      | OPTIONAL    | Extension object.                |.
-draft-wang-jep-judgment-event-protocol-07.txt(593): RFC 2119 keyword:        | ext_crit | OPTIONAL    | Critical extension identifier    |.
-draft-wang-jep-judgment-event-protocol-07.txt(596): RFC 2119 keyword:        | sig      | REQUIRED    | Detached signature container.    |.
-draft-wang-jep-judgment-event-protocol-07.txt(603): RFC 2119 keyword:    The top-level extensibility mechanism is ext.  Producers SHOULD NOT.
-draft-wang-jep-judgment-event-protocol-07.txt(628): RFC 2119 keyword:    A verifier MUST NOT infer Internet-Draft revision number or release.
-draft-wang-jep-judgment-event-protocol-07.txt(638): RFC 2119 keyword:    *  MUST be a non-empty ASCII string;.
-draft-wang-jep-judgment-event-protocol-07.txt(640): RFC 2119 keyword:    *  MUST be stable for the lifetime of the event;.
-draft-wang-jep-judgment-event-protocol-07.txt(642): RFC 2119 keyword:    *  MUST be included in the signed payload;.
-draft-wang-jep-judgment-event-protocol-07.txt(644): RFC 2119 keyword:    *  MUST NOT be reused by the same who for different unsigned event.
-draft-wang-jep-judgment-event-protocol-07.txt(647): RFC 2119 keyword:    *  SHOULD be collision-resistant across independently generated.
-draft-wang-jep-judgment-event-protocol-07.txt(650): RFC 2119 keyword:    *  MUST NOT be treated as a secret, bearer token, authorization.
-draft-wang-jep-judgment-event-protocol-07.txt(653): update_references(    UUID URNs [RFC9562], other collision-resistant URIs, or equivalent)
+draft-wang-jep-judgment-event-protocol-07.txt(568): RFC 2119 keyword:       | jep      | REQUIRED    | Wire-format major version.  For   |.
+draft-wang-jep-judgment-event-protocol-07.txt(571): RFC 2119 keyword:       | id       | REQUIRED    | Opaque event identifier.  Event   |.
+draft-wang-jep-judgment-event-protocol-07.txt(574): RFC 2119 keyword:       | verb     | REQUIRED    | One of "J", "D", "T", "V".        |.
+draft-wang-jep-judgment-event-protocol-07.txt(576): RFC 2119 keyword:       | who      | REQUIRED    | Actor identifier claimed by the   |.
+draft-wang-jep-judgment-event-protocol-07.txt(579): RFC 2119 keyword:       | when     | REQUIRED    | Actor-declared event time, Unix   |.
+draft-wang-jep-judgment-event-protocol-07.txt(582): RFC 2119 keyword:       | what     | REQUIRED    | Verb-specific claim, descriptor,  |.
+draft-wang-jep-judgment-event-protocol-07.txt(585): RFC 2119 keyword:       | aud      | OPTIONAL    | Intended audience or validation   |.
+draft-wang-jep-judgment-event-protocol-07.txt(591): RFC 2119 keyword:       | ext      | OPTIONAL    | Extension object.                 |.
+draft-wang-jep-judgment-event-protocol-07.txt(593): RFC 2119 keyword:       | ext_crit | OPTIONAL    | Critical extension identifier     |.
+draft-wang-jep-judgment-event-protocol-07.txt(596): RFC 2119 keyword:       | sig      | REQUIRED    | Signature container defined by    |.
+draft-wang-jep-judgment-event-protocol-07.txt(604): RFC 2119 keyword:    The top-level extensibility mechanism is ext.  Producers SHOULD NOT.
+draft-wang-jep-judgment-event-protocol-07.txt(633): RFC 2119 keyword:    A verifier MUST NOT infer Internet-Draft revision number or release.
+draft-wang-jep-judgment-event-protocol-07.txt(643): RFC 2119 keyword:    *  MUST be a non-empty ASCII string;.
+draft-wang-jep-judgment-event-protocol-07.txt(645): RFC 2119 keyword:    *  MUST be stable for the lifetime of the event;.
+draft-wang-jep-judgment-event-protocol-07.txt(647): RFC 2119 keyword:    *  MUST be included in the signed payload;.
+draft-wang-jep-judgment-event-protocol-07.txt(649): RFC 2119 keyword:    *  MUST NOT be reused by the same who for different unsigned event.
+draft-wang-jep-judgment-event-protocol-07.txt(652): RFC 2119 keyword:    *  SHOULD be collision-resistant across independently generated.
+draft-wang-jep-judgment-event-protocol-07.txt(655): RFC 2119 keyword:    *  MUST NOT be treated as a secret, bearer token, authorization.
+draft-wang-jep-judgment-event-protocol-07.txt(658): update_references(    UUID URNs [RFC9562], other collision-resistant URIs, or equivalent)
 .
-draft-wang-jep-judgment-event-protocol-07.txt(657): RFC 2119 keyword:    A producer SHOULD NOT derive id solely from the event's semantic.
-draft-wang-jep-judgment-event-protocol-07.txt(662): RFC 2119 keyword:    canonicalized unsigned event content, it MUST report.
-draft-wang-jep-judgment-event-protocol-07.txt(665): RFC 2119 keyword:    Re-signing an otherwise identical unsigned event MAY produce a.
-draft-wang-jep-judgment-event-protocol-07.txt(679): RFC 2119 keyword:    The verb member identifies the event verb.  It MUST be one of J, D,.
-draft-wang-jep-judgment-event-protocol-07.txt(704): RFC 2119 keyword:    Because Event Identity includes who, two different actors MAY use the.
-draft-wang-jep-judgment-event-protocol-07.txt(716): RFC 2119 keyword:    Implementations SHOULD distinguish:.
-draft-wang-jep-judgment-event-protocol-07.txt(739): RFC 2119 keyword:    An acceptance profile MAY define a permitted time window using when,.
-draft-wang-jep-judgment-event-protocol-07.txt(749): RFC 2119 keyword:    A J event MUST contain what..
-draft-wang-jep-judgment-event-protocol-07.txt(751): RFC 2119 keyword:    A D event MUST contain an object-valued what with the Core members.
-draft-wang-jep-judgment-event-protocol-07.txt(754): RFC 2119 keyword:    A T event MUST contain an object-valued what with the Core member.
-draft-wang-jep-judgment-event-protocol-07.txt(758): RFC 2119 keyword:    A V event MUST contain an object-valued what with the Core members.
-draft-wang-jep-judgment-event-protocol-07.txt(763): RFC 2119 keyword:    When what is represented as a digest where permitted, the digest MUST.
-draft-wang-jep-judgment-event-protocol-07.txt(770): RFC 2119 keyword:    aud is OPTIONAL in JEP-Core.  A profile MAY require it, including for.
-draft-wang-jep-judgment-event-protocol-07.txt(789): RFC 2119 keyword:    References MAY identify:.
-draft-wang-jep-judgment-event-protocol-07.txt(807): RFC 2119 keyword:    A logical reference to another JEP event SHOULD use a typed.
-draft-wang-jep-judgment-event-protocol-07.txt(813): RFC 2119 keyword:    An exact signed artifact MAY additionally be pinned:.
-draft-wang-jep-judgment-event-protocol-07.txt(822): RFC 2119 keyword:    A bare Event Hash MAY be used when an application intentionally.
-draft-wang-jep-judgment-event-protocol-07.txt(823): RFC 2119 keyword:    refers only to an exact signed artifact, but it MUST NOT be described.
-draft-wang-jep-judgment-event-protocol-07.txt(831): RFC 2119 keyword:    Unknown critical extensions MUST cause the applicable.
-draft-wang-jep-judgment-event-protocol-07.txt(833): RFC 2119 keyword:    MAY be ignored..
-draft-wang-jep-judgment-event-protocol-07.txt(846): RFC 2119 keyword:    transaction identifier, ledger position, or similar mechanism SHOULD.
-draft-wang-jep-judgment-event-protocol-07.txt(858): RFC 2119 keyword:    unsigned event.  Other registered signature profiles MAY define an.
-draft-wang-jep-judgment-event-protocol-07.txt(869): RFC 2119 keyword:    four verbs.  Profiles and extensions MAY add domain-specific members.
-draft-wang-jep-judgment-event-protocol-07.txt(870): RFC 2119 keyword:    but MUST NOT replace these Core requirements with differently named.
+draft-wang-jep-judgment-event-protocol-07.txt(662): RFC 2119 keyword:    A producer SHOULD NOT derive id solely from the event's semantic.
+draft-wang-jep-judgment-event-protocol-07.txt(667): RFC 2119 keyword:    canonicalized unsigned event content, it MUST report.
+draft-wang-jep-judgment-event-protocol-07.txt(677): RFC 2119 keyword:    Re-signing an otherwise identical unsigned event MAY produce a.
+draft-wang-jep-judgment-event-protocol-07.txt(682): RFC 2119 keyword:    The verb member identifies the event verb.  It MUST be one of J, D,.
+draft-wang-jep-judgment-event-protocol-07.txt(707): RFC 2119 keyword:    Because Event Identity includes who, two different actors MAY use the.
+draft-wang-jep-judgment-event-protocol-07.txt(719): RFC 2119 keyword:    Implementations SHOULD distinguish:.
+draft-wang-jep-judgment-event-protocol-07.txt(743): RFC 2119 keyword:    An acceptance profile MAY define a permitted time window using when,.
+draft-wang-jep-judgment-event-protocol-07.txt(753): RFC 2119 keyword:    A J event MUST contain what..
+draft-wang-jep-judgment-event-protocol-07.txt(755): RFC 2119 keyword:    A D event MUST contain an object-valued what with the Core members.
+draft-wang-jep-judgment-event-protocol-07.txt(758): RFC 2119 keyword:    A T event MUST contain an object-valued what with the Core member.
+draft-wang-jep-judgment-event-protocol-07.txt(762): RFC 2119 keyword:    A V event MUST contain an object-valued what with the Core members.
+draft-wang-jep-judgment-event-protocol-07.txt(767): RFC 2119 keyword:    When what is represented as a digest where permitted, the digest MUST.
+draft-wang-jep-judgment-event-protocol-07.txt(774): RFC 2119 keyword:    aud is OPTIONAL in JEP-Core.  A profile MAY require it, including for.
+draft-wang-jep-judgment-event-protocol-07.txt(795): RFC 2119 keyword:    References MAY identify:.
+draft-wang-jep-judgment-event-protocol-07.txt(813): RFC 2119 keyword:    A logical reference to another JEP event SHOULD use a typed.
+draft-wang-jep-judgment-event-protocol-07.txt(819): RFC 2119 keyword:    An exact signed artifact MAY additionally be pinned:.
+draft-wang-jep-judgment-event-protocol-07.txt(828): RFC 2119 keyword:    A bare Event Hash MAY be used when an application intentionally.
+draft-wang-jep-judgment-event-protocol-07.txt(829): RFC 2119 keyword:    refers only to an exact signed artifact, but it MUST NOT be described.
+draft-wang-jep-judgment-event-protocol-07.txt(845): RFC 2119 keyword:    Unknown critical extensions MUST cause the applicable.
+draft-wang-jep-judgment-event-protocol-07.txt(847): RFC 2119 keyword:    MAY be ignored..
+draft-wang-jep-judgment-event-protocol-07.txt(850): RFC 2119 keyword:    transaction identifier, ledger position, or similar mechanism SHOULD.
+draft-wang-jep-judgment-event-protocol-07.txt(862): RFC 2119 keyword:    unsigned event.  Other registered signature profiles MAY define an.
+draft-wang-jep-judgment-event-protocol-07.txt(873): RFC 2119 keyword:    four verbs.  Profiles and extensions MAY add domain-specific members.
+draft-wang-jep-judgment-event-protocol-07.txt(874): RFC 2119 keyword:    but MUST NOT replace these Core requirements with differently named.
 draft-wang-jep-judgment-event-protocol-07.txt(905): RFC 2119 keyword:    | J    | REQUIRED claim,      | OPTIONAL    | expresses or adopts  |.
 draft-wang-jep-judgment-event-protocol-07.txt(909): RFC 2119 keyword:    | D    | REQUIRED object with | OPTIONAL    | declares a scoped    |.
 draft-wang-jep-judgment-event-protocol-07.txt(912): RFC 2119 keyword:    | T    | REQUIRED object with | REQUIRED    | declares termination |.
@@ -133,37 +133,37 @@ draft-wang-jep-judgment-event-protocol-07.txt(1756): RFC 2119 keyword:    to fai
 draft-wang-jep-judgment-event-protocol-07.txt(1759): RFC 2119 keyword:    validation MUST fail with ERR_EXTENSION_CONFLICT..
 draft-wang-jep-judgment-event-protocol-07.txt(1761): RFC 2119 keyword:    Extension identifiers SHOULD be collision-resistant.  Supported forms.
 draft-wang-jep-judgment-event-protocol-07.txt(1776): RFC 2119 keyword:    A JEP-Core-0.7 producer MUST support:.
-draft-wang-jep-judgment-event-protocol-07.txt(1801): RFC 2119 keyword:    A producer MUST NOT reuse one Event Identity for different unsigned.
-draft-wang-jep-judgment-event-protocol-07.txt(1806): RFC 2119 keyword:    A JEP-Core-0.7 verifier MUST support:.
-draft-wang-jep-judgment-event-protocol-07.txt(1829): RFC 2119 keyword:    A verifier MUST NOT require support for any optional identity,.
-draft-wang-jep-judgment-event-protocol-07.txt(1836): RFC 2119 keyword:    conformance MUST additionally support:.
-draft-wang-jep-judgment-event-protocol-07.txt(1858): RFC 2119 keyword:    A profile MAY add freshness, audience, challenge-response,.
-draft-wang-jep-judgment-event-protocol-07.txt(1863): RFC 2119 keyword:    A baseline conformance class MAY require detached JWS using JCS.
-draft-wang-jep-judgment-event-protocol-07.txt(1868): RFC 2119 keyword:    semantic requirement.  Other profiles MAY define additional or.
-draft-wang-jep-judgment-event-protocol-07.txt(1932): RFC 2119 keyword:    A profile MAY define evidence rules for external target facts.  Such.
-draft-wang-jep-judgment-event-protocol-07.txt(1933): RFC 2119 keyword:    rules are outside JEP-Core.  A JEP-Core-valid event MUST NOT be.
-draft-wang-jep-judgment-event-protocol-07.txt(1941): RFC 2119 keyword:    Absence of an event in an observed log MUST NOT be interpreted as.
-draft-wang-jep-judgment-event-protocol-07.txt(1945): RFC 2119 keyword:    Profiles MAY define:.
-draft-wang-jep-judgment-event-protocol-07.txt(1967): RFC 2119 keyword:    A chain reconstruction result MUST declare whether it relies on.
-draft-wang-jep-judgment-event-protocol-07.txt(1979): RFC 2119 keyword:    evidence lifecycle for JEP events.  Such systems MUST NOT redefine.
-draft-wang-jep-judgment-event-protocol-07.txt(1985): RFC 2119 keyword:    workflow accountability graphs.  Such systems MUST NOT redefine JEP-.
-draft-wang-jep-judgment-event-protocol-07.txt(2048): RFC 2119 keyword:    id is not a secret and MUST NOT be used as an authorization token..
-draft-wang-jep-judgment-event-protocol-07.txt(2053): RFC 2119 keyword:    A producer MUST NOT reuse an Event Identity for different unsigned.
-draft-wang-jep-judgment-event-protocol-07.txt(2054): RFC 2119 keyword:    event content.  Verifiers with identity state MUST detect such reuse.
-draft-wang-jep-judgment-event-protocol-07.txt(2059): RFC 2119 keyword:    lookup interfaces.  Profiles MAY impose stronger identifier-.
-draft-wang-jep-judgment-event-protocol-07.txt(2082): RFC 2119 keyword:    freshness, strict request ordering, or single-use authority SHOULD.
-draft-wang-jep-judgment-event-protocol-07.txt(2089): RFC 2119 keyword:    Identity was already accepted, it MUST NOT claim a fresh accepted.
-draft-wang-jep-judgment-event-protocol-07.txt(2093): RFC 2119 keyword:    the result MUST be indeterminate or rejected according to the.
-draft-wang-jep-judgment-event-protocol-07.txt(2098): RFC 2119 keyword:    A verifier MUST reject algorithms prohibited by the applicable.
-draft-wang-jep-judgment-event-protocol-07.txt(2099): RFC 2119 keyword:    profile.  A verifier MUST NOT accept a weaker algorithm merely.
-draft-wang-jep-judgment-event-protocol-07.txt(2121): RFC 2119 keyword:    Deployments SHOULD minimize personal data in what and extensions..
-draft-wang-jep-judgment-event-protocol-07.txt(2122): RFC 2119 keyword:    When possible, external evidence SHOULD be referenced by digest.
-draft-wang-jep-judgment-event-protocol-07.txt(2134): RFC 2119 keyword:    systems.  Deployments SHOULD avoid stable cross-context identifiers.
-draft-wang-jep-judgment-event-protocol-07.txt(2138): RFC 2119 keyword:    dictionary attacks.  Sensitive evidence references MAY require salted.
-draft-wang-jep-judgment-event-protocol-07.txt(2143): RFC 2119 keyword:    Implementations SHOULD avoid reusing actor identifiers across.
-draft-wang-jep-judgment-event-protocol-07.txt(2146): RFC 2119 keyword:    JEP is an accountability protocol component.  It SHOULD NOT be.
-draft-wang-jep-judgment-event-protocol-07.txt(2152): RFC 2119 keyword:    JEP registries SHOULD cover:.
-draft-wang-jep-judgment-event-protocol-07.txt(2176): RFC 2119 keyword:    New verb registrations are NOT RECOMMENDED.  New verbs require an.
+draft-wang-jep-judgment-event-protocol-07.txt(1799): RFC 2119 keyword:    A producer MUST NOT reuse one Event Identity for different unsigned.
+draft-wang-jep-judgment-event-protocol-07.txt(1804): RFC 2119 keyword:    A JEP-Core-0.7 verifier MUST support:.
+draft-wang-jep-judgment-event-protocol-07.txt(1826): RFC 2119 keyword:    A verifier MUST NOT require support for any optional identity,.
+draft-wang-jep-judgment-event-protocol-07.txt(1833): RFC 2119 keyword:    conformance MUST additionally support:.
+draft-wang-jep-judgment-event-protocol-07.txt(1856): RFC 2119 keyword:    A profile MAY add freshness, audience, challenge-response,.
+draft-wang-jep-judgment-event-protocol-07.txt(1861): RFC 2119 keyword:    A baseline conformance class MAY require detached JWS using JCS.
+draft-wang-jep-judgment-event-protocol-07.txt(1866): RFC 2119 keyword:    semantic requirement.  Other profiles MAY define additional or.
+draft-wang-jep-judgment-event-protocol-07.txt(1930): RFC 2119 keyword:    A profile MAY define evidence rules for external target facts.  Such.
+draft-wang-jep-judgment-event-protocol-07.txt(1931): RFC 2119 keyword:    rules are outside JEP-Core.  A JEP-Core-valid event MUST NOT be.
+draft-wang-jep-judgment-event-protocol-07.txt(1939): RFC 2119 keyword:    Absence of an event in an observed log MUST NOT be interpreted as.
+draft-wang-jep-judgment-event-protocol-07.txt(1943): RFC 2119 keyword:    Profiles MAY define:.
+draft-wang-jep-judgment-event-protocol-07.txt(1965): RFC 2119 keyword:    A chain reconstruction result MUST declare whether it relies on.
+draft-wang-jep-judgment-event-protocol-07.txt(1977): RFC 2119 keyword:    evidence lifecycle for JEP events.  Such systems MUST NOT redefine.
+draft-wang-jep-judgment-event-protocol-07.txt(1983): RFC 2119 keyword:    workflow accountability graphs.  Such systems MUST NOT redefine JEP-.
+draft-wang-jep-judgment-event-protocol-07.txt(2046): RFC 2119 keyword:    id is not a secret and MUST NOT be used as an authorization token..
+draft-wang-jep-judgment-event-protocol-07.txt(2051): RFC 2119 keyword:    A producer MUST NOT reuse an Event Identity for different unsigned.
+draft-wang-jep-judgment-event-protocol-07.txt(2052): RFC 2119 keyword:    event content.  Verifiers with identity state MUST detect such reuse.
+draft-wang-jep-judgment-event-protocol-07.txt(2057): RFC 2119 keyword:    lookup interfaces.  Profiles MAY impose stronger identifier-.
+draft-wang-jep-judgment-event-protocol-07.txt(2078): RFC 2119 keyword:    freshness, strict request ordering, or single-use authority SHOULD.
+draft-wang-jep-judgment-event-protocol-07.txt(2085): RFC 2119 keyword:    Identity was already accepted, it MUST NOT claim a fresh accepted.
+draft-wang-jep-judgment-event-protocol-07.txt(2089): RFC 2119 keyword:    the result MUST be indeterminate or rejected according to the.
+draft-wang-jep-judgment-event-protocol-07.txt(2094): RFC 2119 keyword:    A verifier MUST reject algorithms prohibited by the applicable.
+draft-wang-jep-judgment-event-protocol-07.txt(2095): RFC 2119 keyword:    profile.  A verifier MUST NOT accept a weaker algorithm merely.
+draft-wang-jep-judgment-event-protocol-07.txt(2117): RFC 2119 keyword:    Deployments SHOULD minimize personal data in what and extensions..
+draft-wang-jep-judgment-event-protocol-07.txt(2118): RFC 2119 keyword:    When possible, external evidence SHOULD be referenced by digest.
+draft-wang-jep-judgment-event-protocol-07.txt(2122): RFC 2119 keyword:    systems.  Deployments SHOULD avoid stable cross-context identifiers.
+draft-wang-jep-judgment-event-protocol-07.txt(2134): RFC 2119 keyword:    dictionary attacks.  Sensitive evidence references MAY require salted.
+draft-wang-jep-judgment-event-protocol-07.txt(2139): RFC 2119 keyword:    Implementations SHOULD avoid reusing actor identifiers across.
+draft-wang-jep-judgment-event-protocol-07.txt(2142): RFC 2119 keyword:    JEP is an accountability protocol component.  It SHOULD NOT be.
+draft-wang-jep-judgment-event-protocol-07.txt(2148): RFC 2119 keyword:    JEP registries SHOULD cover:.
+draft-wang-jep-judgment-event-protocol-07.txt(2172): RFC 2119 keyword:    New verb registrations are NOT RECOMMENDED.  New verbs require an.
 draft-wang-jep-judgment-event-protocol-07.txt(2201): RFC 2119 keyword:    Implementations MAY retain historical pre--07 decoders..
 draft-wang-jep-judgment-event-protocol-07.txt(2203): RFC 2119 keyword:    Historical signed events MUST NOT be rewritten, re-signed, or.
 draft-wang-jep-judgment-event-protocol-07.txt(2206): RFC 2119 keyword:    A historical decoder MUST be selected explicitly through a named.
@@ -222,7 +222,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Indicate Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119,
      March 1997, <https://www.rfc-editor.org/rfc/rfc2119>.)
 
-     	ref_def[RFC2119] at 1956: [RFC2119]  Bradner, S., "Key words for use in
+     	ref_def[RFC2119] at 1954: [RFC2119]  Bradner, S., "Key words for use in
      RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, DOI
      10.17487/RFC2119, March 1997, <https://www.rfc-editor.org/rfc/rfc2119>.
 
@@ -230,7 +230,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Hash Algorithms (SHA and SHA-based HMAC and HKDF)", RFC 6234, DOI
      10.17487/RFC6234, May 2011, <https://www.rfc-editor.org/rfc/rfc6234>.)
 
-     	ref_def[RFC6234] at 1961: [RFC6234]  Eastlake 3rd, D. and T. Hansen,
+     	ref_def[RFC6234] at 1959: [RFC6234]  Eastlake 3rd, D. and T. Hansen,
      "US Secure Hash Algorithms (SHA and SHA-based HMAC and HKDF)", RFC 6234,
      DOI 10.17487/RFC6234, May 2011, <https://www.rfc-editor.org/rfc/rfc6234>.
 
@@ -238,7 +238,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Format", RFC 7493, DOI 10.17487/RFC7493, March 2015,
      <https://www.rfc-editor.org/rfc/rfc7493>.)
 
-     	ref_def[RFC7493] at 1966: [RFC7493]  Bray, T., Ed., "The I-JSON Message
+     	ref_def[RFC7493] at 1964: [RFC7493]  Bray, T., Ed., "The I-JSON Message
      Format", RFC 7493, DOI 10.17487/RFC7493, March 2015,
      <https://www.rfc-editor.org/rfc/rfc7493>.
 
@@ -246,7 +246,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      "JSON Web Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May 2015,
      <https://www.rfc-editor.org/rfc/rfc7515>.)
 
-     	ref_def[RFC7515] at 1970: [RFC7515]  Jones, M., Bradley, J., and N.
+     	ref_def[RFC7515] at 1968: [RFC7515]  Jones, M., Bradley, J., and N.
      Sakimura, "JSON Web Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May
      2015, <https://www.rfc-editor.org/rfc/rfc7515>.
 
@@ -254,7 +254,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Lowercase in RFC 2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
      May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.)
 
-     	ref_def[RFC8174] at 1974: [RFC8174]  Leiba, B., "Ambiguity of Uppercase
+     	ref_def[RFC8174] at 1972: [RFC8174]  Leiba, B., "Ambiguity of Uppercase
      vs Lowercase in RFC 2119 Key Words", BCP 14, RFC 8174, DOI
      10.17487/RFC8174, May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
@@ -263,7 +263,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      10.17487/RFC8259, December 2017,
      <https://www.rfc-editor.org/rfc/rfc8259>.)
 
-     	ref_def[RFC8259] at 1978: [RFC8259]  Bray, T., Ed., "The JavaScript
+     	ref_def[RFC8259] at 1976: [RFC8259]  Bray, T., Ed., "The JavaScript
      Object Notation (JSON) Data Interchange Format", STD 90, RFC 8259, DOI
      10.17487/RFC8259, December 2017,
      <https://www.rfc-editor.org/rfc/rfc8259>.
@@ -272,7 +272,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      "JSON Canonicalization Scheme (JCS)", RFC 8785, DOI 10.17487/RFC8785,
      June 2020, <https://www.rfc-editor.org/rfc/rfc8785>.)
 
-     	ref_def[RFC8785] at 1983: [RFC8785]  Rundgren, A., Jordan, B., and S.
+     	ref_def[RFC8785] at 1981: [RFC8785]  Rundgren, A., Jordan, B., and S.
      Erdtman, "JSON Canonicalization Scheme (JCS)", RFC 8785, DOI
      10.17487/RFC8785, June 2020, <https://www.rfc-editor.org/rfc/rfc8785>.
 
@@ -281,7 +281,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      10.17487/RFC8032, January 2017,
      <https://www.rfc-editor.org/rfc/rfc8032>.)
 
-     	ref_def[RFC8032] at 1990: [RFC8032]  Josefsson, S. and I. Liusvaara,
+     	ref_def[RFC8032] at 1988: [RFC8032]  Josefsson, S. and I. Liusvaara,
      "Edwards-Curve Digital Signature Algorithm (EdDSA)", RFC 8032, DOI
      10.17487/RFC8032, January 2017, <https://www.rfc-editor.org/rfc/rfc8032>.
 
@@ -289,7 +289,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      "Universally Unique IDentifiers (UUIDs)", RFC 9562, DOI 10.17487/RFC9562,
      May 2024, <https://www.rfc-editor.org/rfc/rfc9562>.)
 
-     	ref_def[RFC9562] at 1995: [RFC9562]  Davis, K., Peabody, B., and P.
+     	ref_def[RFC9562] at 1993: [RFC9562]  Davis, K., Peabody, B., and P.
      Leach, "Universally Unique IDentifiers (UUIDs)", RFC 9562, DOI
      10.17487/RFC9562, May 2024, <https://www.rfc-editor.org/rfc/rfc9562>.
 

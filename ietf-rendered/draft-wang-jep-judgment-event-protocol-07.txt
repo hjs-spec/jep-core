@@ -20,12 +20,12 @@ Abstract
 
    JEP specifies four immutable event verbs: Judgment (J), Delegation
    (D), Termination (T), and Verification (V).  It defines a signed JSON
-   event structure, stable event identity, detached JSON Web Signature
-   (JWS) verification over JSON Canonicalization Scheme (JCS)
-   canonicalized payloads, signed-artifact hash and reference semantics,
-   independent validation checks, idempotent acceptance semantics,
-   structured validation results, extension handling, trust-profile
-   interfaces, and determinability boundaries.
+   event structure, stable event identity, signature verification over
+   JSON Canonicalization Scheme (JCS) canonicalized payloads, a detached
+   JSON Web Signature (JWS) baseline profile, signed-artifact hash and
+   reference semantics, independent validation checks, idempotent
+   acceptance semantics, structured validation results, extension
+   handling, trust-profile interfaces, and determinability boundaries.
 
    JEP-Core defines protocol properties rather than mandating one replay
    mechanism.  In particular, JEP-Core does not require a top-level
@@ -91,14 +91,14 @@ Table of Contents
    5.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   8
    6.  Core Event Object . . . . . . . . . . . . . . . . . . . . . .  10
    7.  Field Semantics . . . . . . . . . . . . . . . . . . . . . . .  11
-     7.1.  jep . . . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     7.1.  jep . . . . . . . . . . . . . . . . . . . . . . . . . . .  12
      7.2.  id  . . . . . . . . . . . . . . . . . . . . . . . . . . .  12
      7.3.  verb  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
      7.4.  who . . . . . . . . . . . . . . . . . . . . . . . . . . .  13
      7.5.  when  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
      7.6.  what  . . . . . . . . . . . . . . . . . . . . . . . . . .  14
      7.7.  aud . . . . . . . . . . . . . . . . . . . . . . . . . . .  14
-     7.8.  ref . . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     7.8.  ref . . . . . . . . . . . . . . . . . . . . . . . . . . .  15
      7.9.  ext and ext_crit  . . . . . . . . . . . . . . . . . . . .  15
      7.10. sig . . . . . . . . . . . . . . . . . . . . . . . . . . .  16
    8.  Event Verb Semantics  . . . . . . . . . . . . . . . . . . . .  16
@@ -147,7 +147,7 @@ Internet-Draft                     JEP                    September 2026
      19.3.  Acceptance-Processor Conformance . . . . . . . . . . . .  33
      19.4.  Baseline Algorithm Conformance . . . . . . . . . . . . .  34
    20. Determinability Boundary  . . . . . . . . . . . . . . . . . .  34
-     20.1.  Observable Protocol Facts  . . . . . . . . . . . . . . .  34
+     20.1.  Observable Protocol Properties . . . . . . . . . . . . .  34
      20.2.  External Target Facts  . . . . . . . . . . . . . . . . .  35
    21. Observed Log Assumptions  . . . . . . . . . . . . . . . . . .  35
    22. Relationship to HJS and JAC . . . . . . . . . . . . . . . . .  36
@@ -440,8 +440,8 @@ Internet-Draft                     JEP                    September 2026
    termination, or verification is made.  A subject is distinct from the
    actor.
 
-   *Event:* A single immutable signed JSON object representing one
-   judgment-related act.
+   *Event:* A single immutable signed JSON object carrying one judgment-
+   related protocol statement.
 
 
 
@@ -562,41 +562,42 @@ Wang                      Expires 30 March 2027                [Page 10]
 Internet-Draft                     JEP                    September 2026
 
 
-       +==========+=============+==================================+
-       | Member   | Status      | Description                      |
-       +==========+=============+==================================+
-       | jep      | REQUIRED    | Wire-format major version.  For  |
-       |          |             | this draft, "1".                 |
-       +----------+-------------+----------------------------------+
-       | id       | REQUIRED    | Opaque event identifier.  Event  |
-       |          |             | Identity is (who,id).            |
-       +----------+-------------+----------------------------------+
-       | verb     | REQUIRED    | One of "J", "D", "T", "V".       |
-       +----------+-------------+----------------------------------+
-       | who      | REQUIRED    | Actor identifier claimed by the  |
-       |          |             | event.                           |
-       +----------+-------------+----------------------------------+
-       | when     | REQUIRED    | Actor-declared event time, Unix  |
-       |          |             | seconds.                         |
-       +----------+-------------+----------------------------------+
-       | what     | REQUIRED    | Verb-specific claim, descriptor, |
-       |          |             | or permitted digest.             |
-       +----------+-------------+----------------------------------+
-       | aud      | OPTIONAL    | Intended audience or validation  |
-       |          |             | context.                         |
-       +----------+-------------+----------------------------------+
-       | ref      | Conditional | Typed reference or exact-        |
-       |          |             | artifact reference.              |
-       +----------+-------------+----------------------------------+
-       | ext      | OPTIONAL    | Extension object.                |
-       +----------+-------------+----------------------------------+
-       | ext_crit | OPTIONAL    | Critical extension identifier    |
-       |          |             | list.                            |
-       +----------+-------------+----------------------------------+
-       | sig      | REQUIRED    | Detached signature container.    |
-       +----------+-------------+----------------------------------+
+      +==========+=============+===================================+
+      | Member   | Status      | Description                       |
+      +==========+=============+===================================+
+      | jep      | REQUIRED    | Wire-format major version.  For   |
+      |          |             | this draft, "1".                  |
+      +----------+-------------+-----------------------------------+
+      | id       | REQUIRED    | Opaque event identifier.  Event   |
+      |          |             | Identity is (who,id).             |
+      +----------+-------------+-----------------------------------+
+      | verb     | REQUIRED    | One of "J", "D", "T", "V".        |
+      +----------+-------------+-----------------------------------+
+      | who      | REQUIRED    | Actor identifier claimed by the   |
+      |          |             | event.                            |
+      +----------+-------------+-----------------------------------+
+      | when     | REQUIRED    | Actor-declared event time, Unix   |
+      |          |             | seconds.                          |
+      +----------+-------------+-----------------------------------+
+      | what     | REQUIRED    | Verb-specific claim, descriptor,  |
+      |          |             | or permitted digest.              |
+      +----------+-------------+-----------------------------------+
+      | aud      | OPTIONAL    | Intended audience or validation   |
+      |          |             | context.                          |
+      +----------+-------------+-----------------------------------+
+      | ref      | Conditional | Typed reference or exact-artifact |
+      |          |             | reference.                        |
+      +----------+-------------+-----------------------------------+
+      | ext      | OPTIONAL    | Extension object.                 |
+      +----------+-------------+-----------------------------------+
+      | ext_crit | OPTIONAL    | Critical extension identifier     |
+      |          |             | list.                             |
+      +----------+-------------+-----------------------------------+
+      | sig      | REQUIRED    | Signature container defined by    |
+      |          |             | the applicable signature profile. |
+      +----------+-------------+-----------------------------------+
 
-                                  Table 1
+                                 Table 1
 
    JEP-Core 0.7 has no required top-level nonce member.
 
@@ -606,10 +607,9 @@ Internet-Draft                     JEP                    September 2026
 
 7.  Field Semantics
 
-7.1.  jep
 
-   The jep member identifies the wire-format major version.  For this
-   draft, the value is "1".
+
+
 
 
 
@@ -617,6 +617,11 @@ Wang                      Expires 30 March 2027                [Page 11]
 
 Internet-Draft                     JEP                    September 2026
 
+
+7.1.  jep
+
+   The jep member identifies the wire-format major version.  For this
+   draft, the value is "1".
 
    JEP-Core-0.7 identifies the specification release version.  It is not
    the wire-format version.
@@ -662,17 +667,15 @@ Internet-Draft                     JEP                    September 2026
    canonicalized unsigned event content, it MUST report
    ERR_EVENT_ID_CONFLICT.
 
-   Re-signing an otherwise identical unsigned event MAY produce a
-   different Event Hash while retaining the same Event Identity.
-
-
-
 
 
 Wang                      Expires 30 March 2027                [Page 12]
 
 Internet-Draft                     JEP                    September 2026
 
+
+   Re-signing an otherwise identical unsigned event MAY produce a
+   different Event Hash while retaining the same Event Identity.
 
 7.3.  verb
 
@@ -719,9 +722,6 @@ Internet-Draft                     JEP                    September 2026
 
    *  signature time;
 
-   *  receipt time;
-
-   *  archive time;
 
 
 
@@ -729,6 +729,10 @@ Wang                      Expires 30 March 2027                [Page 13]
 
 Internet-Draft                     JEP                    September 2026
 
+
+   *  receipt time;
+
+   *  archive time;
 
    *  verification time;
 
@@ -773,11 +777,7 @@ Internet-Draft                     JEP                    September 2026
    aud does not by itself enforce access control.  Access control,
    retention, redaction, and disclosure policy are outside JEP-Core.
 
-7.8.  ref
 
-   ref is a reference field.  A reference does not by itself imply
-   endorsement, truth, authorization validity, legal effect, or
-   causality.
 
 
 
@@ -785,6 +785,12 @@ Wang                      Expires 30 March 2027                [Page 14]
 
 Internet-Draft                     JEP                    September 2026
 
+
+7.8.  ref
+
+   ref is a reference field.  A reference does not by itself imply
+   endorsement, truth, authorization validity, legal effect, or
+   causality.
 
    References MAY identify:
 
@@ -828,12 +834,6 @@ Internet-Draft                     JEP                    September 2026
    ext contains named extension objects. ext_crit contains the
    identifiers of critical extensions.
 
-   Unknown critical extensions MUST cause the applicable
-   extension_processing check to fail.  Unknown non-critical extensions
-   MAY be ignored.
-
-
-
 
 
 
@@ -841,6 +841,10 @@ Wang                      Expires 30 March 2027                [Page 15]
 
 Internet-Draft                     JEP                    September 2026
 
+
+   Unknown critical extensions MUST cause the applicable
+   extension_processing check to fail.  Unknown non-critical extensions
+   MAY be ignored.
 
    Profiles that require a nonce, challenge, sequence number,
    transaction identifier, ledger position, or similar mechanism SHOULD
@@ -869,10 +873,6 @@ Internet-Draft                     JEP                    September 2026
    four verbs.  Profiles and extensions MAY add domain-specific members
    but MUST NOT replace these Core requirements with differently named
    equivalents.
-
-
-
-
 
 
 
@@ -1783,9 +1783,9 @@ Internet-Draft                     JEP                    September 2026
 
    *  JCS canonicalization of unsigned payloads;
 
-   *  detached JWS signature generation under at least one conformance
-      class;
+   *  signature generation under at least one conformance class;
 
+   *  algorithm-tagged digest strings;
 
 
 
@@ -1793,8 +1793,6 @@ Wang                      Expires 30 March 2027                [Page 32]
 
 Internet-Draft                     JEP                    September 2026
 
-
-   *  algorithm-tagged digest strings;
 
    *  ext and ext_crit semantics.
 
@@ -1813,8 +1811,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  JCS canonicalization;
 
-   *  detached signature verification under at least one conformance
-      class;
+   *  signature verification under at least one conformance class;
 
    *  Event Hash calculation;
 
@@ -1843,14 +1840,15 @@ Internet-Draft                     JEP                    September 2026
 
    *  atomic or equivalent first-acceptance processing;
 
+   *  accepted, already_accepted, rejected, and indeterminate outcomes;
+
+
 
 
 Wang                      Expires 30 March 2027                [Page 33]
 
 Internet-Draft                     JEP                    September 2026
 
-
-   *  accepted, already_accepted, rejected, and indeterminate outcomes;
 
    *  separation between repeated valid delivery and invalid event
       content.
@@ -1877,7 +1875,7 @@ Internet-Draft                     JEP                    September 2026
    from substantive facts about the external world.  This distinction is
    the basis of JEP-Core's semantic neutrality.
 
-20.1.  Observable Protocol Facts
+20.1.  Observable Protocol Properties
 
    Subject to the checks actually performed, JEP can support
    determination of protocol-level properties such as:
@@ -1899,14 +1897,14 @@ Internet-Draft                     JEP                    September 2026
 
    *  whether a critical extension was processed;
 
+   *  which validation checks were actually performed.
+
 
 
 Wang                      Expires 30 March 2027                [Page 34]
 
 Internet-Draft                     JEP                    September 2026
 
-
-   *  which validation checks were actually performed.
 
 20.2.  External Target Facts
 
@@ -1954,6 +1952,8 @@ Internet-Draft                     JEP                    September 2026
 
    *  archive-backed logs;
 
+   *  transparency-backed logs.
+
 
 
 
@@ -1961,8 +1961,6 @@ Wang                      Expires 30 March 2027                [Page 35]
 
 Internet-Draft                     JEP                    September 2026
 
-
-   *  transparency-backed logs.
 
    A chain reconstruction result MUST declare whether it relies on
    complete or partial log assumptions.
@@ -2010,6 +2008,8 @@ Internet-Draft                     JEP                    September 2026
 
    JEP-Core does not by itself prevent:
 
+   *  compromised signing keys;
+
 
 
 
@@ -2017,8 +2017,6 @@ Wang                      Expires 30 March 2027                [Page 36]
 
 Internet-Draft                     JEP                    September 2026
 
-
-   *  compromised signing keys;
 
    *  false claims signed by legitimate actors;
 
@@ -2065,7 +2063,9 @@ Internet-Draft                     JEP                    September 2026
    Signature validity alone therefore does not prevent repeated
    delivery.
 
-
+   JEP-Core addresses duplicate acceptance through stable Event Identity
+   and idempotent acceptance.  A valid retry yields already_accepted
+   rather than a second state-changing effect.
 
 
 
@@ -2073,10 +2073,6 @@ Wang                      Expires 30 March 2027                [Page 37]
 
 Internet-Draft                     JEP                    September 2026
 
-
-   JEP-Core addresses duplicate acceptance through stable Event Identity
-   and idempotent acceptance.  A valid retry yields already_accepted
-   rather than a second state-changing effect.
 
    Applications requiring proof of current liveness, server challenge
    freshness, strict request ordering, or single-use authority SHOULD
@@ -2122,6 +2118,10 @@ Internet-Draft                     JEP                    September 2026
    When possible, external evidence SHOULD be referenced by digest
    rather than embedded directly.
 
+   Event IDs and Event Hashes may enable correlation across exports or
+   systems.  Deployments SHOULD avoid stable cross-context identifiers
+   when they are not required by the trust or interoperability model.
+
 
 
 
@@ -2129,10 +2129,6 @@ Wang                      Expires 30 March 2027                [Page 38]
 
 Internet-Draft                     JEP                    September 2026
 
-
-   Event IDs and Event Hashes may enable correlation across exports or
-   systems.  Deployments SHOULD avoid stable cross-context identifiers
-   when they are not required by the trust or interoperability model.
 
    Digest references may enable correlation, confirmation attacks, or
    dictionary attacks.  Sensitive evidence references MAY require salted
@@ -2176,6 +2172,10 @@ Internet-Draft                     JEP                    September 2026
    New verb registrations are NOT RECOMMENDED.  New verbs require an
    update to JEP-Core explaining why existing verbs plus extensions are
    insufficient.
+
+
+
+
 
 
 
