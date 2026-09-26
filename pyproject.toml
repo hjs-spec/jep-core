@@ -3,10 +3,10 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "jep-v06-conformance-seed"
+name = "jep-core-conformance"
 version = "0.7.0"
 readme = "README.md"
-description = "Legacy JEP 0.6 conformance and interoperability seed retained for pre-07 compatibility"
+description = "JEP Core 0.7 conformance tools with explicit legacy 0.6 compatibility"
 requires-python = ">=3.10"
 dependencies = [
     "PyNaCl>=1.6.2,<2",
@@ -22,7 +22,9 @@ packages = ["jep_conformance"]
 package-dir = {jep_conformance = "reference-validator"}
 
 [project.scripts]
-jep-validate = "jep_conformance.jep_validate:main"
+jep-validate = "jep_conformance.jep_validate_07:main"
+jep-validate-07 = "jep_conformance.jep_validate_07:main"
+jep-validate-06 = "jep_conformance.jep_validate:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

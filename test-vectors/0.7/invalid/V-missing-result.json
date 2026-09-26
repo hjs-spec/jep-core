@@ -1,0 +1,20 @@
+{
+  "jep": "1",
+  "who": "did:example:jep07-test",
+  "when": 1790424000,
+  "id": "urn:uuid:00000000-0000-7000-8000-000000000005",
+  "verb": "V",
+  "ref": {
+    "type": "jep:event",
+    "value": {
+      "who": "did:example:jep07-test",
+      "id": "urn:uuid:00000000-0000-7000-8000-000000000001"
+    }
+  },
+  "what": {
+    "verification_scope": [
+      "cryptographic"
+    ]
+  },
+  "sig": "eyJhbGciOiJFZDI1NTE5Iiwia2lkIjoiamVwMDctdGVzdC1rZXkifQ..HmsAKYlbHxU_4ekrOmHfrKZa35ovatrWk0InyeLWIT_oMBdsKz75TXjVqaX-NFDA9vGspsGv5mPPgk14G3j0Dw"
+}

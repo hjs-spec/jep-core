@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://jep.org/schemas/jep-profile-0.6.schema.json",
-  "title": "JEP Profile Descriptor",
+  "$id": "https://jep.org/schemas/jep-profile-0.7.schema.json",
+  "title": "JEP Core 0.7 Profile Descriptor",
   "type": "object",
   "required": [
     "profile_id",
@@ -11,22 +11,27 @@
   ],
   "properties": {
     "profile_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "version": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "supported_jep_core": {
-      "type": "string"
+      "type": "string",
+      "const": "0.7"
     },
     "actor_identifier_forms": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "uniqueItems": true
     },
     "key_resolution": {
       "type": "string"
@@ -35,15 +40,39 @@
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "uniqueItems": true
     },
-    "validation_level_impact": {
+    "required_checks": {
       "type": "array",
       "items": {
-        "type": "integer",
-        "minimum": 0,
-        "maximum": 4
-      }
+        "type": "string",
+        "enum": [
+          "syntax",
+          "cryptographic",
+          "actor_binding",
+          "freshness",
+          "audience",
+          "event_identity",
+          "reference_integrity",
+          "extension_processing",
+          "chain_integrity",
+          "policy"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "audience_required": {
+      "type": "boolean"
+    },
+    "freshness_policy": {
+      "type": "string"
+    },
+    "challenge_policy": {
+      "type": "string"
+    },
+    "acceptance_domain": {
+      "type": "string"
     },
     "security_considerations": {
       "type": "string"
@@ -51,5 +80,6 @@
     "privacy_considerations": {
       "type": "string"
     }
-  }
+  },
+  "additionalProperties": true
 }

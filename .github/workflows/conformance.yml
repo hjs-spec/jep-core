@@ -1,4 +1,4 @@
-name: Legacy JEP 0.6 conformance (pre-07 compatibility)
+name: JEP Core conformance (0.7 current + 0.6 legacy)
 
 on:
   pull_request:
@@ -25,12 +25,19 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e '.[test]'
       - run: python -m pytest
-      - run: python reference-validator/jep_validate.py run-tests test-manifest.json
-      - run: python -m json.tool schemas/jep-event.schema.json >/dev/null
-      - run: python -m json.tool schemas/jep-validation-result.schema.json >/dev/null
+      - name: Run current JEP 0.7 suite
+        run: python reference-validator/jep_validate_07.py run-tests test-manifest-0.7.json
+      - name: Run legacy JEP 0.6 suite
+        run: python reference-validator/jep_validate.py run-tests test-manifest-0.6.json
+      - name: Validate current schemas
+        run: |
+          python -m json.tool schemas/jep-event.schema.json >/dev/null
+          python -m json.tool schemas/jep-ref.schema.json >/dev/null
+          python -m json.tool schemas/jep-profile.schema.json >/dev/null
+          python -m json.tool schemas/jep-validation-result.schema.json >/dev/null
 
   typescript:
-    name: TypeScript / Node ${{ matrix.node-version }}
+    name: Legacy 0.6 TypeScript / Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -47,7 +54,7 @@ jobs:
         run: npm run check
 
   go:
-    name: Go conformance verifier
+    name: Legacy 0.6 Go conformance verifier
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,7 +65,8 @@ jobs:
       - working-directory: go-validator
         run: go test -race ./...
 
-  interop:
+  legacy-interop:
+    name: Legacy 0.6 cross-language interop
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

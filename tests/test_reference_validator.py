@@ -150,7 +150,7 @@ def test_chain_verifier_reports_level_three_only_after_actor_binding() -> None:
 
 
 def test_manifest_suite_checks_exact_assertions() -> None:
-    process, output = run_validator("run-tests", ROOT / "test-manifest.json")
+    process, output = run_validator("run-tests", ROOT / "test-manifest-0.6.json")
     assert process.returncode == 0, process.stderr + process.stdout
     assert output["passed"] == len(output["details"])
     assert output["failed"] == 0

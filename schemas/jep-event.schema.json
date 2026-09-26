@@ -1,22 +1,28 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://jep.org/schemas/jep-event-0.6.schema.json",
-  "title": "JEP v0.6 Baseline Event",
-  "$comment": "Structural seed for JEP-Core-0.6 and the repository's Ed25519/JWS/JCS baseline. The Internet-Draft is normative; cryptographic, trust-profile, replay, chain, and policy validation require a validator.",
+  "$id": "https://jep.org/schemas/jep-event-0.7.schema.json",
+  "title": "JEP Core 0.7 Event",
+  "$comment": "Structural schema for JEP-Core-0.7. The Internet-Draft is normative. Cryptographic, trust-profile, acceptance-state, reference-resolution, and policy checks require a validator.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "jep",
+    "id",
     "verb",
     "who",
     "when",
-    "nonce",
+    "what",
     "sig"
   ],
   "properties": {
     "jep": {
       "type": "string",
       "const": "1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[\\x21-\\x7E]+$"
     },
     "verb": {
       "type": "string",
@@ -39,16 +45,12 @@
     "what": {
       "$ref": "#/$defs/claim"
     },
-    "nonce": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-    },
     "aud": {
       "type": "string",
       "minLength": 1
     },
     "ref": {
-      "$ref": "#/$defs/referenceOrNull"
+      "$ref": "#/$defs/reference"
     },
     "ext": {
       "type": "object",
@@ -82,49 +84,23 @@
       "type": "string",
       "pattern": "^(?:sha256:[0-9a-f]{64}|(?!sha256:)[a-z0-9][a-z0-9-]*:[0-9a-f]+)$"
     },
-    "claim": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/digest"
+    "eventIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "who",
+        "id"
+      ],
+      "properties": {
+        "who": {
+          "type": "string",
+          "minLength": 1
         },
-        {
-          "type": "object",
-          "minProperties": 1,
-          "additionalProperties": true,
-          "properties": {
-            "claim": {
-              "type": "string",
-              "minLength": 1
-            },
-            "subject": {},
-            "scope": {},
-            "result": {},
-            "evidence": {},
-            "context": {},
-            "delegatee": {
-              "type": "string",
-              "minLength": 1
-            },
-            "constraints": {
-              "type": "array"
-            },
-            "target": {},
-            "termination_scope": {
-              "type": "string",
-              "minLength": 1
-            },
-            "verification_scope": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "uniqueItems": true
-            }
-          }
+        "id": {
+          "type": "string",
+          "minLength": 1
         }
-      ]
+      }
     },
     "reference": {
       "oneOf": [
@@ -147,39 +123,45 @@
             "hash": {
               "$ref": "#/$defs/digest"
             }
-          }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "jep:event"
+                  }
+                },
+                "required": [
+                  "type"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "value": {
+                    "$ref": "#/$defs/eventIdentity"
+                  }
+                }
+              }
+            }
+          ]
         }
       ]
     },
-    "referenceOrNull": {
+    "claim": {
       "oneOf": [
         {
-          "$ref": "#/$defs/reference"
+          "$ref": "#/$defs/digest"
         },
         {
-          "type": "null"
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": true
         }
       ]
     }
   },
   "allOf": [
-    {
-      "if": {
-        "properties": {
-          "verb": {
-            "const": "J"
-          }
-        },
-        "required": [
-          "verb"
-        ]
-      },
-      "then": {
-        "required": [
-          "what"
-        ]
-      }
-    },
     {
       "if": {
         "properties": {
@@ -192,42 +174,20 @@
         ]
       },
       "then": {
-        "required": [
-          "what",
-          "ref"
-        ],
         "properties": {
           "what": {
-            "oneOf": [
-              {
-                "$ref": "#/$defs/digest"
+            "type": "object",
+            "required": [
+              "delegatee",
+              "scope"
+            ],
+            "properties": {
+              "delegatee": {
+                "type": "string",
+                "minLength": 1
               },
-              {
-                "type": "object",
-                "required": [
-                  "claim",
-                  "delegatee",
-                  "scope"
-                ],
-                "minProperties": 3,
-                "additionalProperties": true,
-                "properties": {
-                  "claim": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "delegatee": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "scope": {
-                    "not": {
-                      "type": "null"
-                    }
-                  }
-                }
-              }
-            ]
+              "scope": {}
+            }
           }
         }
       }
@@ -245,41 +205,23 @@
       },
       "then": {
         "required": [
-          "what",
           "ref"
         ],
         "properties": {
           "what": {
-            "oneOf": [
-              {
-                "$ref": "#/$defs/digest"
-              },
-              {
-                "type": "object",
-                "required": [
-                  "claim",
-                  "target",
-                  "termination_scope"
-                ],
-                "minProperties": 3,
-                "additionalProperties": true,
-                "properties": {
-                  "claim": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "target": {
-                    "not": {
-                      "type": "null"
-                    }
-                  },
-                  "termination_scope": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                }
+            "type": "object",
+            "required": [
+              "termination_scope"
+            ],
+            "properties": {
+              "termination_scope": {
+                "type": "string",
+                "minLength": 1
               }
-            ]
+            }
+          },
+          "ref": {
+            "$ref": "#/$defs/reference"
           }
         }
       }
@@ -297,38 +239,30 @@
       },
       "then": {
         "required": [
-          "what",
           "ref"
         ],
         "properties": {
+          "what": {
+            "type": "object",
+            "required": [
+              "verification_scope",
+              "result"
+            ],
+            "properties": {
+              "verification_scope": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "result": {}
+            }
+          },
           "ref": {
             "$ref": "#/$defs/reference"
-          },
-          "what": {
-            "oneOf": [
-              {
-                "$ref": "#/$defs/digest"
-              },
-              {
-                "type": "object",
-                "required": [
-                  "verification_scope"
-                ],
-                "minProperties": 1,
-                "additionalProperties": true,
-                "properties": {
-                  "verification_scope": {
-                    "type": "array",
-                    "minItems": 1,
-                    "items": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "uniqueItems": true
-                  }
-                }
-              }
-            ]
           }
         }
       }
