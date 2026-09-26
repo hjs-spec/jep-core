@@ -1,0 +1,11 @@
+{
+  "jep": "1",
+  "who": "did:example:jep07-test",
+  "when": 1790424000,
+  "id": "urn:uuid:00000000-0000-7000-8000-000000000007",
+  "verb": "T",
+  "what": {
+    "termination_scope": "future-reliance"
+  },
+  "sig": "eyJhbGciOiJFZDI1NTE5Iiwia2lkIjoiamVwMDctdGVzdC1rZXkifQ..e8_V9zrHf_EvUoCxWHtCw6p62p8i5gvKshJAWRJvBnY908iZ0Uu_JiAuPXGXsHYZUKAoVSuSZ_vNE84KkyVcAA"
+}
