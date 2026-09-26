@@ -12,6 +12,33 @@ These implementation notes explain the diagrams. Protocol definitions remain in 
 | Application runtime | Tool dispatch, independently configured policy, identity resolution and storage integration | Automatic conformance to all three protocols |
 | SDK/API | Supported event creation and verification interfaces | Authority validation merely because a signature passes |
 
+## Format and verification matrix
+
+Choose components by their actual format, not their repository name. JSONL describes a container, not an interoperability contract.
+
+| Component | Format / ownership | What verification establishes |
+|---|---|---|
+| Core reference validator | Current 0.7 signed wire event; explicit legacy 0.6 path | Independent Core checks under the supplied keys/profile |
+| API + Python/JS/Go SDK + CLI | Current 0.7 wire event; clients delegate signing/verification to the API | Server-reported checks; clients do not independently verify signatures |
+| Agent SDK | Current 0.7 event plus local chain extensions | Core signatures and supported local checks; HTML export is an unverified projection |
+| Agent Blackbox | Core 0.7-style events plus local JAC/HJS conventions | Local hashes/signatures and incident links; not universal companion conformance |
+| Runtime | Own normalized/sorted JSON envelope and mock signatures | Local profile checks; not Core JCS/JWS conformance |
+| LangGraph / OpenAI Agents / MCP adapters | Three separate unsigned observation/archive formats | Each adapter's archive consistency checks; not Core signature verification |
+| Authority runtime / lineage explorer | Declared local scope and delegation records | Local policy-model consistency; not authenticated real-world authority |
+| Replay visualizer | Normalized projection of supplied records | Displayed links/results; no hash recomputation or JWS verification |
+| Claude replay | Own envelope, signatures and `.jcrpack` | Its declared replay/signature profile; not Core detached JWS |
+| AIP sidecar | `aip-sidecar-receipt-0.2`, sorted ASCII JSON | Receipt integrity under a caller-trusted key; not a Core event |
+| JAC seed | JAC extension/fragment; historical unsigned demo events | Declaration structure and fragment hashes; not event signatures |
+| GitHub Action | Historical 0.6-style workflow artifact or legacy API result | Mode-specific checks; unsigned artifacts are not signed Core events |
+
+No automatic adapter connects these archive formats. A bridge must name the source format, preserve original signed bytes, define its mapping and pass interoperability tests. A lifecycle label such as completion or failure is not automatically a Core `T` statement.
+
+## Component ownership
+
+Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language ergonomics. The Agent SDK owns local agent recording and reports. Quickstart owns the introductory workflow. Optional runtime experiments own only their explicitly described envelopes and policies.
+
+The [organization directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md) is the sole repository inventory. This document explains boundaries, rather than duplicating installation or release tables.
+
 ## Core objects and application envelopes
 
 Preserve signed Core members exactly when forwarding or archiving. The current protocol profile is `jep-core-0.7`, while its wire member remains `jep: "1"`. Event Identity is `(who,id)`; Event Hash identifies an exact signed artifact. Software version numbers are independent.

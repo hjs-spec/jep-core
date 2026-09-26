@@ -2,9 +2,9 @@
 
 Maintained here in `jep-core/docs/architecture` after the 2026-09-26 repository consolidation. [Migration provenance](../REPOSITORY-CONSOLIDATION-2026-09.md) records the source revision.
 
-Developer-oriented architecture notes and diagrams for the JEP / HJS / JAC accountability runtime stack.
+Start with the [format and verification matrix](architecture-notes.md#format-and-verification-matrix) to choose compatible components. The diagrams below explain optional relationships; they are not a required installation stack.
 
-This repository uses Markdown, Mermaid and a small standard-library SVG preview generator so the architecture can be read in code review, rendered by GitHub, and copied into implementation docs without a documentation framework.
+This directory uses Markdown, Mermaid and a small standard-library SVG preview generator so the architecture can be read in code review, rendered by GitHub, and copied into implementation docs without a documentation framework.
 
 ## What this stack describes
 

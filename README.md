@@ -1,124 +1,52 @@
-# Judgment Event Protocol (JEP) — Core
+# JEP Core
 
-This is the canonical repository for **JEP Core**, the narrow-waist event layer of the Judgment Event Protocol.
+The canonical source for **Judgment Event Protocol**: signed statements of Judgment (J), Delegation (D), Termination (T) and Verification (V).
 
-JEP Core defines signed judgment-related statements and their protocol-observable properties. It defines the four Core event verbs — Judgment (J), Delegation (D), Termination (T), and Verification (V) — without deciding substantive truth, authority, legality, causality, policy consequence, or external effect.
+Core defines event structure and observable checks. It does not decide truth, authority, legal effect, causality, policy or external consequences.
 
-## Current status
+## Start here
 
-| Item | Current value |
+| Task | Entry |
 |---|---|
-| Latest published Internet-Draft | `draft-wang-jep-judgment-event-protocol-07` |
-| Core release | `JEP-Core 0.7` |
-| Wire major | `jep: "1"` |
-| Published date | 2026-09-26 |
-| Editor's Copy | [draft-wang-jep-judgment-event-protocol.md](draft-wang-jep-judgment-event-protocol.md) |
-| Frozen -07 snapshot | [releases/draft-07/](releases/draft-07/) |
-| IETF Datatracker | https://datatracker.ietf.org/doc/draft-wang-jep-judgment-event-protocol/ |
+| Read the published protocol | [Frozen Internet-Draft -07](releases/draft-07/) |
+| Read the working source | [Editor's Copy](draft-wang-jep-judgment-event-protocol.md) |
+| Implement or migrate | [Implementer guide](docs/IMPLEMENTER-GUIDE.md) · [0.7 migration](docs/MIGRATION-0.7.md) |
+| Run a signed example | [Quickstart](https://github.com/hjs-spec/jep-quickstart) |
+| Choose a client or recorder | [Integration directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md#integrate) |
+| Understand component boundaries | [Architecture](docs/architecture/README.md) |
 
-The published `-07` snapshot is immutable. Any later correction or semantic change belongs to a subsequent Internet-Draft revision; the published `-07` artifact is never rewritten.
+## Current contract
 
-## Core invariants in 0.7
+**Core 0.7 · wire major `jep: "1"` · published 2026-09-26.**
 
-- **Event Identity:** `(who, id)` identifies the event instance.
-- **Artifact identity:** Event Hash identifies an exact signed artifact and is not the Event Identity.
-- **Safe retry:** delivery may repeat; an acceptance processor applies the acceptance effect of one Event Identity at most once within one acceptance domain.
-- **Replay mechanisms:** Core does not mandate nonce, challenge, counter, ledger, or other freshness mechanisms; profiles may add them.
-- **Orthogonal validation:** Core checks are separated from trust/acceptance-profile checks and companion/external checks.
-- **Substantive neutrality:** protocol validity does not itself establish truth, authority, legality, policy outcome, causality, or external consequence.
-- **Layer boundary:** chain reconstruction, termination cascade, authorization consequences, and domain policy remain outside JEP Core.
+- Event Identity `(who,id)` identifies an event; Event Hash identifies an exact signed artifact.
+- Acceptance is idempotent per Event Identity within an acceptance domain.
+- Validation reports independent checks and `valid`, `invalid` or `indeterminate`.
+- Freshness mechanisms belong to profiles; Core does not require a nonce.
+- Chain reconstruction, delegation enforcement and termination cascade belong to companion/application layers.
 
-## Repository model
+The published -07 snapshot is immutable. Its exact RFCXML and SHA-256 are recorded in the [freeze record](releases/draft-07/README.md). Later changes belong to the Editor's Copy and a subsequent draft. [Datatracker](https://datatracker.ietf.org/doc/draft-wang-jep-judgment-event-protocol/) is the external publication record.
 
-```text
-repository identity     hjs-spec/jep-core
-main                    current Editor's Copy and maintained Core assets
-published revision      immutable release snapshot
-future changes          next Internet-Draft revision, not a rewrite of -07
-```
-
-The unversioned Editor's Copy is the working source for future evolution. Versioned files such as `draft-wang-jep-judgment-event-protocol-07.*` are historical snapshots.
-
-## Published JEP-07
-
-The exact published RFCXML is preserved at:
-
-- [releases/draft-07/draft-wang-jep-judgment-event-protocol-07.xml](releases/draft-07/draft-wang-jep-judgment-event-protocol-07.xml)
-- [ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml](ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml)
-
-SHA-256:
-
-```text
-601809b4053d485fa68367db22f5e43919e859c4f0227609b8f851c627e9caab
-```
-
-See [releases/draft-07/README.md](releases/draft-07/README.md) for the freeze record.
-
-## Migration status of companion assets
-
-JEP Core 0.7 changed identity, replay/acceptance, validation, and chain boundaries. Therefore older companion material MUST NOT be assumed to describe 0.7 merely because it remains in this repository.
-
-| Asset | Status |
-|---|---|
-| JEP Core `-07` | Current / frozen publication |
-| Editor's Copy | Current working Core source |
-| `draft-wang-jep-judgment-event-protocol-06.md` | Historical pre-07 draft |
-| `draft-wang-jep-conformance-01.md` | Current 0.7 conformance companion |
-| `draft-wang-jep-profiles-01.md` | Current 0.7 profile companion |
-| 0.7 schemas / test vectors / Python reference validator | Current 0.7 implementation aids |
-| `draft-wang-jep-conformance-00.md` / `profiles-00.md` | Historical pre-07 companions |
-| 0.6 schemas/test vectors/validators | Explicit legacy compatibility assets |
-
-Historical material is retained for auditability and compatibility. It does not override JEP Core 0.7. Current conformance and profile work is represented by the `-01` companion drafts and the versioned 0.7 implementation aids.
-
-## Implementation boundary
-
-The repository also contains historical schemas, test vectors, reference validators, and implementation aids. These are non-normative unless a specific JEP Core revision or conformance specification explicitly binds them.
-
-For JEP Core 0.7, do not infer:
-- mandatory Core nonce semantics from pre-07 validators;
-- cumulative Validation Levels 0–4 from pre-07 conformance material;
-- chain or termination-cascade semantics as Core behavior;
-- Event Hash as stable Event Identity.
-
-## Versioning
-
-Repository identity is stable; versions are snapshots.
-
-```text
-Repo        = protocol component identity
-main        = Editor's Copy
-draft-XX    = immutable Internet-Draft snapshot
-Datatracker = external publication record
-```
-
-See [docs/VERSIONING.md](docs/VERSIONING.md).
-
-## Developer documentation
-
-[Documentation index](docs/README.md) · [Architecture](docs/architecture/README.md) · [Logging comparison](docs/comparisons/logging.md) · [Current Quickstart](https://github.com/hjs-spec/jep-quickstart)
-
-Architecture and logging explanations are maintained here after [repository consolidation](docs/REPOSITORY-CONSOLIDATION-2026-09.md). Their original repositories retain historical links.
-
-## Companion ecosystem
-
-JEP Core is intentionally narrower than the wider JEP ecosystem. Profiles, conformance rules, semantic bindings, chain composition, runtime behavior, SDKs, and application integrations may evolve independently, but MUST NOT silently redefine Core semantics.
-
-## Historical repository identity
-
-This repository was previously named `hjs-spec/jep-v06`. The repository was renamed to `hjs-spec/jep-core` so that repository identity no longer tracks a particular draft revision.
-
-## Local checks
+## Validate locally
 
 ```sh
 python -m pip install -e '.[test]'
 make validate conformance repository-check
-make conformance-legacy
 python -m pytest
 ```
 
-The default Make targets use the current 0.7 path. `validate-legacy` and
-`conformance-legacy` select the historical 0.6 implementation explicitly.
-`repository-check` verifies immutable -07 artifact hashes and manifest paths.
-The retired -07 rendering workflow is now read-only: it checks and exports the
-frozen publication, and cannot regenerate or commit replacements.
+The default Python validator, schemas and manifest target Core 0.7. [Validator usage](reference-validator/README.md) explains keys and acceptance storage.
+
+## Current and historical assets
+
+| Current | Historical compatibility |
+|---|---|
+| Core `-07`; profiles/conformance `-01` | Core `-06`; profiles/conformance `-00` |
+| `test-manifest-0.7.json`, Python `jep_validate_07.py` | `test-manifest-0.6.json`, Python `jep_validate.py` |
+| Versioned 0.7 schemas and vectors | Go and TypeScript validators currently support **0.6 only** |
+
+Schemas and tools are implementation aids; the applicable specification controls normative requirements. Use `make conformance-legacy` only for known 0.6 artifacts. Never select a legacy decoder because current validation failed, or rewrite a historical signed artifact.
+
+[Documentation index](docs/README.md) · [Versioning](docs/VERSIONING.md) · [Logging comparison](docs/comparisons/logging.md) · [Delivery status](https://github.com/hjs-spec/.github/blob/main/DELIVERY-2026-09-26.md)
+
+The repository was previously named `jep-v06`. Repository identity is now stable; protocol drafts and software packages have separate versions.

@@ -1,3 +1,5 @@
+> Historical **Core 0.6** regression harnesses. These scripts assume matching 0.6 API/SDK releases, pre-0.7 result shapes and a Core checkout named `jep-v06`. They are not a gate for current 0.7 packages. For the maintained 0.7 SDK/API flow use [Quickstart tests](https://github.com/hjs-spec/jep-quickstart#test); for current conformance use [Core checks](../README.md#validate-locally).
+
 # Local SDK/API interoperability checks
 
 These checks start a temporary API on loopback with disposable state and a test bearer token. They do not deploy or call a live signing service.

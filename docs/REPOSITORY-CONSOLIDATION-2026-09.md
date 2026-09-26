@@ -4,9 +4,9 @@ This maintenance change consolidates documentation and clarifies historical onbo
 
 | Previous repository | Maintained destination | Treatment of old repository |
 |---|---|---|
-| `hjs-spec/jep-architecture` | [Architecture](architecture/README.md) | Migration notice; retain prior files/history, ready for GitHub read-only archive |
-| `hjs-spec/jep-vs-logging` | [Comparison](comparisons/logging.md) and [legacy illustration](../examples/legacy/logging-comparison/README.md) | Migration notice; retain prior files/history, ready for GitHub read-only archive |
-| `hjs-spec/jep-e2e-demo` | [Current onboarding](https://github.com/hjs-spec/jep-quickstart) | Historical Core 0.6 example and release remain available; ready for GitHub read-only archive |
+| `hjs-spec/jep-architecture` | [Architecture](architecture/README.md) | Migration notice; retain prior files/history, GitHub read-only archive confirmed on 2026-09-26 |
+| `hjs-spec/jep-vs-logging` | [Comparison](comparisons/logging.md) and [legacy illustration](../examples/legacy/logging-comparison/README.md) | Migration notice; retain prior files/history, GitHub read-only archive confirmed on 2026-09-26 |
+| `hjs-spec/jep-e2e-demo` | [Current onboarding](https://github.com/hjs-spec/jep-quickstart) | Historical Core 0.6 example and release remain available; GitHub read-only archive confirmed on 2026-09-26 |
 
 The E2E example is not byte-converted into Core 0.7. It contains a distinct historical signed J/D/T/V flow; the current Quickstart has its own documented supported examples.
 
@@ -22,4 +22,4 @@ Logging source: [`7ed10ec09389cf14d6c9730df21c4109c0e9b777`](https://github.com/
 
 Current Core documentation and organization navigation use the new destinations. Existing release reports keep their historical PR, release and source citations. The original repositories retain migration notices so external links still lead to a useful page.
 
-Migration and deprecation notices do **not** by themselves set GitHub's repository `archived` flag. That separate repository-settings action must be verified after it is applied. No repository deletion is part of this change.
+All three repository settings were archived on 2026-09-26 and independently verified through GitHub API responses (`archived: true`). Migration notices alone do not set that flag. No repository deletion was part of this consolidation.
