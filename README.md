@@ -63,11 +63,13 @@ JEP Core 0.7 changed identity, replay/acceptance, validation, and chain boundari
 | JEP Core `-07` | Current / frozen publication |
 | Editor's Copy | Current working Core source |
 | `draft-wang-jep-judgment-event-protocol-06.md` | Historical pre-07 draft |
-| `draft-wang-jep-conformance-00.md` | Pre-07 companion; migration required |
-| `draft-wang-jep-profiles-00.md` | Pre-07 companion; migration required |
-| Existing 0.6 schemas/test vectors/validators | Legacy compatibility/conformance aids until explicitly revised for 0.7 |
+| `draft-wang-jep-conformance-01.md` | Current 0.7 conformance companion |
+| `draft-wang-jep-profiles-01.md` | Current 0.7 profile companion |
+| 0.7 schemas / test vectors / Python reference validator | Current 0.7 implementation aids |
+| `draft-wang-jep-conformance-00.md` / `profiles-00.md` | Historical pre-07 companions |
+| 0.6 schemas/test vectors/validators | Explicit legacy compatibility assets |
 
-Historical material is retained for auditability and migration. It does not override JEP Core 0.7.
+Historical material is retained for auditability and compatibility. It does not override JEP Core 0.7. Current conformance and profile work is represented by the `-01` companion drafts and the versioned 0.7 implementation aids.
 
 ## Implementation boundary
 
