@@ -125,7 +125,7 @@ judgment-related statements. Subject to the applicable validation mode
 and trust profile, a conforming implementation can support determination
 that:
 
-1. a specific event identity was asserted by an actor;
+1. a specific Event Identity was carried in the signed statement;
 2. an event payload existed;
 3. the event payload was signed as specified;
 4. the signed payload was not modified without invalidating the
@@ -304,7 +304,7 @@ The top-level members are:
 | `verb` | REQUIRED | One of `"J"`, `"D"`, `"T"`, `"V"`. |
 | `who` | REQUIRED | Actor identifier claimed by the event. |
 | `when` | REQUIRED | Actor-declared event time, Unix seconds. |
-| `what` | Conditional | Claim object, descriptor, or algorithm-tagged digest. |
+| `what` | REQUIRED | Verb-specific claim, descriptor, or permitted digest. |
 | `aud` | OPTIONAL | Intended audience or validation context. |
 | `ref` | Conditional | Typed reference or exact-artifact reference. |
 | `ext` | OPTIONAL | Extension object. |
@@ -523,6 +523,11 @@ alternative container without changing J/D/T/V semantics.
 
 # Event Verb Semantics
 
+JEP verb semantics define the type of statement carried by an event.
+They describe what the event claims; they do not independently establish
+that the claimed act occurred, was authorized, was correct, or produced
+an external effect.
+
 The following table defines the minimum Core distinction among the four
 verbs. Profiles and extensions MAY add domain-specific members but MUST
 NOT replace these Core requirements with differently named equivalents.
@@ -536,12 +541,13 @@ NOT replace these Core requirements with differently named equivalents.
 
 ## J - Judgment
 
-A Judgment event records that an actor expressed or adopted a judgment
-about a claim, choice, classification, recommendation, or proposed
-result.
+A Judgment event represents the signed statement that the actor
+identified by `who` expressed or adopted a judgment about a claim,
+choice, classification, recommendation, or proposed result.
 
-A J event records the actor's judgment. It MUST NOT be interpreted as
-proof that the judged claim is true, authorized, or externally effective.
+The claim represented by J is the judgment itself. A J event MUST NOT be
+interpreted as proof that the judged claim is true, authorized, or
+externally effective.
 
 Typical uses include:
 
@@ -555,8 +561,9 @@ Typical uses include:
 
 ## D - Delegation
 
-A Delegation event records that an actor declared a delegation to a
-delegatee within an explicit scope.
+A Delegation event represents the signed statement that the actor
+identified by `who` declared a delegation to a delegatee within an
+explicit scope.
 
 A D event MUST contain `what.delegatee` and `what.scope`. It MAY
 identify:
@@ -575,9 +582,9 @@ JEP-Core.
 
 ## T - Termination
 
-A Termination event records that an actor declared a referenced target
-no longer eligible for future reliance within a stated termination
-scope.
+A Termination event represents the signed statement that the actor
+identified by `who` declared a referenced target no longer eligible
+for future reliance within a stated termination scope.
 
 A T event MUST identify its target through `ref` and MUST contain
 `what.termination_scope`.
@@ -592,9 +599,9 @@ profiles.
 
 ## V - Verification
 
-A Verification event records that an actor evaluated a referenced target
-under an explicitly declared verification scope and recorded the result
-of that evaluation.
+A Verification event represents the signed statement that the actor
+identified by `who` evaluated a referenced target under an explicitly
+declared verification scope and recorded the result of that evaluation.
 
 A V event MUST identify its verification target through `ref`, MUST
 contain `what.verification_scope`, and MUST contain `what.result`.
@@ -1331,9 +1338,9 @@ JEP-Core does not by itself prevent:
 Because Event Identity is `(who,id)`, deliberate use of another actor's
 `id` string does not create the same Event Identity.
 
-A validly signed actor MUST NOT reuse its own Event Identity for different
-unsigned event content. Verifiers with identity state MUST detect such
-reuse as `ERR_EVENT_ID_CONFLICT`.
+A producer MUST NOT reuse an Event Identity for different unsigned event
+content. Verifiers with identity state MUST detect such reuse as
+`ERR_EVENT_ID_CONFLICT`.
 
 Predictable Event IDs do not weaken signature integrity, but they may
 increase correlation or enumeration risk in systems that expose lookup
@@ -1562,6 +1569,9 @@ Major changes from `draft-wang-jep-judgment-event-protocol-06`:
 - Required actor binding to pass before authoritative identity or
   acceptance state is committed when the active profile requires actor
   binding.
+- Clarified that J/D/T/V define statement semantics, not independent
+  proof that the claimed act occurred or had external effect.
+- Made `what` explicitly REQUIRED because every Core verb requires it.
 
 # IANA Considerations
 
