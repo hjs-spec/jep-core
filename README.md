@@ -101,3 +101,18 @@ JEP Core is intentionally narrower than the wider JEP ecosystem. Profiles, confo
 ## Historical repository identity
 
 This repository was previously named `hjs-spec/jep-v06`. The repository was renamed to `hjs-spec/jep-core` so that repository identity no longer tracks a particular draft revision.
+
+## Local checks
+
+```sh
+python -m pip install -e '.[test]'
+make validate conformance repository-check
+make conformance-legacy
+python -m pytest
+```
+
+The default Make targets use the current 0.7 path. `validate-legacy` and
+`conformance-legacy` select the historical 0.6 implementation explicitly.
+`repository-check` verifies immutable -07 artifact hashes and manifest paths.
+The retired -07 rendering workflow is now read-only: it checks and exports the
+frozen publication, and cannot regenerate or commit replacements.
