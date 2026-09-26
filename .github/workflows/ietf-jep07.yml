@@ -1,0 +1,89 @@
+name: Build IETF JEP-07 submission artifacts
+
+on:
+  push:
+    branches:
+      - draft/jep-07-core
+    paths:
+      - draft-wang-jep-judgment-event-protocol.md
+      - .github/workflows/ietf-jep07.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Render RFCXML v3 with IETF Author Tools
+        run: |
+          mkdir -p ietf-rendered
+          curl --fail-with-body --retry 3 --retry-delay 2 \
+            https://author-tools.ietf.org/api/render/xml \
+            -X POST \
+            -F "file=@draft-wang-jep-judgment-event-protocol.md" \
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
+
+      - name: Render plaintext with IETF Author Tools
+        run: |
+          curl --fail-with-body --retry 3 --retry-delay 2 \
+            https://author-tools.ietf.org/api/render/text \
+            -X POST \
+            -F "file=@draft-wang-jep-judgment-event-protocol.md" \
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
+
+      - name: Validate submission source
+        run: |
+          curl --fail-with-body --retry 3 --retry-delay 2 \
+            https://author-tools.ietf.org/api/validate \
+            -X POST \
+            -F "file=@ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml" \
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json
+          cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json")
+          data = json.loads(p.read_text())
+          errors = data.get("errors") or []
+          if errors:
+              raise SystemExit("IETF Author Tools validation errors: " + repr(errors))
+          PY
+
+      - name: Run IETF submission nits check
+        run: |
+          curl --fail-with-body --retry 3 --retry-delay 2 \
+            https://author-tools.ietf.org/api/idnits \
+            -X POST \
+            -F "file=@ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt" \
+            -F "verbose=2" \
+            -F "hidetext=1" \
+            -F "submitcheck=1" \
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
+          cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
+
+      - name: Sanity checks
+        run: |
+          test -s ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
+          test -s ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
+          grep -q 'docName="draft-wang-jep-judgment-event-protocol-07"' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
+          grep -q 'Judgment Event Protocol (JEP)' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
+          ! grep -q 'ERR_NONCE_REPLAY' ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
+          ! grep -q '| `nonce` | REQUIRED' draft-wang-jep-judgment-event-protocol.md
+
+      - name: Commit validated submission artifacts
+        run: |
+          git config user.name "JEP IETF Build"
+          git config user.email "signal@humanjudgment.org"
+          git add \
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml \
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt \
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json \
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "build: render validated IETF JEP -07 artifacts"
+            git push
+          fi
