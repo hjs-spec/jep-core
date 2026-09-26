@@ -38,9 +38,10 @@ organizational, software, and autonomous agent systems.
 
 JEP specifies four immutable event verbs: Judgment (J), Delegation (D),
 Termination (T), and Verification (V). It defines a signed JSON event
-structure, stable event identity, detached JSON Web Signature (JWS)
-verification over JSON Canonicalization Scheme (JCS) canonicalized
-payloads, signed-artifact hash and reference semantics, independent
+structure, stable event identity, signature verification over JSON
+Canonicalization Scheme (JCS) canonicalized payloads, a detached JSON
+Web Signature (JWS) baseline profile, signed-artifact hash and reference
+semantics, independent
 validation checks, idempotent acceptance semantics, structured
 validation results, extension handling, trust-profile interfaces, and
 determinability boundaries.
@@ -177,10 +178,10 @@ JEP-Core follows these principles:
 2. **Semantic neutrality:** JEP-Core records structured signed statements
    without deciding their substantive truth, authority, legality,
    causality, policy consequence, or external effect.
-4. **Property over mechanism:** JEP-Core defines required protocol
+3. **Property over mechanism:** JEP-Core defines required protocol
    properties without mandating a single replay, transport, storage, or
    challenge mechanism.
-3. **Stable event identity:** event identity is a first-class protocol
+4. **Stable event identity:** event identity is a first-class protocol
    concept and is separate from signed-artifact hashing.
 5. **Idempotent acceptance:** repeated delivery of the same event does
    not create a new event and MUST NOT repeatedly apply acceptance
@@ -231,8 +232,8 @@ actor is defined by a trust profile.
 termination, or verification is made. A subject is distinct from the
 actor.
 
-**Event:** A single immutable signed JSON object representing one
-judgment-related act.
+**Event:** A single immutable signed JSON object carrying one
+judgment-related protocol statement.
 
 **Event ID:** The value of the top-level `id` member. An Event ID is an
 opaque identifier chosen by the producer for one event instance.
@@ -309,7 +310,7 @@ The top-level members are:
 | `ref` | Conditional | Typed reference or exact-artifact reference. |
 | `ext` | OPTIONAL | Extension object. |
 | `ext_crit` | OPTIONAL | Critical extension identifier list. |
-| `sig` | REQUIRED | Detached signature container. |
+| `sig` | REQUIRED | Signature container defined by the applicable signature profile. |
 
 JEP-Core 0.7 has no required top-level `nonce` member.
 
@@ -1166,7 +1167,7 @@ A JEP-Core-0.7 producer MUST support:
 - generation or assignment of a stable `id`;
 - required top-level fields;
 - JCS canonicalization of unsigned payloads;
-- detached JWS signature generation under at least one conformance class;
+- signature generation under at least one conformance class;
 - algorithm-tagged digest strings;
 - `ext` and `ext_crit` semantics.
 
@@ -1181,7 +1182,7 @@ A JEP-Core-0.7 verifier MUST support:
 - core field validation;
 - Event Identity validation;
 - JCS canonicalization;
-- detached signature verification under at least one conformance class;
+- signature verification under at least one conformance class;
 - Event Hash calculation;
 - independent validation checks;
 - structured validation result objects;
@@ -1227,7 +1228,7 @@ JEP distinguishes protocol-observable properties of signed statements
 from substantive facts about the external world. This distinction is the
 basis of JEP-Core's semantic neutrality.
 
-## Observable Protocol Facts
+## Observable Protocol Properties
 
 Subject to the checks actually performed, JEP can support determination
 of protocol-level properties such as:
