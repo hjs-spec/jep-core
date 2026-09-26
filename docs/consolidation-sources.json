@@ -1,0 +1,110 @@
+{
+  "date": "2026-09-26",
+  "files": [
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "README.md",
+      "destination": "docs/architecture/README.md",
+      "source_sha256": "5153ca1dfb690383e53a299c9d10e4f7d218f07b91974efa7bd3e004c2e8d867"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "architecture-notes.md",
+      "destination": "docs/architecture/architecture-notes.md",
+      "source_sha256": "5934f3233930dbc478af95a65f171182781c1a0dc7a26d19c17e75b5655c3a8c"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/delegation-lineage.md",
+      "destination": "docs/architecture/diagrams/delegation-lineage.md",
+      "source_sha256": "e39cbc1800451f845fbfb2328a4265a6f84f5f3ead34b1ea86a5bb62383798fc"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/delegation-lineage.svg",
+      "destination": "docs/architecture/diagrams/delegation-lineage.svg",
+      "source_sha256": "bbbbfb65ce6fbb9d470278aa16bcf4d2818c23adbc210df88bd707567223f177"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/execution-path.md",
+      "destination": "docs/architecture/diagrams/execution-path.md",
+      "source_sha256": "6c6f8e2511aa243b1905daadb432398eac52a12bb70e8c19db6d9bc24087301c"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/execution-path.svg",
+      "destination": "docs/architecture/diagrams/execution-path.svg",
+      "source_sha256": "42b735a40e177481fc4b334f1f9c08af4453ffe7bf998b47e58e4b8cac84497e"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/protocol-stack.md",
+      "destination": "docs/architecture/diagrams/protocol-stack.md",
+      "source_sha256": "da365ae245a59ddc986b3156012bbb77322d4a40ac7211148a51d1db66137b94"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/protocol-stack.svg",
+      "destination": "docs/architecture/diagrams/protocol-stack.svg",
+      "source_sha256": "2838fc4eb5735dbbd15972633d131cd2f9751d1044b466b7c5c5ee762de1fcd6"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/replay-verification.md",
+      "destination": "docs/architecture/diagrams/replay-verification.md",
+      "source_sha256": "b05fbb193af110029e725c8fcd136e900f0f17efa5583e1eb39e071be80b9340"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/replay-verification.svg",
+      "destination": "docs/architecture/diagrams/replay-verification.svg",
+      "source_sha256": "306fd346a42da27e50d2a6f8b47658386636a0c6b79761ca8cd08eac04adde2d"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/trust-boundary.md",
+      "destination": "docs/architecture/diagrams/trust-boundary.md",
+      "source_sha256": "699f274d5cf0d23e91fb64208ab0ec6993d97695ae459906a44495a91c917748"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "diagrams/trust-boundary.svg",
+      "destination": "docs/architecture/diagrams/trust-boundary.svg",
+      "source_sha256": "903478c84eb95668b63dcbb2d7419b48bfdfb20dadc367c15bc77d153a2e99e4"
+    },
+    {
+      "source_repository": "hjs-spec/jep-architecture",
+      "source_commit": "daedfeef8671f949fcef274155e9436a7b6678cc",
+      "source_path": "scripts/generate-static-svgs.py",
+      "destination": "docs/architecture/scripts/generate-static-svgs.py",
+      "source_sha256": "b4f03f23513b9ac545386421ba31ef8129c700ad2e0de7b0126028c7c761c77b"
+    },
+    {
+      "source_repository": "hjs-spec/jep-vs-logging",
+      "source_commit": "7ed10ec09389cf14d6c9730df21c4109c0e9b777",
+      "source_path": "demo.py",
+      "destination": "examples/legacy/logging-comparison/demo.py",
+      "source_sha256": "348daf928214f53dca5b95333b0165dfecee8062a2969fd85343ab031ba29074"
+    },
+    {
+      "source_repository": "hjs-spec/jep-vs-logging",
+      "source_commit": "7ed10ec09389cf14d6c9730df21c4109c0e9b777",
+      "source_path": ".gitignore",
+      "destination": "examples/legacy/logging-comparison/.gitignore",
+      "source_sha256": "cdf7ae1d501021c1d8ec696082a6f2c0dbfedfcc3d229211679bb33b4b9d3def"
+    }
+  ]
+}
