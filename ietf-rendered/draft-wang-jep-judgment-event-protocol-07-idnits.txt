@@ -1,14 +1,14 @@
 idnits 2.17.1 
 
 draft-wang-jep-judgment-event-protocol-07.txt:
-draft-wang-jep-judgment-event-protocol-07.txt(32): RFC 2119 keyword:    nonce.  An acceptance processor MUST prevent the same JEP event from.
-draft-wang-jep-judgment-event-protocol-07.txt(34): RFC 2119 keyword:    domain.  Profiles MAY additionally require nonces, challenges,.
+draft-wang-jep-judgment-event-protocol-07.txt(31): RFC 2119 keyword:    nonce.  An acceptance processor MUST prevent the same JEP event from.
+draft-wang-jep-judgment-event-protocol-07.txt(33): RFC 2119 keyword:    domain.  Profiles MAY additionally require nonces, challenges,.
 draft-wang-jep-judgment-event-protocol-07.txt(211): RFC 2119 keyword:    valid event MAY be delivered repeatedly.  Repeated delivery MUST NOT.
-draft-wang-jep-judgment-event-protocol-07.txt(346): RFC 2119 keyword:    A JEP event records claims about judgment-related acts.  It MUST NOT.
-draft-wang-jep-judgment-event-protocol-07.txt(370): RFC 2119 keyword:         does not create a new event and MUST NOT repeatedly apply.
-draft-wang-jep-judgment-event-protocol-07.txt(373): RFC 2119 keyword:    6.   *Identity-system neutrality:* JEP-Core MUST NOT require a.
-draft-wang-jep-judgment-event-protocol-07.txt(376): RFC 2119 keyword:    7.   *Credential-system neutrality:* JEP-Core MUST NOT require VC or.
-draft-wang-jep-judgment-event-protocol-07.txt(379): RFC 2119 keyword:    8.   *Platform neutrality:* JEP-Core MUST NOT require an AI platform,.
+draft-wang-jep-judgment-event-protocol-07.txt(348): RFC 2119 keyword:    A JEP event records claims about judgment-related acts.  It MUST NOT.
+draft-wang-jep-judgment-event-protocol-07.txt(372): RFC 2119 keyword:         does not create a new event and MUST NOT repeatedly apply.
+draft-wang-jep-judgment-event-protocol-07.txt(375): RFC 2119 keyword:    6.   *Identity-system neutrality:* JEP-Core MUST NOT require a.
+draft-wang-jep-judgment-event-protocol-07.txt(378): RFC 2119 keyword:    7.   *Credential-system neutrality:* JEP-Core MUST NOT require VC or.
+draft-wang-jep-judgment-event-protocol-07.txt(381): RFC 2119 keyword:    8.   *Platform neutrality:* JEP-Core MUST NOT require an AI platform,.
 draft-wang-jep-judgment-event-protocol-07.txt(405): RFC 2119 keyword:    12.  *Privacy by minimization:* sensitive evidence SHOULD be.
 draft-wang-jep-judgment-event-protocol-07.txt(409): RFC 2119 keyword:    13.  *Extension without semantic capture:* extensions MUST NOT.
 draft-wang-jep-judgment-event-protocol-07.txt(417): RFC 2119 keyword:         under the rules that produced them and MUST NOT be silently.
@@ -222,7 +222,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Indicate Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119,
      March 1997, <https://www.rfc-editor.org/rfc/rfc2119>.)
 
-     	ref_def[RFC2119] at 1954: [RFC2119]  Bradner, S., "Key words for use in
+     	ref_def[RFC2119] at 1956: [RFC2119]  Bradner, S., "Key words for use in
      RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, DOI
      10.17487/RFC2119, March 1997, <https://www.rfc-editor.org/rfc/rfc2119>.
 
@@ -230,7 +230,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Hash Algorithms (SHA and SHA-based HMAC and HKDF)", RFC 6234, DOI
      10.17487/RFC6234, May 2011, <https://www.rfc-editor.org/rfc/rfc6234>.)
 
-     	ref_def[RFC6234] at 1959: [RFC6234]  Eastlake 3rd, D. and T. Hansen,
+     	ref_def[RFC6234] at 1961: [RFC6234]  Eastlake 3rd, D. and T. Hansen,
      "US Secure Hash Algorithms (SHA and SHA-based HMAC and HKDF)", RFC 6234,
      DOI 10.17487/RFC6234, May 2011, <https://www.rfc-editor.org/rfc/rfc6234>.
 
@@ -238,7 +238,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Format", RFC 7493, DOI 10.17487/RFC7493, March 2015,
      <https://www.rfc-editor.org/rfc/rfc7493>.)
 
-     	ref_def[RFC7493] at 1964: [RFC7493]  Bray, T., Ed., "The I-JSON Message
+     	ref_def[RFC7493] at 1966: [RFC7493]  Bray, T., Ed., "The I-JSON Message
      Format", RFC 7493, DOI 10.17487/RFC7493, March 2015,
      <https://www.rfc-editor.org/rfc/rfc7493>.
 
@@ -246,7 +246,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      "JSON Web Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May 2015,
      <https://www.rfc-editor.org/rfc/rfc7515>.)
 
-     	ref_def[RFC7515] at 1968: [RFC7515]  Jones, M., Bradley, J., and N.
+     	ref_def[RFC7515] at 1970: [RFC7515]  Jones, M., Bradley, J., and N.
      Sakimura, "JSON Web Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May
      2015, <https://www.rfc-editor.org/rfc/rfc7515>.
 
@@ -254,7 +254,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      Lowercase in RFC 2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
      May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.)
 
-     	ref_def[RFC8174] at 1972: [RFC8174]  Leiba, B., "Ambiguity of Uppercase
+     	ref_def[RFC8174] at 1974: [RFC8174]  Leiba, B., "Ambiguity of Uppercase
      vs Lowercase in RFC 2119 Key Words", BCP 14, RFC 8174, DOI
      10.17487/RFC8174, May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
@@ -263,7 +263,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      10.17487/RFC8259, December 2017,
      <https://www.rfc-editor.org/rfc/rfc8259>.)
 
-     	ref_def[RFC8259] at 1976: [RFC8259]  Bray, T., Ed., "The JavaScript
+     	ref_def[RFC8259] at 1978: [RFC8259]  Bray, T., Ed., "The JavaScript
      Object Notation (JSON) Data Interchange Format", STD 90, RFC 8259, DOI
      10.17487/RFC8259, December 2017,
      <https://www.rfc-editor.org/rfc/rfc8259>.
@@ -272,7 +272,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      "JSON Canonicalization Scheme (JCS)", RFC 8785, DOI 10.17487/RFC8785,
      June 2020, <https://www.rfc-editor.org/rfc/rfc8785>.)
 
-     	ref_def[RFC8785] at 1981: [RFC8785]  Rundgren, A., Jordan, B., and S.
+     	ref_def[RFC8785] at 1983: [RFC8785]  Rundgren, A., Jordan, B., and S.
      Erdtman, "JSON Canonicalization Scheme (JCS)", RFC 8785, DOI
      10.17487/RFC8785, June 2020, <https://www.rfc-editor.org/rfc/rfc8785>.
 
@@ -281,7 +281,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      10.17487/RFC8032, January 2017,
      <https://www.rfc-editor.org/rfc/rfc8032>.)
 
-     	ref_def[RFC8032] at 1988: [RFC8032]  Josefsson, S. and I. Liusvaara,
+     	ref_def[RFC8032] at 1990: [RFC8032]  Josefsson, S. and I. Liusvaara,
      "Edwards-Curve Digital Signature Algorithm (EdDSA)", RFC 8032, DOI
      10.17487/RFC8032, January 2017, <https://www.rfc-editor.org/rfc/rfc8032>.
 
@@ -289,7 +289,7 @@ draft-wang-jep-judgment-event-protocol-07.txt(2421): update_references( [RFC9562
      "Universally Unique IDentifiers (UUIDs)", RFC 9562, DOI 10.17487/RFC9562,
      May 2024, <https://www.rfc-editor.org/rfc/rfc9562>.)
 
-     	ref_def[RFC9562] at 1993: [RFC9562]  Davis, K., Peabody, B., and P.
+     	ref_def[RFC9562] at 1995: [RFC9562]  Davis, K., Peabody, B., and P.
      Leach, "Universally Unique IDentifiers (UUIDs)", RFC 9562, DOI
      10.17487/RFC9562, May 2024, <https://www.rfc-editor.org/rfc/rfc9562>.
 
