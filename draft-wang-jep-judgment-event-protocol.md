@@ -1519,3 +1519,9 @@ extension identifiers, validation checks, acceptance outcomes, trust
 profiles, conformance classes, or related identifiers.
 
 --- back
+
+# Acknowledgments
+{:numbered="false"}
+
+The author thanks implementers and reviewers who provided interoperability,
+security, and deployment feedback on earlier JEP draft revisions.
