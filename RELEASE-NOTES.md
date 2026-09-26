@@ -35,8 +35,10 @@ SHA-256:
 
 ## Current implementation delivery
 
-Software release **0.7.1** publishes `jep-core-conformance` with the current Python validator, schemas and vectors. Conformance/01 and Profiles/01 describe the Core 0.7 migration. Explicit legacy validators and historical vectors remain available.
+Software release **0.7.2** publishes `jep-core-conformance` with the current Python validator, schemas and vectors. Conformance/01 and Profiles/01 describe the Core 0.7 migration. Explicit legacy validators and historical vectors remain available.
 
 This release repairs malformed-input handling, unresolved-key results, acceptance-state failure handling, and schema alignment. It also verifies the published -07 hashes in CI. Legacy Go binaries are named `jep-validate-06-*` to identify their actual protocol target. The default Python command is `jep-validate` (Core 0.7).
 
 The earlier software tag `v0.7.0` contained legacy 0.6 artifacts; it is retained as published history. No published Internet-Draft bytes are changed by this software release.
+
+The unpublished 0.7.1 delivery attempt exposed a legacy Go test reading the current manifest. Release 0.7.2 selects the explicit 0.6 manifest and disables Go test-result caching in both CI and release gates.

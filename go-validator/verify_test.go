@@ -10,7 +10,7 @@ import (
 )
 
 func TestSharedManifest(t *testing.T) {
-	raw, err := os.ReadFile("../test-manifest.json")
+	raw, err := os.ReadFile("../test-manifest-0.6.json")
 	if err != nil {
 		t.Fatal(err)
 	}
