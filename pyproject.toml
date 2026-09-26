@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "jep-v06-conformance-seed"
 version = "0.7.0"
 readme = "README.md"
-description = "JEP v0.6 draft-set conformance and interoperability seed"
+description = "Legacy JEP 0.6 conformance and interoperability seed retained for pre-07 compatibility"
 requires-python = ">=3.10"
 dependencies = [
     "PyNaCl>=1.6.2,<2",
