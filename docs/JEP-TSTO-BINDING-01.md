@@ -1,4 +1,7 @@
-# JEP-TSTO Binding/01: declared validation path
+# JEP-TSTO Binding/01: historical validation path
+
+**Historical Core 0.6 publication note.** For current Core 0.7 integration, use [Binding/02 and its executable validation path](https://github.com/cognitive-emergence/tsto-spec). The seed-coverage statements below describe the original pinned `eef317711e0177a64a301bceb1cb6dfd32bf4fc9` snapshot, not today's Core 0.7 validator. Do not run historical events through the current decoder or rewrite their signatures.
+
 
 Binding/01 is an independent experimental binding to TSTO/00. It leaves JEP-Core 0.6 and wire version `jep: "1"` unchanged.
 

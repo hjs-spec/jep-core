@@ -12,16 +12,12 @@ Current Core: **JEP Core 0.7**.
 - 0.7 vectors/manifest: current.
 - 0.6 Python/TypeScript/Go validators and vectors: explicit legacy compatibility.
 
-## Still to migrate outside or alongside Core
+## Cross-repository status
 
-- jep-api;
-- sdk-js / sdk-py / sdk-go;
-- jep-agent-sdk;
-- jep-runtime;
-- AMP / semantic interoperability;
-- JEP-TSTO Binding/02;
-- HJS / Agent Blackbox adapters;
-- application integrations such as Prooftask.
+- [JEP-TSTO Binding/02](https://github.com/cognitive-emergence/tsto-spec) is the current TSTO/00 integration for Core 0.7. Its signed marker, typed carriers, pinned joint validation, fixtures and [experimental release](https://github.com/cognitive-emergence/tsto-spec/releases/tag/jep-tsto-binding-02) are maintained in that repository.
+- [Software delivery status](https://github.com/hjs-spec/.github/blob/main/DELIVERY-2026-09-26.md) tracks API, client and recorder releases separately from package-registry and hosted-deployment status. A protocol version does not imply that every deployment has upgraded.
+- [Component format boundaries](architecture/architecture-notes.md#format-and-verification-matrix) distinguish Core events from separate runtime, adapter, JAC and HJS formats. Those formats must not be relabeled as Core 0.7.
+- Application integrations such as Prooftask and semantic/chain profiles require their own explicit compatibility and deployment evidence. Publishing a binding does not migrate their stored history.
 
 ## Migration invariants
 
