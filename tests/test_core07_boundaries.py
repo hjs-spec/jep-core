@@ -99,3 +99,23 @@ def test_repository_guard_and_frozen_artifact(tmp_path):
     corrupted.write_text("changed publication")
     with pytest.raises(ValueError, match="Frozen publication changed"):
         guard.check(tmp_path)
+
+
+def test_jcs_large_integer_wire_form_preserves_signature(event):
+    event["what"] = {"value": 1e20}
+    key = SigningKey.generate()
+    protected = core.b64u(b'{"alg":"Ed25519","kid":"number-test"}')
+    payload = core.b64u(core.canonicalize({k:v for k,v in event.items() if k != "sig"}))
+    event["sig"] = protected + ".." + core.b64u(key.sign((protected + "." + payload).encode()).signature)
+    keys = {"number-test": {"kty":"OKP","crv":"Ed25519","x":core.b64u(bytes(key.verify_key))}}
+    wire = core.canonicalize(event).decode()
+    assert '100000000000000000000' in wire
+    parsed = core.parse_json(wire)
+    assert type(parsed["what"]["value"]) is int
+    result = core.validate_event(parsed, keys=keys)
+    assert result["status"] == "valid"
+    assert result["event_hash"] == core.event_hash(event)
+    assert type(event["what"]["value"]) is float
+    for bad in (2**53 + 1, 10**400):
+        with pytest.raises(ValueError):
+            core.parse_json(json.dumps({"value":bad}))
