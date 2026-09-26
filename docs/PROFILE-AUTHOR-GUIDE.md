@@ -1,150 +1,75 @@
-# JEP v0.6 Profile Author Guide
+# JEP Core 0.7 Profile Author Guide
 
-This guide helps authors define optional JEP profiles without destabilizing JEP-Core.
+Profiles add interoperability constraints without redefining Core.
 
-Profiles are optional interoperability layers. They must not redefine Core semantics.
+## A profile should declare
 
-## 1. Profile boundary
-
-A profile may define:
-
+- profile identifier and version;
+- supported JEP Core version;
 - actor identifier forms;
-- key resolution;
+- signing-key resolution;
 - actor/key binding;
-- credential rules;
-- authorization context;
-- attestation evidence;
-- archival behavior;
-- chain interpretation;
-- policy hooks.
+- algorithm policy;
+- required validation checks;
+- audience rules;
+- freshness/challenge rules;
+- acceptance-domain rules;
+- security considerations;
+- privacy considerations.
 
-A profile must not redefine:
+## Use checks, not levels
 
-- J/D/T/V semantics;
-- event hash semantics;
-- signature semantics;
-- validation levels;
-- core failure-code semantics;
-- `ext_crit` behavior;
-- JEP-Core conformance.
+Do not say that a profile "raises validation to Level 3" or similar.
 
-## 2. Required profile metadata
+Instead declare exact required checks, for example:
 
-Each profile should declare:
-
-```text
-profile_id:
-profile_name:
-profile_version:
-supported_jep_core:
-status:
-change_controller:
+```json
+{
+  "required_checks": [
+    "syntax",
+    "cryptographic",
+    "actor_binding",
+    "event_identity",
+    "freshness",
+    "audience",
+    "extension_processing"
+  ]
+}
 ```
 
-Example:
+## Do not redefine Core
 
-```text
-profile_id: jep-profile:did-vc:0
-profile_name: JEP DID/VC Profile
-profile_version: 0
-supported_jep_core: JEP-Core-0.6
-status: optional experimental
-```
+A profile MUST NOT redefine:
 
-## 3. Required profile sections
+- Event Identity `(who,id)`;
+- Event Hash meaning;
+- J/D/T/V Core semantics;
+- JCS signing payload;
+- Core check meanings;
+- substantive-neutrality boundary.
 
-A profile should include:
+## Replay / freshness
 
-1. Scope
-2. Non-goals
-3. Actor identifier forms
-4. Key resolution
-5. Actor/key binding
-6. Algorithm policy
-7. Credential or attestation handling
-8. Validation-level impact
-9. Failure-code mapping
-10. Security considerations
-11. Privacy considerations
-12. Test vectors
-13. Conformance class, if any
+Core does not require a nonce. If a profile needs current liveness,
+single-use authority, or ordering, specify the required mechanism
+explicitly.
 
-## 4. Validation-level impact
+## Chain profiles
 
-A profile must say which validation level it affects.
+Chain profiles may define:
 
-Examples:
+- reference resolution;
+- delegation paths;
+- termination cascade;
+- cycle rules;
+- complete-log assumptions;
+- authorization consequences.
 
-| Profile feature | Likely validation level |
-|---|---|
-| DID key binding | Level 2 |
-| X.509 certificate chain | Level 2 |
-| VC role credential | Level 2 or Level 4 |
-| OAuth authorization context | Level 4 |
-| RATS attestation | Level 4 |
-| HJS archive receipt | Level 3 |
-| JAC chain reconstruction | Level 3 |
+These remain companion semantics even when reported through
+`chain_integrity`.
 
-## 5. Failure-code mapping
+## Compatibility
 
-A profile should map failures to existing JEP codes where possible.
-
-Examples:
-
-```text
-DID document unavailable -> ERR_ACTOR_UNRESOLVED
-key not in verificationMethod -> ERR_KEY_NOT_BOUND_TO_ACTOR
-credential expired -> ERR_POLICY_REJECTED
-unknown required profile extension -> ERR_UNKNOWN_CRITICAL_EXTENSION
-attestation evidence missing -> ERR_DOMAIN_REQUIREMENT_UNSATISFIED
-```
-
-## 6. Security requirements
-
-A profile must consider:
-
-- actor misbinding;
-- key substitution;
-- credential overclaim;
-- algorithm downgrade;
-- profile downgrade;
-- replay or stale evidence;
-- issuer trust;
-- external evidence tampering.
-
-## 7. Privacy requirements
-
-A profile must consider:
-
-- identifier linkability;
-- credential disclosure;
-- workflow leakage;
-- digest dictionary attacks;
-- cross-context correlation;
-- retention and redaction;
-- selective disclosure.
-
-## 8. Profile registration template
-
-```text
-Profile identifier:
-Profile name:
-Version:
-Supported JEP-Core version:
-Description:
-Actor identifier forms:
-Key resolution:
-Algorithm policy:
-Credential/attestation dependencies:
-Validation-level impact:
-Failure-code mapping:
-Security considerations:
-Privacy considerations:
-Reference implementation:
-Test vectors:
-Change controller:
-```
-
-## 9. Profile authoring rule
-
-When in doubt, keep the profile optional and do not change JEP-Core.
+A pre-0.7 profile is not automatically a 0.7 profile. Any dependency on
+mandatory nonce, Validation Levels, Event Hash as event identity, or Core
+chain effects requires an explicit revision.
