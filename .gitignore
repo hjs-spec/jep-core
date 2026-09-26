@@ -6,3 +6,6 @@ __pycache__/
 *.tmp
 typescript-validator/node_modules/
 typescript-validator/dist/
+
+/build/
+/dist/
