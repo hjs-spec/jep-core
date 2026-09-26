@@ -1,0 +1,87 @@
+{
+  "suite": "jep-core-0.7-conformance",
+  "version": "0.7",
+  "description": "JEP Core 0.7 structural, signature, identity, and idempotent-acceptance vectors.",
+  "cases": [
+    {
+      "name": "J-basic",
+      "path": "test-vectors/0.7/valid/J-basic.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "trust_profile": "inline",
+      "expected_status": "valid"
+    },
+    {
+      "name": "D-basic",
+      "path": "test-vectors/0.7/valid/D-basic.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "trust_profile": "inline",
+      "expected_status": "valid"
+    },
+    {
+      "name": "T-basic",
+      "path": "test-vectors/0.7/valid/T-basic.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "trust_profile": "inline",
+      "expected_status": "valid"
+    },
+    {
+      "name": "V-basic",
+      "path": "test-vectors/0.7/valid/V-basic.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "trust_profile": "inline",
+      "expected_status": "valid"
+    },
+    {
+      "name": "V-missing-result",
+      "path": "test-vectors/0.7/invalid/V-missing-result.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "expected_status": "invalid",
+      "expected_error": "ERR_MISSING_REQUIRED_FIELD"
+    },
+    {
+      "name": "D-missing-scope",
+      "path": "test-vectors/0.7/invalid/D-missing-scope.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "expected_status": "invalid",
+      "expected_error": "ERR_MISSING_REQUIRED_FIELD"
+    },
+    {
+      "name": "T-missing-ref",
+      "path": "test-vectors/0.7/invalid/T-missing-ref.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "expected_status": "invalid",
+      "expected_error": "ERR_MISSING_REQUIRED_FIELD"
+    },
+    {
+      "name": "accept-first",
+      "path": "test-vectors/0.7/valid/J-basic.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "trust_profile": "inline",
+      "mode": "acceptance",
+      "state": "acceptance-1",
+      "expected_status": "valid",
+      "expected_outcome": "accepted"
+    },
+    {
+      "name": "accept-retry",
+      "path": "test-vectors/0.7/valid/J-basic.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "trust_profile": "inline",
+      "mode": "acceptance",
+      "state": "acceptance-1",
+      "expected_status": "valid",
+      "expected_outcome": "already_accepted"
+    },
+    {
+      "name": "event-id-conflict",
+      "path": "test-vectors/0.7/acceptance/J-conflict.json",
+      "keys": "test-vectors/0.7/keys.json",
+      "trust_profile": "inline",
+      "mode": "acceptance",
+      "state": "acceptance-1",
+      "expected_status": "invalid",
+      "expected_error": "ERR_EVENT_ID_CONFLICT",
+      "expected_outcome": "rejected"
+    }
+  ]
+}
