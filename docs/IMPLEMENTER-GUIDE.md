@@ -1,103 +1,104 @@
-# JEP v0.6 Implementer Guide
+# JEP Core 0.7 Implementer Guide
 
-This guide describes the minimum implementation path for JEP-Core-0.6.
+This guide describes the current JEP Core implementation path. For the
+normative definition, use `draft-wang-jep-judgment-event-protocol-07`.
 
-It is non-normative. The normative requirements remain in:
+## Produce
 
-- `draft-wang-jep-judgment-event-protocol-06.md`
-- `draft-wang-jep-profiles-00.md`
-- `draft-wang-jep-conformance-00.md`
+A Core 0.7 producer:
 
-## 1. Minimum implementation path
+1. assigns a stable `id`;
+2. sets `jep: "1"`;
+3. sets `verb`, `who`, `when`, and `what`;
+4. satisfies the verb-specific minimum:
+   - J: judgment claim;
+   - D: `what.delegatee` and `what.scope`;
+   - T: `ref` and `what.termination_scope`;
+   - V: `ref`, `what.verification_scope`, and `what.result`;
+5. canonicalizes the unsigned event using JCS;
+6. signs under a declared signature/conformance profile.
 
-A minimal JEP-Core verifier should implement the following steps:
+Core 0.7 does not require a top-level nonce.
 
-```text
-1. Parse JSON.
-2. Reject duplicate JSON member names.
-3. Validate required top-level fields.
-4. Validate verb-specific requirements.
-5. Remove `sig` to construct the unsigned event.
-6. JCS-canonicalize the unsigned event.
-7. Verify the detached JWS signature over the canonicalized payload.
-8. Compute the event hash over the full signed event.
-9. Resolve `who` and `kid` under a trust profile.
-10. Process `ext` and `ext_crit`.
-11. Return a structured validation result.
-```
+## Identify
 
-## 2. Minimal producer checklist
+Event Identity is `(who,id)`.
 
-A JEP producer should:
+Event Hash identifies one exact signed artifact. Do not use Event Hash as
+the stable event identity.
 
-- emit I-JSON-compatible JSON;
-- set `jep` to `"1"`;
-- use one of `J`, `D`, `T`, or `V`;
-- generate a fresh nonce;
-- include `who`, `when`, `what`, `aud`, `ref`, and `sig` as required;
-- canonicalize the unsigned payload using JCS;
-- sign using a conformance-supported detached JWS profile;
-- include `ext_crit` only for extensions required for validation.
+A retransmission keeps the same Event Identity.
 
-## 3. Minimal verifier checklist
+Reusing one Event Identity for different unsigned content is an
+`ERR_EVENT_ID_CONFLICT`.
 
-A JEP verifier should:
+## Verify
 
-- reject invalid JSON;
-- reject duplicate JSON member names;
-- reject unsupported JEP wire-format versions;
-- reject unknown verbs;
-- reject malformed or missing signatures;
-- verify detached JWS;
-- compute event hash;
-- reject unknown critical extensions;
-- distinguish validation level from policy validity.
+Report independent checks rather than a highest Validation Level.
 
-## 4. Validation levels
+Core checks:
+`syntax`, `cryptographic`, `event_identity`,
+`reference_integrity`, `extension_processing`.
 
-Implementation should report the highest completed validation level:
+Profile checks:
+`actor_binding`, `freshness`, `audience`.
 
-| Level | Name | Meaning |
-|---|---|---|
-| 0 | Syntax | JSON and field shape |
-| 1 | Cryptographic | Signature, canonicalization, hash |
-| 2 | Actor Binding | Key-to-actor binding under trust profile |
-| 3 | Chain | References, extension processing, termination effects |
-| 4 | Policy | External policy, legal, regulatory, or domain logic |
+Companion/external checks:
+`chain_integrity`, `policy`.
 
-Do not report Level 4 unless a policy profile was actually evaluated.
+## Accept safely
 
-## 5. Common mistakes
+Delivery may be at-least-once. Acceptance effects are at-most-once per
+Event Identity within an acceptance domain.
 
-Avoid these mistakes:
-
-- treating signature validity as factual truth;
-- treating `who` as necessarily identical to the signer;
-- treating `ref` as causality;
-- treating `aud` as access control;
-- treating `V` as global fact verification;
-- treating HJS archival presence as complete-log proof;
-- treating JAC chain reconstruction as legal liability.
-
-## 6. Suggested implementation stages
+First valid acceptance:
 
 ```text
-Stage 1: Parser and schema checks
-Stage 2: JCS + event hash
-Stage 3: detached JWS verification
-Stage 4: validation result object and error codes
-Stage 5: critical extension handling
-Stage 6: trust profile interface
-Stage 7: chain validation
-Stage 8: optional profiles
+status = valid
+acceptance.outcome = accepted
+effect_applied = true
 ```
 
-## 7. Test before publishing
+Safe retry:
 
-Run:
-
-```bash
-python reference-validator/jep_validate.py validate test-vectors/valid/J-basic-signed.json --keys test-vectors/valid/public-keys.json
-python reference-validator/jep_validate.py validate-chain test-vectors/valid/delegation-verification-termination-chain.jsonl --keys test-vectors/valid/public-keys.json
-python reference-validator/jep_validate.py run-tests test-vectors --keys test-vectors/valid/public-keys.json
+```text
+status = valid
+acceptance.outcome = already_accepted
+effect_applied = false
 ```
+
+Identity conflict:
+
+```text
+status = invalid
+ERR_EVENT_ID_CONFLICT
+effect_applied = false
+```
+
+Recording first acceptance and applying the effect must be atomic or
+equivalent.
+
+## Freshness
+
+Stable identity is not proof of liveness or freshness.
+
+Interactive profiles may require challenge, nonce, audience, trusted time,
+sequence number, transaction identifier, counter, or ledger position.
+
+Those mechanisms belong to a profile or extension.
+
+## Chain boundary
+
+Core references do not create causal, authorization, or lifecycle
+semantics by themselves.
+
+Delegation-scope enforcement, termination cascade, cycle analysis,
+complete-log assumptions, and policy effects belong to chain/profile
+layers.
+
+## Historical 0.6
+
+Do not rewrite historical signed events.
+
+Use the explicit legacy validator for pre-0.7 artifacts. Never attempt
+0.7, observe failure, and silently retry 0.6 based only on field presence.
