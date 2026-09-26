@@ -18,6 +18,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Check kramdown RFCXML structure
+        run: |
+          gem install kramdown-rfc --no-document
+          kramdown-rfc draft-wang-jep-judgment-event-protocol.md > /tmp/jep07.xml
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          p=Path("/tmp/jep07.xml")
+          try:
+              ET.parse(p)
+          except Exception as exc:
+              print(exc)
+              lines=p.read_text(errors="replace").splitlines()
+              for n,line in enumerate(lines[-80:], start=max(1,len(lines)-79)):
+                  print(f"{n:04d}: {line}")
+              raise
+          PY
+
       - name: Preflight validate Markdown source
         run: |
           mkdir -p ietf-rendered
