@@ -25,15 +25,8 @@ author:
     uri: https://github.com/hjs-spec
 
 normative:
-  RFC6234:
-  RFC7493:
-  RFC7515:
-  RFC8259:
-  RFC8785:
 
 informative:
-  RFC8032:
-  RFC9562:
 
 ...
 
@@ -728,11 +721,7 @@ Identity.
 JEP uses algorithm-tagged digest strings for Event Hashes, content
 digests, exact-artifact pins, and other digest references.
 
-Syntax:
-
-```text
-<hash-algorithm>:<lowercase-hex-digest>
-```
+Syntax: `<hash-algorithm>:<lowercase-hex-digest>`
 
 The hash algorithm identifier MUST be lower-case ASCII. The digest value
 MUST be lower-case hexadecimal.
