@@ -55,20 +55,7 @@ or blockchain system.</t>
   <middle>
     <?line 61?>
 
-<section anchor="companion-drafts">
-      <name>Companion Drafts</name>
-      <t>This draft defines JEP-Core. Optional identity, credential, attestation,
-chain, archival, mandate, and domain bindings are defined by companion
-profiles and extensions.</t>
-      <t>Existing companion drafts written against JEP-Core 0.6 remain historical
-documents until revised for JEP-Core 0.7. Where an earlier companion
-draft conflicts with this document, this document controls JEP-Core 0.7
-semantics.</t>
-      <t>Schemas, test vectors, validation-result structure, and reference
-validator behavior for JEP-Core 0.7 are expected to be defined by a
-matching conformance revision.</t>
-    </section>
-    <section anchor="introduction">
+<section anchor="introduction">
       <name>Introduction</name>
       <t>Autonomous and semi-autonomous systems increasingly make, assist with,
 delegate, terminate, verify, or record judgments across organizational,
@@ -103,110 +90,123 @@ or application-specific systems.</t>
 external target facts. In partially observed systems, a signed event log
 can support audit and accountability workflows without guaranteeing
 complete or zero-error determination of external facts.</t>
+      <section anchor="companion-specifications">
+        <name>Companion Specifications</name>
+        <t>This draft defines JEP-Core. Optional identity, credential, attestation,
+chain, archival, mandate, and domain bindings are defined by companion
+profiles and extensions.</t>
+        <t>Existing companion drafts written against JEP-Core 0.6 remain historical
+documents until revised for JEP-Core 0.7. Where an earlier companion
+draft conflicts with this document, this document controls JEP-Core 0.7
+semantics.</t>
+        <t>Schemas, test vectors, validation-result structure, and reference
+validator behavior for JEP-Core 0.7 are expected to be defined by a
+matching conformance revision.</t>
+      </section>
     </section>
     <section anchor="protocol-objective-and-non-goals">
       <name>Protocol Objective and Non-Goals</name>
-    </section>
-    <section anchor="objective">
-      <name>Objective</name>
-      <t>JEP-Core defines a neutral event layer for verifiable judgment-related
+      <section anchor="objective">
+        <name>Objective</name>
+        <t>JEP-Core defines a neutral event layer for verifiable judgment-related
 acts. Subject to the applicable validation mode and trust profile, a
 conforming implementation can support determination that:</t>
-      <ol spacing="normal" type="1"><li>
-          <t>a specific event identity was asserted by an actor;</t>
-        </li>
-        <li>
-          <t>an event payload existed;</t>
-        </li>
-        <li>
-          <t>the event payload was signed as specified;</t>
-        </li>
-        <li>
-          <t>the signed payload was not modified without invalidating the
+        <ol spacing="normal" type="1"><li>
+            <t>a specific event identity was asserted by an actor;</t>
+          </li>
+          <li>
+            <t>an event payload existed;</t>
+          </li>
+          <li>
+            <t>the event payload was signed as specified;</t>
+          </li>
+          <li>
+            <t>the signed payload was not modified without invalidating the
 signature;</t>
-        </li>
-        <li>
-          <t>the signer was or was not bound to the claimed actor under an
+          </li>
+          <li>
+            <t>the signer was or was not bound to the claimed actor under an
 applicable trust profile;</t>
-        </li>
-        <li>
-          <t>references, exact-artifact hashes, and critical extensions were
+          </li>
+          <li>
+            <t>references, exact-artifact hashes, and critical extensions were
 processed according to the checks actually requested;</t>
-        </li>
-        <li>
-          <t>the verifier reports which checks passed, failed, were not performed,
+          </li>
+          <li>
+            <t>the verifier reports which checks passed, failed, were not performed,
 were unsupported, were not applicable, or were indeterminate;</t>
-        </li>
-        <li>
-          <t>an acceptance processor does not apply acceptance effects more than
+          </li>
+          <li>
+            <t>an acceptance processor does not apply acceptance effects more than
 once for the same event identity within one acceptance domain.</t>
-        </li>
-      </ol>
-    </section>
-    <section anchor="non-goals">
-      <name>Non-Goals</name>
-      <t>JEP-Core does not define:</t>
-      <ul spacing="normal">
-        <li>
-          <t>legal liability;</t>
-        </li>
-        <li>
-          <t>moral responsibility;</t>
-        </li>
-        <li>
-          <t>regulatory compliance;</t>
-        </li>
-        <li>
-          <t>global truth determination;</t>
-        </li>
-        <li>
-          <t>external target-fact determinability;</t>
-        </li>
-        <li>
-          <t>authorization delegation validity;</t>
-        </li>
-        <li>
-          <t>permission-chain enforcement;</t>
-        </li>
-        <li>
-          <t>lifecycle state-machine enforcement;</t>
-        </li>
-        <li>
-          <t>termination cascade policy;</t>
-        </li>
-        <li>
-          <t>a global identity framework;</t>
-        </li>
-        <li>
-          <t>a global credential framework;</t>
-        </li>
-        <li>
-          <t>a global trust framework;</t>
-        </li>
-        <li>
-          <t>mandatory DID, VC, X.509, OAuth, RATS, blockchain, or AI-platform
+          </li>
+        </ol>
+      </section>
+      <section anchor="non-goals">
+        <name>Non-Goals</name>
+        <t>JEP-Core does not define:</t>
+        <ul spacing="normal">
+          <li>
+            <t>legal liability;</t>
+          </li>
+          <li>
+            <t>moral responsibility;</t>
+          </li>
+          <li>
+            <t>regulatory compliance;</t>
+          </li>
+          <li>
+            <t>global truth determination;</t>
+          </li>
+          <li>
+            <t>external target-fact determinability;</t>
+          </li>
+          <li>
+            <t>authorization delegation validity;</t>
+          </li>
+          <li>
+            <t>permission-chain enforcement;</t>
+          </li>
+          <li>
+            <t>lifecycle state-machine enforcement;</t>
+          </li>
+          <li>
+            <t>termination cascade policy;</t>
+          </li>
+          <li>
+            <t>a global identity framework;</t>
+          </li>
+          <li>
+            <t>a global credential framework;</t>
+          </li>
+          <li>
+            <t>a global trust framework;</t>
+          </li>
+          <li>
+            <t>mandatory DID, VC, X.509, OAuth, RATS, blockchain, or AI-platform
 support;</t>
-        </li>
-        <li>
-          <t>confidentiality for event content;</t>
-        </li>
-        <li>
-          <t>long-term storage, redaction, retention, or disclosure policy;</t>
-        </li>
-        <li>
-          <t>causal-chain or responsibility-graph computation;</t>
-        </li>
-        <li>
-          <t>exactly-once network delivery;</t>
-        </li>
-        <li>
-          <t>a mandatory challenge, nonce, counter, ledger, or transport mechanism.</t>
-        </li>
-      </ul>
-      <t>A JEP event records claims about judgment-related acts. It <bcp14>MUST NOT</bcp14> be
+          </li>
+          <li>
+            <t>confidentiality for event content;</t>
+          </li>
+          <li>
+            <t>long-term storage, redaction, retention, or disclosure policy;</t>
+          </li>
+          <li>
+            <t>causal-chain or responsibility-graph computation;</t>
+          </li>
+          <li>
+            <t>exactly-once network delivery;</t>
+          </li>
+          <li>
+            <t>a mandatory challenge, nonce, counter, ledger, or transport mechanism.</t>
+          </li>
+        </ul>
+        <t>A JEP event records claims about judgment-related acts. It <bcp14>MUST NOT</bcp14> be
 presented as proof that an underlying real-world assertion is true unless
 an applicable external profile and evidence policy makes that
 determination.</t>
+      </section>
     </section>
     <section anchor="design-principles">
       <name>Design Principles</name>
@@ -441,184 +441,183 @@ future JEP revision.</t>
     </section>
     <section anchor="field-semantics">
       <name>Field Semantics</name>
-    </section>
-    <section anchor="jep">
-      <name><tt>jep</tt></name>
-      <t>The <tt>jep</tt> member identifies the wire-format major version. For this
+      <section anchor="jep">
+        <name><tt>jep</tt></name>
+        <t>The <tt>jep</tt> member identifies the wire-format major version. For this
 draft, the value is <tt>"1"</tt>.</t>
-      <t><tt>JEP-Core-0.7</tt> identifies the specification release version. It is not
+        <t><tt>JEP-Core-0.7</tt> identifies the specification release version. It is not
 the wire-format version.</t>
-      <t>The <tt>-06</tt> and earlier Internet-Draft encodings were pre-stable
+        <t>The <tt>-06</tt> and earlier Internet-Draft encodings were pre-stable
 development artifacts and do not create a permanent wire-compatibility
 contract for <tt>jep: "1"</tt>.</t>
-      <t>A verifier <bcp14>MUST NOT</bcp14> infer Internet-Draft revision number or release
+        <t>A verifier <bcp14>MUST NOT</bcp14> infer Internet-Draft revision number or release
 maturity solely from <tt>jep</tt>.</t>
-    </section>
-    <section anchor="id">
-      <name><tt>id</tt></name>
-      <t><tt>id</tt> identifies one event instance within the namespace of <tt>who</tt>.
+      </section>
+      <section anchor="id">
+        <name><tt>id</tt></name>
+        <t><tt>id</tt> identifies one event instance within the namespace of <tt>who</tt>.
 Event Identity is the pair <tt>(who, id)</tt>.</t>
-      <t>The <tt>id</tt> value:</t>
-      <ul spacing="normal">
-        <li>
-          <t><bcp14>MUST</bcp14> be a non-empty ASCII string;</t>
-        </li>
-        <li>
-          <t><bcp14>MUST</bcp14> be stable for the lifetime of the event;</t>
-        </li>
-        <li>
-          <t><bcp14>MUST</bcp14> be included in the signed payload;</t>
-        </li>
-        <li>
-          <t><bcp14>MUST NOT</bcp14> be reused by the same <tt>who</tt> for different unsigned event
+        <t>The <tt>id</tt> value:</t>
+        <ul spacing="normal">
+          <li>
+            <t><bcp14>MUST</bcp14> be a non-empty ASCII string;</t>
+          </li>
+          <li>
+            <t><bcp14>MUST</bcp14> be stable for the lifetime of the event;</t>
+          </li>
+          <li>
+            <t><bcp14>MUST</bcp14> be included in the signed payload;</t>
+          </li>
+          <li>
+            <t><bcp14>MUST NOT</bcp14> be reused by the same <tt>who</tt> for different unsigned event
 content;</t>
-        </li>
-        <li>
-          <t><bcp14>SHOULD</bcp14> be collision-resistant across independently generated events;</t>
-        </li>
-        <li>
-          <t><bcp14>MUST NOT</bcp14> be treated as a secret, bearer token, authorization grant, or
+          </li>
+          <li>
+            <t><bcp14>SHOULD</bcp14> be collision-resistant across independently generated events;</t>
+          </li>
+          <li>
+            <t><bcp14>MUST NOT</bcp14> be treated as a secret, bearer token, authorization grant, or
 proof of freshness.</t>
-        </li>
-      </ul>
-      <t>UUID URNs <xref target="RFC9562"/>, other collision-resistant URIs, or equivalent opaque
+          </li>
+        </ul>
+        <t>UUID URNs <xref target="RFC9562"/>, other collision-resistant URIs, or equivalent opaque
 identifiers are suitable choices. JEP-Core does not require a specific
 identifier-generation algorithm.</t>
-      <t>A producer <bcp14>SHOULD NOT</bcp14> derive <tt>id</tt> solely from the event's semantic
+        <t>A producer <bcp14>SHOULD NOT</bcp14> derive <tt>id</tt> solely from the event's semantic
 content when doing so could collapse two distinct event emissions with
 identical content into one Event Identity.</t>
-      <t>If a verifier observes the same Event Identity with different
+        <t>If a verifier observes the same Event Identity with different
 JCS-canonicalized unsigned event content, it <bcp14>MUST</bcp14> report
 <tt>ERR_EVENT_ID_CONFLICT</tt>.</t>
-      <t>Re-signing an otherwise identical unsigned event <bcp14>MAY</bcp14> produce a different
+        <t>Re-signing an otherwise identical unsigned event <bcp14>MAY</bcp14> produce a different
 Event Hash while retaining the same Event Identity.</t>
-    </section>
-    <section anchor="verb">
-      <name><tt>verb</tt></name>
-      <t>The <tt>verb</tt> member identifies the event verb. It <bcp14>MUST</bcp14> be one of <tt>J</tt>,
+      </section>
+      <section anchor="verb">
+        <name><tt>verb</tt></name>
+        <t>The <tt>verb</tt> member identifies the event verb. It <bcp14>MUST</bcp14> be one of <tt>J</tt>,
 <tt>D</tt>, <tt>T</tt>, or <tt>V</tt>.</t>
-      <t>Event verbs do not determine cryptographic algorithms, storage policy,
+        <t>Event verbs do not determine cryptographic algorithms, storage policy,
 privacy mode, identity method, transport, or legal effect.</t>
-    </section>
-    <section anchor="who">
-      <name><tt>who</tt></name>
-      <t><tt>who</tt> identifies the actor claimed by the event.</t>
-      <t><tt>who</tt> is not necessarily:</t>
-      <ul spacing="normal">
-        <li>
-          <t>the signer;</t>
-        </li>
-        <li>
-          <t>a legal person;</t>
-        </li>
-        <li>
-          <t>the controller of the key;</t>
-        </li>
-        <li>
-          <t>a real-world identity;</t>
-        </li>
-        <li>
-          <t>the subject of the judgment.</t>
-        </li>
-      </ul>
-      <t>The binding between <tt>who</tt> and the signing key is determined by the
+      </section>
+      <section anchor="who">
+        <name><tt>who</tt></name>
+        <t><tt>who</tt> identifies the actor claimed by the event.</t>
+        <t><tt>who</tt> is not necessarily:</t>
+        <ul spacing="normal">
+          <li>
+            <t>the signer;</t>
+          </li>
+          <li>
+            <t>a legal person;</t>
+          </li>
+          <li>
+            <t>the controller of the key;</t>
+          </li>
+          <li>
+            <t>a real-world identity;</t>
+          </li>
+          <li>
+            <t>the subject of the judgment.</t>
+          </li>
+        </ul>
+        <t>The binding between <tt>who</tt> and the signing key is determined by the
 applicable trust profile.</t>
-      <t>Because Event Identity includes <tt>who</tt>, two different actors <bcp14>MAY</bcp14> use the
+        <t>Because Event Identity includes <tt>who</tt>, two different actors <bcp14>MAY</bcp14> use the
 same <tt>id</tt> string without creating the same Event Identity.</t>
-    </section>
-    <section anchor="when">
-      <name><tt>when</tt></name>
-      <t><tt>when</tt> is an actor-declared event time in Unix seconds.</t>
-      <t><tt>when</tt> does not by itself prove trusted wall-clock time, liveness, or
+      </section>
+      <section anchor="when">
+        <name><tt>when</tt></name>
+        <t><tt>when</tt> is an actor-declared event time in Unix seconds.</t>
+        <t><tt>when</tt> does not by itself prove trusted wall-clock time, liveness, or
 freshness. Stronger time evidence requires a timestamping, receipt,
 archival, transparency, challenge-response, transport, or storage
 profile.</t>
-      <t>Implementations <bcp14>SHOULD</bcp14> distinguish:</t>
-      <ul spacing="normal">
-        <li>
-          <t>declared event time;</t>
-        </li>
-        <li>
-          <t>signature time;</t>
-        </li>
-        <li>
-          <t>receipt time;</t>
-        </li>
-        <li>
-          <t>archive time;</t>
-        </li>
-        <li>
-          <t>verification time;</t>
-        </li>
-        <li>
-          <t>acceptance time;</t>
-        </li>
-        <li>
-          <t>policy-evaluation time.</t>
-        </li>
-      </ul>
-      <t>An acceptance profile <bcp14>MAY</bcp14> define a permitted time window using <tt>when</tt>,
+        <t>Implementations <bcp14>SHOULD</bcp14> distinguish:</t>
+        <ul spacing="normal">
+          <li>
+            <t>declared event time;</t>
+          </li>
+          <li>
+            <t>signature time;</t>
+          </li>
+          <li>
+            <t>receipt time;</t>
+          </li>
+          <li>
+            <t>archive time;</t>
+          </li>
+          <li>
+            <t>verification time;</t>
+          </li>
+          <li>
+            <t>acceptance time;</t>
+          </li>
+          <li>
+            <t>policy-evaluation time.</t>
+          </li>
+        </ul>
+        <t>An acceptance profile <bcp14>MAY</bcp14> define a permitted time window using <tt>when</tt>,
 but such a window is a profile or deployment rule rather than proof that
 <tt>when</tt> is externally accurate.</t>
-    </section>
-    <section anchor="what">
-      <name><tt>what</tt></name>
-      <t><tt>what</tt> carries the event claim, digest, descriptor, or report. It
+      </section>
+      <section anchor="what">
+        <name><tt>what</tt></name>
+        <t><tt>what</tt> carries the event claim, digest, descriptor, or report. It
 records what the actor asserted, judged, delegated, terminated, or
 verified. It does not by itself prove external truth.</t>
-      <t>A J event <bcp14>MUST</bcp14> contain <tt>what</tt>.</t>
-      <t>A D event <bcp14>MUST</bcp14> contain an object-valued <tt>what</tt> that identifies at least
+        <t>A J event <bcp14>MUST</bcp14> contain <tt>what</tt>.</t>
+        <t>A D event <bcp14>MUST</bcp14> contain an object-valued <tt>what</tt> that identifies at least
 a delegatee and a scope, directly or through a profile-defined structure.</t>
-      <t>A T event <bcp14>MUST</bcp14> contain an object-valued <tt>what</tt> that identifies a
+        <t>A T event <bcp14>MUST</bcp14> contain an object-valued <tt>what</tt> that identifies a
 termination scope. The target of termination is identified by <tt>ref</tt>.
 JEP-Core does not require duplication of the target inside <tt>what</tt>.</t>
-      <t>A V event <bcp14>MUST</bcp14> contain an object-valued <tt>what</tt> that declares a
+        <t>A V event <bcp14>MUST</bcp14> contain an object-valued <tt>what</tt> that declares a
 verification scope.</t>
-      <t>Additional domain semantics belong to profiles or extensions.</t>
-      <t>When <tt>what</tt> is represented as a digest where permitted, the digest <bcp14>MUST</bcp14>
+        <t>Additional domain semantics belong to profiles or extensions.</t>
+        <t>When <tt>what</tt> is represented as a digest where permitted, the digest <bcp14>MUST</bcp14>
 be an algorithm-tagged digest string.</t>
-    </section>
-    <section anchor="aud">
-      <name><tt>aud</tt></name>
-      <t><tt>aud</tt> indicates an intended audience or validation context.</t>
-      <t><tt>aud</tt> is <bcp14>OPTIONAL</bcp14> in JEP-Core. A profile <bcp14>MAY</bcp14> require it, including for
+      </section>
+      <section anchor="aud">
+        <name><tt>aud</tt></name>
+        <t><tt>aud</tt> indicates an intended audience or validation context.</t>
+        <t><tt>aud</tt> is <bcp14>OPTIONAL</bcp14> in JEP-Core. A profile <bcp14>MAY</bcp14> require it, including for
 interactive acceptance or cross-domain replay isolation.</t>
-      <t><tt>aud</tt> does not by itself enforce access control. Access control,
+        <t><tt>aud</tt> does not by itself enforce access control. Access control,
 retention, redaction, and disclosure policy are outside JEP-Core.</t>
-    </section>
-    <section anchor="ref">
-      <name><tt>ref</tt></name>
-      <t><tt>ref</tt> is a reference field. A reference does not by itself imply
+      </section>
+      <section anchor="ref">
+        <name><tt>ref</tt></name>
+        <t><tt>ref</tt> is a reference field. A reference does not by itself imply
 endorsement, truth, authorization validity, legal effect, or causality.</t>
-      <t>References <bcp14>MAY</bcp14> identify:</t>
-      <ul spacing="normal">
-        <li>
-          <t>a JEP event;</t>
-        </li>
-        <li>
-          <t>a digest;</t>
-        </li>
-        <li>
-          <t>a credential;</t>
-        </li>
-        <li>
-          <t>a policy;</t>
-        </li>
-        <li>
-          <t>evidence;</t>
-        </li>
-        <li>
-          <t>a context;</t>
-        </li>
-        <li>
-          <t>an archive receipt;</t>
-        </li>
-        <li>
-          <t>an external object.</t>
-        </li>
-      </ul>
-      <t>A logical reference to another JEP event <bcp14>SHOULD</bcp14> use a typed reference:</t>
-      <t><tt>json
+        <t>References <bcp14>MAY</bcp14> identify:</t>
+        <ul spacing="normal">
+          <li>
+            <t>a JEP event;</t>
+          </li>
+          <li>
+            <t>a digest;</t>
+          </li>
+          <li>
+            <t>a credential;</t>
+          </li>
+          <li>
+            <t>a policy;</t>
+          </li>
+          <li>
+            <t>evidence;</t>
+          </li>
+          <li>
+            <t>a context;</t>
+          </li>
+          <li>
+            <t>an archive receipt;</t>
+          </li>
+          <li>
+            <t>an external object.</t>
+          </li>
+        </ul>
+        <t>A logical reference to another JEP event <bcp14>SHOULD</bcp14> use a typed reference:</t>
+        <t><tt>json
 {
   "type": "jep:event",
   "value": {
@@ -627,8 +626,8 @@ endorsement, truth, authorization validity, legal effect, or causality.</t>
   }
 }
 </tt></t>
-      <t>An exact signed artifact <bcp14>MAY</bcp14> additionally be pinned:</t>
-      <t><tt>json
+        <t>An exact signed artifact <bcp14>MAY</bcp14> additionally be pinned:</t>
+        <t><tt>json
 {
   "type": "jep:event",
   "value": {
@@ -638,280 +637,281 @@ endorsement, truth, authorization validity, legal effect, or causality.</t>
   "hash": "sha256:..."
 }
 </tt></t>
-      <t>The <tt>value</tt> identifies the event. The optional <tt>hash</tt> identifies one
+        <t>The <tt>value</tt> identifies the event. The optional <tt>hash</tt> identifies one
 exact signed artifact for that event.</t>
-      <t>A bare Event Hash <bcp14>MAY</bcp14> be used when an application intentionally refers
+        <t>A bare Event Hash <bcp14>MAY</bcp14> be used when an application intentionally refers
 only to an exact signed artifact, but it <bcp14>MUST NOT</bcp14> be described as the
 stable Event Identity.</t>
-    </section>
-    <section anchor="ext-and-extcrit">
-      <name><tt>ext</tt> and <tt>ext_crit</tt></name>
-      <t><tt>ext</tt> contains named extension objects. <tt>ext_crit</tt> contains the
+      </section>
+      <section anchor="ext-and-extcrit">
+        <name><tt>ext</tt> and <tt>ext_crit</tt></name>
+        <t><tt>ext</tt> contains named extension objects. <tt>ext_crit</tt> contains the
 identifiers of critical extensions.</t>
-      <t>Unknown critical extensions <bcp14>MUST</bcp14> cause the applicable
+        <t>Unknown critical extensions <bcp14>MUST</bcp14> cause the applicable
 <tt>extension_processing</tt> check to fail. Unknown non-critical extensions
 <bcp14>MAY</bcp14> be ignored.</t>
-      <t>Profiles that require a nonce, challenge, sequence number, transaction
+        <t>Profiles that require a nonce, challenge, sequence number, transaction
 identifier, ledger position, or similar mechanism <bcp14>SHOULD</bcp14> carry that
 mechanism in a registered extension or transport/profile layer rather
 than redefining JEP-Core fields.</t>
-    </section>
-    <section anchor="sig">
-      <name><tt>sig</tt></name>
-      <t><tt>sig</tt> carries the detached signature container. JEP-Core uses detached
+      </section>
+      <section anchor="sig">
+        <name><tt>sig</tt></name>
+        <t><tt>sig</tt> carries the detached signature container. JEP-Core uses detached
 JWS over the JCS-canonicalized unsigned event unless another registered
 signature profile applies.</t>
+      </section>
     </section>
     <section anchor="event-verb-semantics">
       <name>Event Verb Semantics</name>
-    </section>
-    <section anchor="j-judgment">
-      <name>J - Judgment</name>
-      <t>A Judgment event records that an actor made, accepted, produced,
+      <section anchor="j-judgment">
+        <name>J - Judgment</name>
+        <t>A Judgment event records that an actor made, accepted, produced,
 approved, selected, rejected, ranked, classified, or otherwise committed
 to a judgment-related claim.</t>
-      <t>A J event <bcp14>MUST NOT</bcp14> be interpreted as proof that the judged claim is true.</t>
-      <t>Typical uses include:</t>
-      <ul spacing="normal">
-        <li>
-          <t>model output approval;</t>
-        </li>
-        <li>
-          <t>human approval;</t>
-        </li>
-        <li>
-          <t>risk classification;</t>
-        </li>
-        <li>
-          <t>tool-selection decision;</t>
-        </li>
-        <li>
-          <t>policy decision;</t>
-        </li>
-        <li>
-          <t>recommendation acceptance;</t>
-        </li>
-        <li>
-          <t>evidence assessment.</t>
-        </li>
-      </ul>
-    </section>
-    <section anchor="d-delegation">
-      <name>D - Delegation</name>
-      <t>A Delegation event records that an actor declared a delegation of a task,
+        <t>A J event <bcp14>MUST NOT</bcp14> be interpreted as proof that the judged claim is true.</t>
+        <t>Typical uses include:</t>
+        <ul spacing="normal">
+          <li>
+            <t>model output approval;</t>
+          </li>
+          <li>
+            <t>human approval;</t>
+          </li>
+          <li>
+            <t>risk classification;</t>
+          </li>
+          <li>
+            <t>tool-selection decision;</t>
+          </li>
+          <li>
+            <t>policy decision;</t>
+          </li>
+          <li>
+            <t>recommendation acceptance;</t>
+          </li>
+          <li>
+            <t>evidence assessment.</t>
+          </li>
+        </ul>
+      </section>
+      <section anchor="d-delegation">
+        <name>D - Delegation</name>
+        <t>A Delegation event records that an actor declared a delegation of a task,
 authority, responsibility, capability, or judgment context to another
 actor or system.</t>
-      <t>A D event <bcp14>MUST</bcp14> identify a delegatee and scope. It <bcp14>MAY</bcp14> identify:</t>
-      <ul spacing="normal">
-        <li>
-          <t>constraints;</t>
-        </li>
-        <li>
-          <t>expiry;</t>
-        </li>
-        <li>
-          <t>context;</t>
-        </li>
-        <li>
-          <t>termination conditions;</t>
-        </li>
-        <li>
-          <t>related evidence or policy references.</t>
-        </li>
-      </ul>
-      <t>A D event records a delegation claim. It does not by itself prove legal,
+        <t>A D event <bcp14>MUST</bcp14> identify a delegatee and scope. It <bcp14>MAY</bcp14> identify:</t>
+        <ul spacing="normal">
+          <li>
+            <t>constraints;</t>
+          </li>
+          <li>
+            <t>expiry;</t>
+          </li>
+          <li>
+            <t>context;</t>
+          </li>
+          <li>
+            <t>termination conditions;</t>
+          </li>
+          <li>
+            <t>related evidence or policy references.</t>
+          </li>
+        </ul>
+        <t>A D event records a delegation claim. It does not by itself prove legal,
 organizational, or technical authority to delegate.</t>
-      <t>Permission-chain enforcement and downstream authorization are outside
+        <t>Permission-chain enforcement and downstream authorization are outside
 JEP-Core.</t>
-    </section>
-    <section anchor="t-termination">
-      <name>T - Termination</name>
-      <t>A Termination event records that an actor declared a previous
+      </section>
+      <section anchor="t-termination">
+        <name>T - Termination</name>
+        <t>A Termination event records that an actor declared a previous
 delegation, authority, session, capability, workflow context,
 verification context, or future-reliance relationship ended, revoked,
 expired, superseded, or no longer valid for a stated termination scope.</t>
-      <t>A T event <bcp14>MUST</bcp14> identify its target through <tt>ref</tt> and <bcp14>MUST</bcp14> declare a
+        <t>A T event <bcp14>MUST</bcp14> identify its target through <tt>ref</tt> and <bcp14>MUST</bcp14> declare a
 termination scope.</t>
-      <t>A T event does not delete historical events, erase past facts,
+        <t>A T event does not delete historical events, erase past facts,
 retroactively invalidate an event, or by itself prove that all downstream
 systems stopped relying on the target.</t>
-      <t>Cascade semantics, downstream effects, authority consequences, and
+        <t>Cascade semantics, downstream effects, authority consequences, and
 lifecycle enforcement are defined by chain, mandate, domain, or policy
 profiles.</t>
-    </section>
-    <section anchor="v-verification">
-      <name>V - Verification</name>
-      <t>A Verification event records that an actor performed a validation, audit,
+      </section>
+      <section anchor="v-verification">
+        <name>V - Verification</name>
+        <t>A Verification event records that an actor performed a validation, audit,
 review, confirmation, rejection, or verification action over an event,
 digest, subject, credential, policy, evidence, chain result, or external
 object.</t>
-      <t>A V event <bcp14>MUST</bcp14> identify its verification target through <tt>ref</tt> and <bcp14>MUST</bcp14>
+        <t>A V event <bcp14>MUST</bcp14> identify its verification target through <tt>ref</tt> and <bcp14>MUST</bcp14>
 declare its verification scope. A V event <bcp14>MUST NOT</bcp14> imply verification
 beyond its declared scope.</t>
-      <t>Initial verification scopes include:</t>
-      <ul spacing="normal">
-        <li>
-          <t><tt>syntax</tt>;</t>
-        </li>
-        <li>
-          <t><tt>cryptographic</tt>;</t>
-        </li>
-        <li>
-          <t><tt>actor_binding</tt>;</t>
-        </li>
-        <li>
-          <t><tt>freshness</tt>;</t>
-        </li>
-        <li>
-          <t><tt>audience</tt>;</t>
-        </li>
-        <li>
-          <t><tt>event_identity</tt>;</t>
-        </li>
-        <li>
-          <t><tt>reference_integrity</tt>;</t>
-        </li>
-        <li>
-          <t><tt>extension_processing</tt>;</t>
-        </li>
-        <li>
-          <t><tt>chain_integrity</tt>;</t>
-        </li>
-        <li>
-          <t><tt>credential_status</tt>;</t>
-        </li>
-        <li>
-          <t><tt>policy_compliance</tt>;</t>
-        </li>
-        <li>
-          <t><tt>human_review</tt>;</t>
-        </li>
-        <li>
-          <t><tt>external_evidence</tt>;</t>
-        </li>
-        <li>
-          <t><tt>factual_claim</tt>;</t>
-        </li>
-        <li>
-          <t><tt>archival_integrity</tt>.</t>
-        </li>
-      </ul>
+        <t>Initial verification scopes include:</t>
+        <ul spacing="normal">
+          <li>
+            <t><tt>syntax</tt>;</t>
+          </li>
+          <li>
+            <t><tt>cryptographic</tt>;</t>
+          </li>
+          <li>
+            <t><tt>actor_binding</tt>;</t>
+          </li>
+          <li>
+            <t><tt>freshness</tt>;</t>
+          </li>
+          <li>
+            <t><tt>audience</tt>;</t>
+          </li>
+          <li>
+            <t><tt>event_identity</tt>;</t>
+          </li>
+          <li>
+            <t><tt>reference_integrity</tt>;</t>
+          </li>
+          <li>
+            <t><tt>extension_processing</tt>;</t>
+          </li>
+          <li>
+            <t><tt>chain_integrity</tt>;</t>
+          </li>
+          <li>
+            <t><tt>credential_status</tt>;</t>
+          </li>
+          <li>
+            <t><tt>policy_compliance</tt>;</t>
+          </li>
+          <li>
+            <t><tt>human_review</tt>;</t>
+          </li>
+          <li>
+            <t><tt>external_evidence</tt>;</t>
+          </li>
+          <li>
+            <t><tt>factual_claim</tt>;</t>
+          </li>
+          <li>
+            <t><tt>archival_integrity</tt>.</t>
+          </li>
+        </ul>
+      </section>
     </section>
     <section anchor="event-identity-delivery-and-acceptance">
       <name>Event Identity, Delivery, and Acceptance</name>
-    </section>
-    <section anchor="event-identity">
-      <name>Event Identity</name>
-      <t>The Event Identity is <tt>(who, id)</tt>.</t>
-      <t>The same Event Identity represents the same JEP event instance across
+      <section anchor="event-identity">
+        <name>Event Identity</name>
+        <t>The Event Identity is <tt>(who, id)</tt>.</t>
+        <t>The same Event Identity represents the same JEP event instance across
 retransmission, storage, export, and re-verification.</t>
-      <t>The same Event Identity <bcp14>MUST NOT</bcp14> identify different unsigned event
+        <t>The same Event Identity <bcp14>MUST NOT</bcp14> identify different unsigned event
 content.</t>
-      <t>A verifier that maintains identity state <bcp14>SHOULD</bcp14> retain, for each observed
+        <t>A verifier that maintains identity state <bcp14>SHOULD</bcp14> retain, for each observed
 Event Identity, a digest of the JEP Signing Payload or an equivalent
 collision-resistant representation sufficient to detect conflicting
 reuse.</t>
-    </section>
-    <section anchor="delivery-is-not-event-creation">
-      <name>Delivery Is Not Event Creation</name>
-      <t>Network delivery, queue delivery, storage import, export, retry, or
+      </section>
+      <section anchor="delivery-is-not-event-creation">
+        <name>Delivery Is Not Event Creation</name>
+        <t>Network delivery, queue delivery, storage import, export, retry, or
 replication of an existing signed event does not create a new JEP event.</t>
-      <t>A sender <bcp14>MAY</bcp14> retransmit the same event when delivery outcome is unknown.</t>
-      <t>A receiver <bcp14>MUST NOT</bcp14> require a new JEP Event Identity merely because a
+        <t>A sender <bcp14>MAY</bcp14> retransmit the same event when delivery outcome is unknown.</t>
+        <t>A receiver <bcp14>MUST NOT</bcp14> require a new JEP Event Identity merely because a
 transport retry occurs.</t>
-    </section>
-    <section anchor="idempotent-acceptance">
-      <name>Idempotent Acceptance</name>
-      <t>An acceptance processor <bcp14>MUST NOT</bcp14> apply acceptance effects more than once
+      </section>
+      <section anchor="idempotent-acceptance">
+        <name>Idempotent Acceptance</name>
+        <t>An acceptance processor <bcp14>MUST NOT</bcp14> apply acceptance effects more than once
 for the same Event Identity within one acceptance domain.</t>
-      <t>A conforming acceptance processor <bcp14>MUST</bcp14> distinguish at least:</t>
-      <ul spacing="normal">
-        <li>
-          <t><tt>accepted</tt>: the event is valid for the requested acceptance context
+        <t>A conforming acceptance processor <bcp14>MUST</bcp14> distinguish at least:</t>
+        <ul spacing="normal">
+          <li>
+            <t><tt>accepted</tt>: the event is valid for the requested acceptance context
 and its acceptance effect is being applied for the first time;</t>
-        </li>
-        <li>
-          <t><tt>already_accepted</tt>: the event is valid for the requested acceptance
+          </li>
+          <li>
+            <t><tt>already_accepted</tt>: the event is valid for the requested acceptance
 context but the same Event Identity has already applied its acceptance
 effect;</t>
-        </li>
-        <li>
-          <t><tt>rejected</tt>: one or more required validation checks failed;</t>
-        </li>
-        <li>
-          <t><tt>indeterminate</tt>: a required acceptance determination could not be
+          </li>
+          <li>
+            <t><tt>rejected</tt>: one or more required validation checks failed;</t>
+          </li>
+          <li>
+            <t><tt>indeterminate</tt>: a required acceptance determination could not be
 completed.</t>
-        </li>
-      </ul>
-      <t><tt>already_accepted</tt> is not a cryptographic validation failure.</t>
-      <t>If the same Event Identity is presented with different unsigned event
+          </li>
+        </ul>
+        <t><tt>already_accepted</tt> is not a cryptographic validation failure.</t>
+        <t>If the same Event Identity is presented with different unsigned event
 content, the event <bcp14>MUST</bcp14> be rejected with <tt>ERR_EVENT_ID_CONFLICT</tt>.</t>
-    </section>
-    <section anchor="atomicity">
-      <name>Atomicity</name>
-      <t>The operation that records first acceptance and the operation that
+      </section>
+      <section anchor="atomicity">
+        <name>Atomicity</name>
+        <t>The operation that records first acceptance and the operation that
 applies its state-changing acceptance effect <bcp14>MUST</bcp14> be atomic or provide an
 equivalent concurrency guarantee.</t>
-      <t>An implementation <bcp14>MUST NOT</bcp14> perform:</t>
-      <t><tt>text
+        <t>An implementation <bcp14>MUST NOT</bcp14> perform:</t>
+        <t><tt>text
 check unseen
 apply effect
 mark seen
 </tt></t>
-      <t>as independent raceable operations.</t>
-      <t>Database uniqueness constraints, transactional insertion, durable
+        <t>as independent raceable operations.</t>
+        <t>Database uniqueness constraints, transactional insertion, durable
 compare-and-set, ledger consumption, or equivalent mechanisms are
 suitable approaches.</t>
-    </section>
-    <section anchor="acceptance-state-lifetime">
-      <name>Acceptance-State Lifetime</name>
-      <t>An implementation claiming at-most-once acceptance <bcp14>MUST</bcp14> preserve enough
+      </section>
+      <section anchor="acceptance-state-lifetime">
+        <name>Acceptance-State Lifetime</name>
+        <t>An implementation claiming at-most-once acceptance <bcp14>MUST</bcp14> preserve enough
 acceptance state to prevent reapplication for as long as the event
 remains eligible to produce that acceptance effect.</t>
-      <t>A profile <bcp14>MAY</bcp14> define a bounded acceptance window. If no bounded window
+        <t>A profile <bcp14>MAY</bcp14> define a bounded acceptance window. If no bounded window
 exists, acceptance state may need to persist for the lifetime of the
 effect or dependent state.</t>
-      <t>Archival verification <bcp14>MUST NOT</bcp14> consume acceptance state.</t>
-    </section>
-    <section anchor="optional-challenge-and-replay-profiles">
-      <name>Optional Challenge and Replay Profiles</name>
-      <t>JEP-Core does not require a nonce.</t>
-      <t>Profiles <bcp14>MAY</bcp14> additionally require:</t>
-      <ul spacing="normal">
-        <li>
-          <t>receiver-issued nonces;</t>
-        </li>
-        <li>
-          <t>sender-generated nonces;</t>
-        </li>
-        <li>
-          <t>challenge-response;</t>
-        </li>
-        <li>
-          <t>sequence numbers;</t>
-        </li>
-        <li>
-          <t>transaction identifiers;</t>
-        </li>
-        <li>
-          <t>trusted timestamps;</t>
-        </li>
-        <li>
-          <t>short-lived audience-bound tokens;</t>
-        </li>
-        <li>
-          <t>monotonic counters;</t>
-        </li>
-        <li>
-          <t>ledger positions;</t>
-        </li>
-        <li>
-          <t>previous-event commitments.</t>
-        </li>
-      </ul>
-      <t>Such mechanisms <bcp14>MAY</bcp14> establish properties that stable Event Identity alone
+        <t>Archival verification <bcp14>MUST NOT</bcp14> consume acceptance state.</t>
+      </section>
+      <section anchor="optional-challenge-and-replay-profiles">
+        <name>Optional Challenge and Replay Profiles</name>
+        <t>JEP-Core does not require a nonce.</t>
+        <t>Profiles <bcp14>MAY</bcp14> additionally require:</t>
+        <ul spacing="normal">
+          <li>
+            <t>receiver-issued nonces;</t>
+          </li>
+          <li>
+            <t>sender-generated nonces;</t>
+          </li>
+          <li>
+            <t>challenge-response;</t>
+          </li>
+          <li>
+            <t>sequence numbers;</t>
+          </li>
+          <li>
+            <t>transaction identifiers;</t>
+          </li>
+          <li>
+            <t>trusted timestamps;</t>
+          </li>
+          <li>
+            <t>short-lived audience-bound tokens;</t>
+          </li>
+          <li>
+            <t>monotonic counters;</t>
+          </li>
+          <li>
+            <t>ledger positions;</t>
+          </li>
+          <li>
+            <t>previous-event commitments.</t>
+          </li>
+        </ul>
+        <t>Such mechanisms <bcp14>MAY</bcp14> establish properties that stable Event Identity alone
 does not establish, including current liveness, server challenge
 freshness, total order, or single-use authority.</t>
+      </section>
     </section>
     <section anchor="references-and-chain-boundaries">
       <name>References and Chain Boundaries</name>
@@ -940,10 +940,8 @@ digests, exact-artifact pins, and other digest references.</t>
 <bcp14>MUST</bcp14> be lower-case hexadecimal.</t>
       <t>Implementations conforming to the JEP-Core 0.7 baseline <bcp14>MUST</bcp14> support
 <tt>sha256</tt> as specified for SHA-256 in <xref target="RFC6234"/>.</t>
-      <t>Example:</t>
-      <t><tt>text
-sha256:3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7
-</tt></t>
+      <t>A SHA-256 digest string therefore begins with <tt>sha256:</tt> followed by
+64 lower-case hexadecimal digits.</t>
       <t>Additional digest algorithms <bcp14>MAY</bcp14> be defined by conformance profiles,
 trust profiles, or registered extensions.</t>
     </section>
@@ -1051,194 +1049,194 @@ JEP-Core conformance.</t>
     </section>
     <section anchor="validation-model">
       <name>Validation Model</name>
-    </section>
-    <section anchor="independent-validation-checks">
-      <name>Independent Validation Checks</name>
-      <t>JEP-Core does not define cumulative validation levels.</t>
-      <t>A verifier reports independent checks. Initial check identifiers include:</t>
-      <ul spacing="normal">
-        <li>
-          <t><tt>syntax</tt>;</t>
-        </li>
-        <li>
-          <t><tt>cryptographic</tt>;</t>
-        </li>
-        <li>
-          <t><tt>actor_binding</tt>;</t>
-        </li>
-        <li>
-          <t><tt>freshness</tt>;</t>
-        </li>
-        <li>
-          <t><tt>audience</tt>;</t>
-        </li>
-        <li>
-          <t><tt>event_identity</tt>;</t>
-        </li>
-        <li>
-          <t><tt>reference_integrity</tt>;</t>
-        </li>
-        <li>
-          <t><tt>extension_processing</tt>;</t>
-        </li>
-        <li>
-          <t><tt>chain_integrity</tt>;</t>
-        </li>
-        <li>
-          <t><tt>policy</tt>.</t>
-        </li>
-      </ul>
-      <t>A check status is one of:</t>
-      <ul spacing="normal">
-        <li>
-          <t><tt>pass</tt>;</t>
-        </li>
-        <li>
-          <t><tt>fail</tt>;</t>
-        </li>
-        <li>
-          <t><tt>not_checked</tt>;</t>
-        </li>
-        <li>
-          <t><tt>not_applicable</tt>;</t>
-        </li>
-        <li>
-          <t><tt>unsupported</tt>;</t>
-        </li>
-        <li>
-          <t><tt>indeterminate</tt>.</t>
-        </li>
-      </ul>
-      <t><tt>unsupported</tt> means the verifier does not implement the requested
+      <section anchor="independent-validation-checks">
+        <name>Independent Validation Checks</name>
+        <t>JEP-Core does not define cumulative validation levels.</t>
+        <t>A verifier reports independent checks. Initial check identifiers include:</t>
+        <ul spacing="normal">
+          <li>
+            <t><tt>syntax</tt>;</t>
+          </li>
+          <li>
+            <t><tt>cryptographic</tt>;</t>
+          </li>
+          <li>
+            <t><tt>actor_binding</tt>;</t>
+          </li>
+          <li>
+            <t><tt>freshness</tt>;</t>
+          </li>
+          <li>
+            <t><tt>audience</tt>;</t>
+          </li>
+          <li>
+            <t><tt>event_identity</tt>;</t>
+          </li>
+          <li>
+            <t><tt>reference_integrity</tt>;</t>
+          </li>
+          <li>
+            <t><tt>extension_processing</tt>;</t>
+          </li>
+          <li>
+            <t><tt>chain_integrity</tt>;</t>
+          </li>
+          <li>
+            <t><tt>policy</tt>.</t>
+          </li>
+        </ul>
+        <t>A check status is one of:</t>
+        <ul spacing="normal">
+          <li>
+            <t><tt>pass</tt>;</t>
+          </li>
+          <li>
+            <t><tt>fail</tt>;</t>
+          </li>
+          <li>
+            <t><tt>not_checked</tt>;</t>
+          </li>
+          <li>
+            <t><tt>not_applicable</tt>;</t>
+          </li>
+          <li>
+            <t><tt>unsupported</tt>;</t>
+          </li>
+          <li>
+            <t><tt>indeterminate</tt>.</t>
+          </li>
+        </ul>
+        <t><tt>unsupported</tt> means the verifier does not implement the requested
 check or profile.</t>
-      <t><tt>indeterminate</tt> means the verifier implements the check but cannot
+        <t><tt>indeterminate</tt> means the verifier implements the check but cannot
 complete it from the available evidence or state.</t>
-      <t>A verifier <bcp14>MUST NOT</bcp14> report an unperformed check as <tt>pass</tt>.</t>
-    </section>
-    <section anchor="overall-validation-status">
-      <name>Overall Validation Status</name>
-      <t>The overall validation status is one of:</t>
-      <ul spacing="normal">
-        <li>
-          <t><tt>valid</tt>;</t>
-        </li>
-        <li>
-          <t><tt>invalid</tt>;</t>
-        </li>
-        <li>
-          <t><tt>indeterminate</tt>.</t>
-        </li>
-      </ul>
-      <t>For a requested mode and profile:</t>
-      <ul spacing="normal">
-        <li>
-          <t><tt>valid</tt> means all required checks passed or were not applicable;</t>
-        </li>
-        <li>
-          <t><tt>invalid</tt> means at least one required check failed;</t>
-        </li>
-        <li>
-          <t><tt>indeterminate</tt> means no required check failed, but at least one
+        <t>A verifier <bcp14>MUST NOT</bcp14> report an unperformed check as <tt>pass</tt>.</t>
+      </section>
+      <section anchor="overall-validation-status">
+        <name>Overall Validation Status</name>
+        <t>The overall validation status is one of:</t>
+        <ul spacing="normal">
+          <li>
+            <t><tt>valid</tt>;</t>
+          </li>
+          <li>
+            <t><tt>invalid</tt>;</t>
+          </li>
+          <li>
+            <t><tt>indeterminate</tt>.</t>
+          </li>
+        </ul>
+        <t>For a requested mode and profile:</t>
+        <ul spacing="normal">
+          <li>
+            <t><tt>valid</tt> means all required checks passed or were not applicable;</t>
+          </li>
+          <li>
+            <t><tt>invalid</tt> means at least one required check failed;</t>
+          </li>
+          <li>
+            <t><tt>indeterminate</tt> means no required check failed, but at least one
 required check is unsupported or indeterminate.</t>
-        </li>
-      </ul>
-      <t>Checks not required by the requested mode or profile <bcp14>MAY</bcp14> be
+          </li>
+        </ul>
+        <t>Checks not required by the requested mode or profile <bcp14>MAY</bcp14> be
 <tt>not_checked</tt>.</t>
-    </section>
-    <section anchor="validation-modes">
-      <name>Validation Modes</name>
-      <t>Initial validation modes are:</t>
-      <ul spacing="normal">
-        <li>
-          <t><tt>archival</tt>;</t>
-        </li>
-        <li>
-          <t><tt>acceptance</tt>;</t>
-        </li>
-        <li>
-          <t><tt>chain</tt>;</t>
-        </li>
-        <li>
-          <t><tt>policy</tt>.</t>
-        </li>
-      </ul>
-      <t>Archival validation is repeatable and <bcp14>MUST NOT</bcp14> consume acceptance state.</t>
-      <t>Acceptance validation includes JEP-Core event-identity checks and
+      </section>
+      <section anchor="validation-modes">
+        <name>Validation Modes</name>
+        <t>Initial validation modes are:</t>
+        <ul spacing="normal">
+          <li>
+            <t><tt>archival</tt>;</t>
+          </li>
+          <li>
+            <t><tt>acceptance</tt>;</t>
+          </li>
+          <li>
+            <t><tt>chain</tt>;</t>
+          </li>
+          <li>
+            <t><tt>policy</tt>.</t>
+          </li>
+        </ul>
+        <t>Archival validation is repeatable and <bcp14>MUST NOT</bcp14> consume acceptance state.</t>
+        <t>Acceptance validation includes JEP-Core event-identity checks and
 idempotent acceptance semantics plus any freshness, audience,
 actor-binding, or challenge requirements declared by the applicable
 profile.</t>
-      <t>Chain mode invokes a companion chain profile or chain system. JEP-Core
+        <t>Chain mode invokes a companion chain profile or chain system. JEP-Core
 does not define chain-integrity semantics.</t>
-      <t>Policy mode invokes a domain, organizational, legal, regulatory, or
+        <t>Policy mode invokes a domain, organizational, legal, regulatory, or
 deployment policy. Policy results <bcp14>MUST NOT</bcp14> be presented as intrinsic
 properties of JEP-Core.</t>
-    </section>
-    <section anchor="deterministic-core-validation-order">
-      <name>Deterministic Core Validation Order</name>
-      <t>A JEP-Core verifier <bcp14>SHOULD</bcp14> process an event in this order:</t>
-      <ol spacing="normal" type="1"><li>
-          <t>parse JSON;</t>
-        </li>
-        <li>
-          <t>reject duplicate JSON member names;</t>
-        </li>
-        <li>
-          <t>check required top-level fields;</t>
-        </li>
-        <li>
-          <t>validate <tt>jep</tt>, <tt>id</tt>, <tt>verb</tt>, <tt>who</tt>, and <tt>when</tt>;</t>
-        </li>
-        <li>
-          <t>check verb-specific core field requirements;</t>
-        </li>
-        <li>
-          <t>remove <tt>sig</tt> to construct the unsigned event;</t>
-        </li>
-        <li>
-          <t>canonicalize the unsigned event using JCS;</t>
-        </li>
-        <li>
-          <t>verify the detached signature;</t>
-        </li>
-        <li>
-          <t>compute the Event Hash if needed;</t>
-        </li>
-        <li>
-          <t>evaluate Event Identity consistency if identity state is available;</t>
-        </li>
-        <li>
-          <t>resolve actor/key and actor binding if required;</t>
-        </li>
-        <li>
-          <t>validate audience if required by the requested profile;</t>
-        </li>
-        <li>
-          <t>evaluate freshness if required by the requested profile;</t>
-        </li>
-        <li>
-          <t>validate reference syntax and exact-artifact pins if requested;</t>
-        </li>
-        <li>
-          <t>process critical extensions;</t>
-        </li>
-        <li>
-          <t>invoke optional chain checks if requested;</t>
-        </li>
-        <li>
-          <t>invoke optional policy checks if requested;</t>
-        </li>
-        <li>
-          <t>if acceptance mode is requested, atomically determine and record the
+      </section>
+      <section anchor="deterministic-core-validation-order">
+        <name>Deterministic Core Validation Order</name>
+        <t>A JEP-Core verifier <bcp14>SHOULD</bcp14> process an event in this order:</t>
+        <ol spacing="normal" type="1"><li>
+            <t>parse JSON;</t>
+          </li>
+          <li>
+            <t>reject duplicate JSON member names;</t>
+          </li>
+          <li>
+            <t>check required top-level fields;</t>
+          </li>
+          <li>
+            <t>validate <tt>jep</tt>, <tt>id</tt>, <tt>verb</tt>, <tt>who</tt>, and <tt>when</tt>;</t>
+          </li>
+          <li>
+            <t>check verb-specific core field requirements;</t>
+          </li>
+          <li>
+            <t>remove <tt>sig</tt> to construct the unsigned event;</t>
+          </li>
+          <li>
+            <t>canonicalize the unsigned event using JCS;</t>
+          </li>
+          <li>
+            <t>verify the detached signature;</t>
+          </li>
+          <li>
+            <t>compute the Event Hash if needed;</t>
+          </li>
+          <li>
+            <t>evaluate Event Identity consistency if identity state is available;</t>
+          </li>
+          <li>
+            <t>resolve actor/key and actor binding if required;</t>
+          </li>
+          <li>
+            <t>validate audience if required by the requested profile;</t>
+          </li>
+          <li>
+            <t>evaluate freshness if required by the requested profile;</t>
+          </li>
+          <li>
+            <t>validate reference syntax and exact-artifact pins if requested;</t>
+          </li>
+          <li>
+            <t>process critical extensions;</t>
+          </li>
+          <li>
+            <t>invoke optional chain checks if requested;</t>
+          </li>
+          <li>
+            <t>invoke optional policy checks if requested;</t>
+          </li>
+          <li>
+            <t>if acceptance mode is requested, atomically determine and record the
 acceptance outcome;</t>
-        </li>
-        <li>
-          <t>return a structured validation result.</t>
-        </li>
-      </ol>
-      <t>An implementation <bcp14>MUST</bcp14> perform cryptographic validation before writing
+          </li>
+          <li>
+            <t>return a structured validation result.</t>
+          </li>
+        </ol>
+        <t>An implementation <bcp14>MUST</bcp14> perform cryptographic validation before writing
 new acceptance state for an untrusted input. Deployments <bcp14>SHOULD</bcp14> bound
 acceptance-state resource use according to their trust, audience, retention,
 and abuse-control policy.</t>
+      </section>
     </section>
     <section anchor="validation-result-object">
       <name>Validation Result Object</name>
@@ -1326,174 +1324,174 @@ and abuse-control policy.</t>
     <section anchor="failure-codes">
       <name>Failure Codes</name>
       <t>A conforming validator <bcp14>SHOULD</bcp14> return structured failure codes.</t>
-    </section>
-    <section anchor="syntax-and-identity-errors">
-      <name>Syntax and Identity Errors</name>
-      <ul spacing="normal">
-        <li>
-          <t><tt>ERR_INVALID_JSON</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_DUPLICATE_MEMBER</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_UNSUPPORTED_JEP_VERSION</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_UNKNOWN_VERB</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_MISSING_REQUIRED_FIELD</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_INVALID_FIELD_TYPE</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_INVALID_TIMESTAMP</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_EVENT_ID_INVALID</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_EVENT_ID_CONFLICT</tt></t>
-        </li>
-      </ul>
-    </section>
-    <section anchor="cryptographic-errors">
-      <name>Cryptographic Errors</name>
-      <ul spacing="normal">
-        <li>
-          <t><tt>ERR_CANONICALIZATION_FAILED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_CANONICALIZATION_VERSION_UNSUPPORTED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_INVALID_EVENT_HASH</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_UNSUPPORTED_SIGNATURE_ALG</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_PROHIBITED_SIGNATURE_ALG</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_ALG_KEY_TYPE_MISMATCH</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_ALG_PROFILE_MISMATCH</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_HASH_ALG_UNSUPPORTED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_SIGNATURE_CONTAINER_INVALID</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_SIGNATURE_MISSING</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_SIGNATURE_INVALID</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_DIGEST_MISMATCH</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_ARCHIVAL_ALG_STATUS_UNKNOWN</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_ALG_DEPRECATED_FOR_NEW_EVENTS</tt></t>
-        </li>
-      </ul>
-    </section>
-    <section anchor="actor-and-trust-errors">
-      <name>Actor and Trust Errors</name>
-      <ul spacing="normal">
-        <li>
-          <t><tt>ERR_ACTOR_UNRESOLVED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_KEY_UNRESOLVED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_KEY_NOT_BOUND_TO_ACTOR</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_KEY_REVOKED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_KEY_NOT_VALID_AT_EVENT_TIME</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_TRUST_PROFILE_UNSUPPORTED</tt></t>
-        </li>
-      </ul>
-    </section>
-    <section anchor="freshness-and-acceptance-errors">
-      <name>Freshness and Acceptance Errors</name>
-      <ul spacing="normal">
-        <li>
-          <t><tt>ERR_EVENT_EXPIRED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_TIMESTAMP_OUT_OF_WINDOW</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_ACCEPTANCE_STATE_UNAVAILABLE</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_ACCEPTANCE_ATOMICITY_UNAVAILABLE</tt></t>
-        </li>
-      </ul>
-      <t><tt>already_accepted</tt> is an acceptance outcome, not an error code.</t>
-    </section>
-    <section anchor="reference-errors">
-      <name>Reference Errors</name>
-      <ul spacing="normal">
-        <li>
-          <t><tt>ERR_REF_UNRESOLVED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_REF_HASH_MISMATCH</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_REF_IDENTITY_MISMATCH</tt></t>
-        </li>
-      </ul>
-      <t>Chain-specific failure codes, including delegation-scope, termination
+      <section anchor="syntax-and-identity-errors">
+        <name>Syntax and Identity Errors</name>
+        <ul spacing="normal">
+          <li>
+            <t><tt>ERR_INVALID_JSON</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_DUPLICATE_MEMBER</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_UNSUPPORTED_JEP_VERSION</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_UNKNOWN_VERB</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_MISSING_REQUIRED_FIELD</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_INVALID_FIELD_TYPE</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_INVALID_TIMESTAMP</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_EVENT_ID_INVALID</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_EVENT_ID_CONFLICT</tt></t>
+          </li>
+        </ul>
+      </section>
+      <section anchor="cryptographic-errors">
+        <name>Cryptographic Errors</name>
+        <ul spacing="normal">
+          <li>
+            <t><tt>ERR_CANONICALIZATION_FAILED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_CANONICALIZATION_VERSION_UNSUPPORTED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_INVALID_EVENT_HASH</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_UNSUPPORTED_SIGNATURE_ALG</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_PROHIBITED_SIGNATURE_ALG</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_ALG_KEY_TYPE_MISMATCH</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_ALG_PROFILE_MISMATCH</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_HASH_ALG_UNSUPPORTED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_SIGNATURE_CONTAINER_INVALID</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_SIGNATURE_MISSING</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_SIGNATURE_INVALID</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_DIGEST_MISMATCH</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_ARCHIVAL_ALG_STATUS_UNKNOWN</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_ALG_DEPRECATED_FOR_NEW_EVENTS</tt></t>
+          </li>
+        </ul>
+      </section>
+      <section anchor="actor-and-trust-errors">
+        <name>Actor and Trust Errors</name>
+        <ul spacing="normal">
+          <li>
+            <t><tt>ERR_ACTOR_UNRESOLVED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_KEY_UNRESOLVED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_KEY_NOT_BOUND_TO_ACTOR</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_KEY_REVOKED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_KEY_NOT_VALID_AT_EVENT_TIME</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_TRUST_PROFILE_UNSUPPORTED</tt></t>
+          </li>
+        </ul>
+      </section>
+      <section anchor="freshness-and-acceptance-errors">
+        <name>Freshness and Acceptance Errors</name>
+        <ul spacing="normal">
+          <li>
+            <t><tt>ERR_EVENT_EXPIRED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_TIMESTAMP_OUT_OF_WINDOW</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_ACCEPTANCE_STATE_UNAVAILABLE</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_ACCEPTANCE_ATOMICITY_UNAVAILABLE</tt></t>
+          </li>
+        </ul>
+        <t><tt>already_accepted</tt> is an acceptance outcome, not an error code.</t>
+      </section>
+      <section anchor="reference-errors">
+        <name>Reference Errors</name>
+        <ul spacing="normal">
+          <li>
+            <t><tt>ERR_REF_UNRESOLVED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_REF_HASH_MISMATCH</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_REF_IDENTITY_MISMATCH</tt></t>
+          </li>
+        </ul>
+        <t>Chain-specific failure codes, including delegation-scope, termination
 cascade, cycle, and complete-log failures, belong to the applicable
 chain profile rather than JEP-Core.</t>
-    </section>
-    <section anchor="extension-errors">
-      <name>Extension Errors</name>
-      <ul spacing="normal">
-        <li>
-          <t><tt>ERR_UNKNOWN_CRITICAL_EXTENSION</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_EXTENSION_SCHEMA_INVALID</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_EXTENSION_VALIDATION_FAILED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_EXTENSION_CONFLICT</tt></t>
-        </li>
-      </ul>
-    </section>
-    <section anchor="policy-errors">
-      <name>Policy Errors</name>
-      <ul spacing="normal">
-        <li>
-          <t><tt>ERR_POLICY_REJECTED</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_AUTHORIZATION_CONTEXT_MISSING</tt></t>
-        </li>
-        <li>
-          <t><tt>ERR_DOMAIN_REQUIREMENT_UNSATISFIED</tt></t>
-        </li>
-      </ul>
+      </section>
+      <section anchor="extension-errors">
+        <name>Extension Errors</name>
+        <ul spacing="normal">
+          <li>
+            <t><tt>ERR_UNKNOWN_CRITICAL_EXTENSION</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_EXTENSION_SCHEMA_INVALID</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_EXTENSION_VALIDATION_FAILED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_EXTENSION_CONFLICT</tt></t>
+          </li>
+        </ul>
+      </section>
+      <section anchor="policy-errors">
+        <name>Policy Errors</name>
+        <ul spacing="normal">
+          <li>
+            <t><tt>ERR_POLICY_REJECTED</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_AUTHORIZATION_CONTEXT_MISSING</tt></t>
+          </li>
+          <li>
+            <t><tt>ERR_DOMAIN_REQUIREMENT_UNSATISFIED</tt></t>
+          </li>
+        </ul>
+      </section>
     </section>
     <section anchor="extension-rules-and-conflict-handling">
       <name>Extension Rules and Conflict Handling</name>
@@ -1551,184 +1549,184 @@ include:</t>
     </section>
     <section anchor="conformance-requirements">
       <name>Conformance Requirements</name>
-    </section>
-    <section anchor="producer-conformance">
-      <name>Producer Conformance</name>
-      <t>A JEP-Core-0.7 producer <bcp14>MUST</bcp14> support:</t>
-      <ul spacing="normal">
-        <li>
-          <t>I-JSON-compatible event construction;</t>
-        </li>
-        <li>
-          <t>generation or assignment of a stable <tt>id</tt>;</t>
-        </li>
-        <li>
-          <t>required top-level fields;</t>
-        </li>
-        <li>
-          <t>JCS canonicalization of unsigned payloads;</t>
-        </li>
-        <li>
-          <t>detached JWS signature generation under at least one conformance class;</t>
-        </li>
-        <li>
-          <t>algorithm-tagged digest strings;</t>
-        </li>
-        <li>
-          <t><tt>ext</tt> and <tt>ext_crit</tt> semantics.</t>
-        </li>
-      </ul>
-      <t>A producer <bcp14>MUST NOT</bcp14> reuse one Event Identity for different unsigned event
+      <section anchor="producer-conformance">
+        <name>Producer Conformance</name>
+        <t>A JEP-Core-0.7 producer <bcp14>MUST</bcp14> support:</t>
+        <ul spacing="normal">
+          <li>
+            <t>I-JSON-compatible event construction;</t>
+          </li>
+          <li>
+            <t>generation or assignment of a stable <tt>id</tt>;</t>
+          </li>
+          <li>
+            <t>required top-level fields;</t>
+          </li>
+          <li>
+            <t>JCS canonicalization of unsigned payloads;</t>
+          </li>
+          <li>
+            <t>detached JWS signature generation under at least one conformance class;</t>
+          </li>
+          <li>
+            <t>algorithm-tagged digest strings;</t>
+          </li>
+          <li>
+            <t><tt>ext</tt> and <tt>ext_crit</tt> semantics.</t>
+          </li>
+        </ul>
+        <t>A producer <bcp14>MUST NOT</bcp14> reuse one Event Identity for different unsigned event
 content.</t>
-    </section>
-    <section anchor="verifier-conformance">
-      <name>Verifier Conformance</name>
-      <t>A JEP-Core-0.7 verifier <bcp14>MUST</bcp14> support:</t>
-      <ul spacing="normal">
-        <li>
-          <t>duplicate-member rejection;</t>
-        </li>
-        <li>
-          <t>core field validation;</t>
-        </li>
-        <li>
-          <t>Event Identity validation;</t>
-        </li>
-        <li>
-          <t>JCS canonicalization;</t>
-        </li>
-        <li>
-          <t>detached signature verification under at least one conformance class;</t>
-        </li>
-        <li>
-          <t>Event Hash calculation;</t>
-        </li>
-        <li>
-          <t>independent validation checks;</t>
-        </li>
-        <li>
-          <t>structured validation result objects;</t>
-        </li>
-        <li>
-          <t>unknown critical extension rejection;</t>
-        </li>
-        <li>
-          <t>archival validation mode.</t>
-        </li>
-      </ul>
-      <t>A verifier <bcp14>MUST NOT</bcp14> require support for any optional identity,
+      </section>
+      <section anchor="verifier-conformance">
+        <name>Verifier Conformance</name>
+        <t>A JEP-Core-0.7 verifier <bcp14>MUST</bcp14> support:</t>
+        <ul spacing="normal">
+          <li>
+            <t>duplicate-member rejection;</t>
+          </li>
+          <li>
+            <t>core field validation;</t>
+          </li>
+          <li>
+            <t>Event Identity validation;</t>
+          </li>
+          <li>
+            <t>JCS canonicalization;</t>
+          </li>
+          <li>
+            <t>detached signature verification under at least one conformance class;</t>
+          </li>
+          <li>
+            <t>Event Hash calculation;</t>
+          </li>
+          <li>
+            <t>independent validation checks;</t>
+          </li>
+          <li>
+            <t>structured validation result objects;</t>
+          </li>
+          <li>
+            <t>unknown critical extension rejection;</t>
+          </li>
+          <li>
+            <t>archival validation mode.</t>
+          </li>
+        </ul>
+        <t>A verifier <bcp14>MUST NOT</bcp14> require support for any optional identity,
 credential, attestation, blockchain, AI platform, agent framework,
 challenge, transport, or chain profile.</t>
-    </section>
-    <section anchor="acceptance-processor-conformance">
-      <name>Acceptance-Processor Conformance</name>
-      <t>An implementation claiming JEP-Core-0.7 acceptance-processor conformance
+      </section>
+      <section anchor="acceptance-processor-conformance">
+        <name>Acceptance-Processor Conformance</name>
+        <t>An implementation claiming JEP-Core-0.7 acceptance-processor conformance
 <bcp14>MUST</bcp14> additionally support:</t>
-      <ul spacing="normal">
-        <li>
-          <t>stable acceptance-domain definition;</t>
-        </li>
-        <li>
-          <t>detection of conflicting Event Identity reuse;</t>
-        </li>
-        <li>
-          <t>durable or otherwise sufficient acceptance state;</t>
-        </li>
-        <li>
-          <t>atomic or equivalent first-acceptance processing;</t>
-        </li>
-        <li>
-          <t><tt>accepted</tt>, <tt>already_accepted</tt>, <tt>rejected</tt>, and
+        <ul spacing="normal">
+          <li>
+            <t>stable acceptance-domain definition;</t>
+          </li>
+          <li>
+            <t>detection of conflicting Event Identity reuse;</t>
+          </li>
+          <li>
+            <t>durable or otherwise sufficient acceptance state;</t>
+          </li>
+          <li>
+            <t>atomic or equivalent first-acceptance processing;</t>
+          </li>
+          <li>
+            <t><tt>accepted</tt>, <tt>already_accepted</tt>, <tt>rejected</tt>, and
 <tt>indeterminate</tt> outcomes;</t>
-        </li>
-        <li>
-          <t>separation between repeated valid delivery and invalid event content.</t>
-        </li>
-      </ul>
-      <t>A profile <bcp14>MAY</bcp14> add freshness, audience, challenge-response, authorization,
+          </li>
+          <li>
+            <t>separation between repeated valid delivery and invalid event content.</t>
+          </li>
+        </ul>
+        <t>A profile <bcp14>MAY</bcp14> add freshness, audience, challenge-response, authorization,
 or single-use-authority requirements.</t>
-    </section>
-    <section anchor="baseline-algorithm-conformance">
-      <name>Baseline Algorithm Conformance</name>
-      <t>A baseline conformance class <bcp14>MAY</bcp14> require detached JWS using JCS
+      </section>
+      <section anchor="baseline-algorithm-conformance">
+        <name>Baseline Algorithm Conformance</name>
+        <t>A baseline conformance class <bcp14>MAY</bcp14> require detached JWS using JCS
 canonicalization, <tt>sha256</tt> algorithm-tagged digest strings, and Ed25519
 verification.</t>
-      <t>This baseline is a conformance-class requirement, not a JEP-Core semantic
+        <t>This baseline is a conformance-class requirement, not a JEP-Core semantic
 requirement. Other profiles <bcp14>MAY</bcp14> define additional or alternative
 algorithm suites, including regional, enterprise, COSE/CBOR, composite,
 or post-quantum profiles, provided that their identifiers, key
 representations, downgrade policies, and validation behavior are
 specified.</t>
+      </section>
     </section>
     <section anchor="determinability-boundary">
       <name>Determinability Boundary</name>
       <t>JEP distinguishes observable protocol facts from external target facts.</t>
-    </section>
-    <section anchor="observable-protocol-facts">
-      <name>Observable Protocol Facts</name>
-      <t>JEP can support determination of protocol-level facts such as:</t>
-      <ul spacing="normal">
-        <li>
-          <t>whether an Event Identity was asserted in a signed event;</t>
-        </li>
-        <li>
-          <t>whether an unsigned payload was signed by a key;</t>
-        </li>
-        <li>
-          <t>whether a key is acceptable under a trust profile;</t>
-        </li>
-        <li>
-          <t>whether an Event Hash matches an exact signed artifact;</t>
-        </li>
-        <li>
-          <t>whether an event references another Event Identity;</t>
-        </li>
-        <li>
-          <t>whether an exact-artifact pin matches the resolved artifact;</t>
-        </li>
-        <li>
-          <t>whether the same Event Identity was already accepted in one acceptance
+      <section anchor="observable-protocol-facts">
+        <name>Observable Protocol Facts</name>
+        <t>JEP can support determination of protocol-level facts such as:</t>
+        <ul spacing="normal">
+          <li>
+            <t>whether an Event Identity was asserted in a signed event;</t>
+          </li>
+          <li>
+            <t>whether an unsigned payload was signed by a key;</t>
+          </li>
+          <li>
+            <t>whether a key is acceptable under a trust profile;</t>
+          </li>
+          <li>
+            <t>whether an Event Hash matches an exact signed artifact;</t>
+          </li>
+          <li>
+            <t>whether an event references another Event Identity;</t>
+          </li>
+          <li>
+            <t>whether an exact-artifact pin matches the resolved artifact;</t>
+          </li>
+          <li>
+            <t>whether the same Event Identity was already accepted in one acceptance
 domain;</t>
-        </li>
-        <li>
-          <t>whether a critical extension was processed;</t>
-        </li>
-        <li>
-          <t>which validation checks were actually performed.</t>
-        </li>
-      </ul>
-    </section>
-    <section anchor="external-target-facts">
-      <name>External Target Facts</name>
-      <t>JEP alone does not determine external target facts such as:</t>
-      <ul spacing="normal">
-        <li>
-          <t>whether a real-world statement is true;</t>
-        </li>
-        <li>
-          <t>whether a model internally understood a request;</t>
-        </li>
-        <li>
-          <t>whether an actor is legally liable;</t>
-        </li>
-        <li>
-          <t>whether a delegation is legally enforceable;</t>
-        </li>
-        <li>
-          <t>whether a human actually read a document;</t>
-        </li>
-        <li>
-          <t>whether a physical-world action occurred outside the logged system;</t>
-        </li>
-        <li>
-          <t>whether all downstream systems honored a Termination event;</t>
-        </li>
-        <li>
-          <t>whether an observed event log is complete.</t>
-        </li>
-      </ul>
-      <t>A profile <bcp14>MAY</bcp14> define evidence rules for external target facts. Such rules
+          </li>
+          <li>
+            <t>whether a critical extension was processed;</t>
+          </li>
+          <li>
+            <t>which validation checks were actually performed.</t>
+          </li>
+        </ul>
+      </section>
+      <section anchor="external-target-facts">
+        <name>External Target Facts</name>
+        <t>JEP alone does not determine external target facts such as:</t>
+        <ul spacing="normal">
+          <li>
+            <t>whether a real-world statement is true;</t>
+          </li>
+          <li>
+            <t>whether a model internally understood a request;</t>
+          </li>
+          <li>
+            <t>whether an actor is legally liable;</t>
+          </li>
+          <li>
+            <t>whether a delegation is legally enforceable;</t>
+          </li>
+          <li>
+            <t>whether a human actually read a document;</t>
+          </li>
+          <li>
+            <t>whether a physical-world action occurred outside the logged system;</t>
+          </li>
+          <li>
+            <t>whether all downstream systems honored a Termination event;</t>
+          </li>
+          <li>
+            <t>whether an observed event log is complete.</t>
+          </li>
+        </ul>
+        <t>A profile <bcp14>MAY</bcp14> define evidence rules for external target facts. Such rules
 are outside JEP-Core.</t>
+      </section>
     </section>
     <section anchor="observed-log-assumptions">
       <name>Observed Log Assumptions</name>
@@ -1842,57 +1840,57 @@ conformance;</t>
 requires stronger single-use semantics than event acceptance.</t>
         </li>
       </ul>
-    </section>
-    <section anchor="event-id-security">
-      <name>Event ID Security</name>
-      <t><tt>id</tt> is not a secret and <bcp14>MUST NOT</bcp14> be used as an authorization token.</t>
-      <t>Because Event Identity is <tt>(who,id)</tt>, deliberate use of another actor's
+      <section anchor="event-id-security">
+        <name>Event ID Security</name>
+        <t><tt>id</tt> is not a secret and <bcp14>MUST NOT</bcp14> be used as an authorization token.</t>
+        <t>Because Event Identity is <tt>(who,id)</tt>, deliberate use of another actor's
 <tt>id</tt> string does not create the same Event Identity.</t>
-      <t>A validly signed actor <bcp14>MUST NOT</bcp14> reuse its own Event Identity for different
+        <t>A validly signed actor <bcp14>MUST NOT</bcp14> reuse its own Event Identity for different
 unsigned event content. Verifiers with identity state <bcp14>MUST</bcp14> detect such
 reuse as <tt>ERR_EVENT_ID_CONFLICT</tt>.</t>
-      <t>Predictable Event IDs do not weaken signature integrity, but they may
+        <t>Predictable Event IDs do not weaken signature integrity, but they may
 increase correlation or enumeration risk in systems that expose lookup
 interfaces. Profiles <bcp14>MAY</bcp14> impose stronger identifier-generation rules.</t>
-    </section>
-    <section anchor="replay-and-safe-retry">
-      <name>Replay and Safe Retry</name>
-      <t>A copied, unmodified signed event can remain cryptographically valid.
+      </section>
+      <section anchor="replay-and-safe-retry">
+        <name>Replay and Safe Retry</name>
+        <t>A copied, unmodified signed event can remain cryptographically valid.
 Signature validity alone therefore does not prevent repeated delivery.</t>
-      <t>JEP-Core addresses duplicate acceptance through stable Event Identity and
+        <t>JEP-Core addresses duplicate acceptance through stable Event Identity and
 idempotent acceptance. A valid retry yields <tt>already_accepted</tt> rather
 than a second state-changing effect.</t>
-      <t>Applications requiring proof of current liveness, server challenge
+        <t>Applications requiring proof of current liveness, server challenge
 freshness, strict request ordering, or single-use authority <bcp14>SHOULD</bcp14> use an
 appropriate challenge, nonce, sequence, timestamp, counter, reservation,
 or ledger profile in addition to JEP-Core.</t>
-    </section>
-    <section anchor="acceptance-state-failure">
-      <name>Acceptance-State Failure</name>
-      <t>If an implementation cannot reliably determine whether an Event Identity
+      </section>
+      <section anchor="acceptance-state-failure">
+        <name>Acceptance-State Failure</name>
+        <t>If an implementation cannot reliably determine whether an Event Identity
 was already accepted, it <bcp14>MUST NOT</bcp14> claim a fresh <tt>accepted</tt> outcome.</t>
-      <t>If required acceptance state or atomicity guarantees are unavailable, the
+        <t>If required acceptance state or atomicity guarantees are unavailable, the
 result <bcp14>MUST</bcp14> be <tt>indeterminate</tt> or rejected according to the applicable
 profile.</t>
-    </section>
-    <section anchor="downgrade-resistance">
-      <name>Downgrade Resistance</name>
-      <t>A verifier <bcp14>MUST</bcp14> reject algorithms prohibited by the applicable profile. A
+      </section>
+      <section anchor="downgrade-resistance">
+        <name>Downgrade Resistance</name>
+        <t>A verifier <bcp14>MUST</bcp14> reject algorithms prohibited by the applicable profile. A
 verifier <bcp14>MUST NOT</bcp14> accept a weaker algorithm merely because it is
 syntactically valid in JOSE.</t>
-    </section>
-    <section anchor="human-in-the-loop-semantics">
-      <name>Human-in-the-Loop Semantics</name>
-      <t>A human-review event records that a human actor emitted or endorsed a
+      </section>
+      <section anchor="human-in-the-loop-semantics">
+        <name>Human-in-the-Loop Semantics</name>
+        <t>A human-review event records that a human actor emitted or endorsed a
 review-related claim. It does not prove that the human fully understood
 the underlying material, that the judgment was correct, or that legal
 compliance was satisfied.</t>
-    </section>
-    <section anchor="ai-actor-semantics">
-      <name>AI Actor Semantics</name>
-      <t>JEP-Core does not mandate any specific AI actor identity scheme. AI
+      </section>
+      <section anchor="ai-actor-semantics">
+        <name>AI Actor Semantics</name>
+        <t>JEP-Core does not mandate any specific AI actor identity scheme. AI
 actor identity, model identity, tool identity, service identity, and
 session identity are defined by trust profiles or extensions.</t>
+      </section>
     </section>
     <section anchor="privacy-considerations">
       <name>Privacy Considerations</name>
@@ -1960,65 +1958,66 @@ insufficient.</t>
     </section>
     <section anchor="versioning-and-compatibility">
       <name>Versioning and Compatibility</name>
-    </section>
-    <section anchor="wire-version">
-      <name>Wire Version</name>
-      <t>For JEP-Core 0.7, <tt>jep</tt> remains <tt>"1"</tt>.</t>
-      <t>The <tt>-06</tt> and earlier Internet-Draft encodings are pre-stable draft
+      <section anchor="wire-version">
+        <name>Wire Version</name>
+        <t>For JEP-Core 0.7, <tt>jep</tt> remains <tt>"1"</tt>.</t>
+        <t>The <tt>-06</tt> and earlier Internet-Draft encodings are pre-stable draft
 artifacts. Their use of <tt>jep: "1"</tt> does not require JEP-Core 0.7 to
 preserve their field set.</t>
-    </section>
-    <section anchor="historical-verification">
-      <name>Historical Verification</name>
-      <t>Implementations <bcp14>MAY</bcp14> retain historical pre-<tt>-07</tt> decoders.</t>
-      <t>Historical signed events <bcp14>MUST NOT</bcp14> be rewritten, re-signed, or silently
+      </section>
+      <section anchor="historical-verification">
+        <name>Historical Verification</name>
+        <t>Implementations <bcp14>MAY</bcp14> retain historical pre-<tt>-07</tt> decoders.</t>
+        <t>Historical signed events <bcp14>MUST NOT</bcp14> be rewritten, re-signed, or silently
 upgraded merely to satisfy JEP-Core 0.7.</t>
-      <t>A historical decoder <bcp14>MUST</bcp14> be selected explicitly through a named
+        <t>A historical decoder <bcp14>MUST</bcp14> be selected explicitly through a named
 compatibility mode, known artifact context, archive metadata, or other
 non-heuristic mechanism.</t>
-      <t>An implementation <bcp14>MUST NOT</bcp14>:</t>
-      <ol spacing="normal" type="1"><li>
-          <t>attempt JEP-Core 0.7 validation;</t>
-        </li>
-        <li>
-          <t>observe failure;</t>
-        </li>
-        <li>
-          <t>silently retry as JEP-Core 0.6 based only on field presence.</t>
-        </li>
-      </ol>
-    </section>
-    <section anchor="future-compatibility">
-      <name>Future Compatibility</name>
-      <t>Future revisions <bcp14>MAY</bcp14> add optional fields or extensions without changing
+        <t>An implementation <bcp14>MUST NOT</bcp14>:</t>
+        <ol spacing="normal" type="1"><li>
+            <t>attempt JEP-Core 0.7 validation;</t>
+          </li>
+          <li>
+            <t>observe failure;</t>
+          </li>
+          <li>
+            <t>silently retry as JEP-Core 0.6 based only on field presence.</t>
+          </li>
+        </ol>
+      </section>
+      <section anchor="future-compatibility">
+        <name>Future Compatibility</name>
+        <t>Future revisions <bcp14>MAY</bcp14> add optional fields or extensions without changing
 the wire major when the core event object remains compatible.</t>
-      <t>A future revision that changes stable Event Identity semantics, signing
+        <t>A future revision that changes stable Event Identity semantics, signing
 input semantics, canonicalization requirements, or required Core fields
 after real-world <tt>jep: "1"</tt> adoption <bcp14>SHOULD</bcp14> define a new wire major.</t>
-      <t>Unknown critical extensions <bcp14>MUST</bcp14> fail the
+        <t>Unknown critical extensions <bcp14>MUST</bcp14> fail the
 <tt>extension_processing</tt> check. Unknown non-critical extensions <bcp14>MAY</bcp14> be
 ignored.</t>
+      </section>
     </section>
     <section anchor="examples">
       <name>Examples</name>
-    </section>
-    <section anchor="minimal-judgment-event-shape">
-      <name>Minimal Judgment Event Shape</name>
-      <t><tt>json
+      <section anchor="minimal-judgment-event-shape">
+        <name>Minimal Judgment Event Shape</name>
+        <t><tt>json
 {
   "jep": "1",
   "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0",
   "verb": "J",
   "who": "did:example:agent-789",
   "when": 1742345678,
-  "what": "sha256:aa55ad4393538f14e6b4961de1a29216eed93517cb6c2631a56a5ee75edb3b7a",
+  "what": {
+    "claim": "example-judgment"
+  },
   "sig": "..."
 }
 </tt></t>
-    </section>
-    <section anchor="judgment-event-with-audience-and-event-reference">
-      <name>Judgment Event with Audience and Event Reference</name>
-      <t><tt>json
+      </section>
+      <section anchor="judgment-event-with-audience-and-event-reference">
+        <name>Judgment Event with Audience and Event Reference</name>
+        <t><tt>json
 {
   "jep": "1",
   "id": "urn:uuid:018f4f8d-8ad2-7baf-b752-e529e79bc88a",
@@ -2041,7 +2040,8 @@ ignored.</t>
   "sig": "..."
 }
 </tt></t>
-      <t>Full signed test vectors belong in the matching conformance revision.</t>
+        <t>Full signed test vectors belong in the matching conformance revision.</t>
+      </section>
     </section>
     <section anchor="changes-from-06">
       <name>Changes from -06</name>
@@ -2273,7 +2273,7 @@ been incorporated into this document. This document obsoletes RFC
         </reference>
       </references>
     </references>
-    <?line 1528?>
+    <?line 1527?>
 
 <section numbered="false" anchor="acknowledgments">
       <name>Acknowledgments</name>
@@ -2282,366 +2282,364 @@ security, and deployment feedback on earlier JEP draft revisions.</t>
     </section>
   </back>
   <!-- ##markdown-source:
-H4sIAAAAAAAAA+1963LcRpbm/3wKLP1jbEehLFJ3qad7yyTVKrVEcklKHm9H
-BwlWoUhYVUAZQInidOtd5ln2yfZcM08CKMrumY3YjdiJHouFSyIvJ8/9fJmm
-qWuLdpm/SHbebObXq7xsk8NP+N+TumqrWbVMvn1zePLdjsuurur8Ez53eLLj
-5tWszFbw2rzOFm16m5XX6S/5Ov1FGklzbCRdSyPpg6dulrX5dVXfvUjyz2vX
-bK5WRdMUVdneraGd6eH5K1es6xdJW2+adu/Bg+cP9twc3nmR7D3Ye5I+eJ7u
-PXEf87vbqp6/cEma6Lfw73m+zK+zFprDX5/yulgUM/87m82qTdlmV8WyaO/w
-ymSaZNfwbuNc02bl/CJbViV86i5vXLPK6vbi103V5s2LpKzcuniR/BXGMUqa
-qm7rfNHAX3cr/ONvzmWb9qaqsUcugf8rSnjp53HyE0wJXeB5+nnzawFXwuV8
-lRXLF0lTXJfZ8r/fbFZZqQMaVzU/s6nhyzdtu25e/PDDddHebK7Gs2r1w80v
-Tdqs85lzZVWvYJif8hfOFeXC/BqPx86lKQz+qmnrbNY6d35TNAms3IaWeZ4v
-ijJvkvYmT+5d+1GSJWW+gUaWjmc2u1rmCa1wwp/Ef/x6pHW+hHWbw7S3DcxH
-QoMbORhVVhb/TquSLXEyF+1tVufQfgkPb9qqrFbVpuGVgRlu2nzVwCigEwkO
-F74M/V1UmzopVqtNa7oB/bqCeffj+PYNdPvAE0Xy7cF3I3ee16uilAvn3/F3
-PxhaSb798N04mYa5yWh9YChvzo6P+FNAL/Vm1m6w343tQjGH/wJ5jeDtNpvd
-6Fs/5VfJGa4yvgMd++nsO2cJNKngFz+6n5VVCZeXMkvJGTSzwpf2z75LZuFu
-Pnfr7G5ZZXMkRepiCkRbLGDKk5usuaGhAYHmdV7O8qQBaoPOzeDpopzn67zE
-zrpP0NacvwQfmn3E2/N8tQbKhwHBrsnXsDni9/3w5/b1Om82yxZu55/hXdzW
-0I1yvizK6xHvaOQFiwJmqyjbvIaO5g0tgIPZ4nXh3ZlcwVadZzUsNS99ul/B
-vOmKKEfBP9Y5DBmu1RnQcA2EnJUJ9BO7BDsN9jN0a73M7twqn8G9olnB4pbJ
-Gmdqtllm9SgJ7VfQUFm18MqvmwIuZElbrdMlrO0SrsMkjN2ktHMCHYAxAEdI
-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
-MxLq1OwKzBhAXqiWL3XaPi968zzRUoEoIcc/KY5dsvo9YybThhn6fQa/S2y4
-PoQCZtVySauCIZ8Cp7HVBOBY67zOS1QwvY+626soaRDYfZ3DjrkCciU9/2Pe
-jTYl15g6JqFWDobD/7wGCovw/v30IHl/etSAQvEnUCieP36y9+XLSMN0Ax1/
-fzrtlTiwj8YFPiohgE3BizS7qYoZah731Y/4EGRoJpUJoZCRCifaDt5PYxgg
-WDtoZxFNWRr35PAvjQ9sOLUaUc5Cb1DdaSpMV1jOadjZGr0+t1VwnUl2s+St
-cDzWBXehNki+f9w2PffFFBVbv48lZ7DZZjuzM8iTmuu5crZ4m0aYBS16Hdow
-7vLw9PTi8MPh0fnF9OBi//jo1dvp/jnuwFNgYOJLQvsbl/y2aHLjA+18An0b
-wT8S+mbsUDAgKO6vOuSW0THLIe1KOAFrWsPyI0R8Qr4HbIdKNLE3aCwdoPp1
-LobHBxzeYYgTKR8OCezbYlc+QUFNereWACA6vkNxC/QUNtq8G07mPCzxD9EY
-kWsAXyXm0RkWG8nD3nh9o+eh9gnU7H3mFBz+LAiXhrN2WrHqKMhYK08E85of
-N+kvOh59S53G8oqvseRV6nrAuZMUtpMe4V0048kVLpOtY3PbMg+h9R9zznvu
-ig/1dtCXRrIjlf3SBLLLLXLSMgsgkeEDoiSCv0qRpHbT5KP6TR5osTEH9G4U
-JZHm7V/clk2caAHZbbZcpjPMPRANHjNJOOwOzDpwaDCf6qrE+jL6oPdnCNtE
-OeBr0cRrwl4mF/K4mUIzVKLvhvMPYhqWDeDC4kyjrFuvdTJrvN4UzQ1R5cAU
-IVkFbVmvSCf9b3WR6e/I6eIfCs5DvcRbNDWJBXgHBUQ3f5M8VEgnUm7Hmhj5
-1Xlmb4Gyq1sgI3Jh0yqO3BUG0skBoffJgNf2KPN6vazuSPHDoHEUrg7ZZ4ae
-1LnA3tANSnulPLDXiIDQbmNnpuV+4npQ52PHdGNej9zRafLcrTpmmc1oovOI
-9jT+q0VLc1O1NCf607D4vZnxvXwJ9HSooEAOLbaRDI3uHwzdz9RwS0kTnKvt
-yu5OEzdoE9RkW5f5rnMaXsaeI5wcGDwqUqQU1tXm+iYsV6pGji9Aoy6d/6e6
-ZINx3AuOfEixAK6/eQArfuK4LBrF44HUXlWL1AUjef1taBr0cbTpzOR++N0j
-kQ2L44i2HA8E2vSVsloDGWo8rnLMR7WVHWy8m6LHn25yXX0cunc3qwYrrupb
-KlT0+5FtQLmHY3FXlOi1LSrFfJ43EfooYA+RqwJF1YxqfLKSC61+g6vCv9wE
-nwEMO1SVTiJuostUoNrlI2BgI5BbEG05qrMIrIjCDKD4pzKfnCAJn6uWminK
-HRjYdZL8TM01jcr3McVnwm+sEPaZwCY/mKzRblYwqenqHvCDpKlEynSOvTbE
-9YKTZoGOgHEUmhjoLpZq3DmYdRDRUkssxcZbSpsj5WmkpVCU90XKquac0czL
-PmJ1KAsuVlZwmDT47+AC5t8hH1qlqTzHJEA/ym7URq724zaTROMkJk4TQkbB
-9SsyE/WUTGJO/g0YxOXl5S+gvLm/g6W2g7d3wPhHFwC9vYN5dju0g+H63ynJ
-aAc0InxoXsxfSCTiBasqu3sP6QV4ppjjI5u6fLHZwHMPdp8tHi2ezdOnsycP
-4T97efr86tHD9FG+ePL4aZ7PdmcPduDNL+4L9ogE6WCstl9ID5sUNBB45v++
-wdD3MLkXX29usr3HT16Mx+MdHSTbH9ifnoouLll8wqdfXmJTXS+JG54mdk9k
-rVfrJ8lVVkeRcUm3IX8DWaMh8VzCcrZGlGimcZQwNRDS0w+PEtRdiig3Pgnp
-WVnDyjKb50OKMLlZkWcEPyqsK10V0dKQ+8fUucumAKXV+F79w/g96yAAaTZQ
-RIQuifJjiSleQyVGLNp8gWSwJ9xwVIyzSnGisGJonGjb6F4aaN/JWsBcAh/E
-jAsPHEGLGJwVWt4QCh46YBGiVDP3NQPv4UWwyl2sCqxbDc5eYReoB96xDmkc
-wSWx42usR6vjFTDVFT+ooOJKPdZMHWmmkvSJsiqUICBT59xEcn3DapMH3Gqi
-83sd4L6pDZZI67PuzU9nIXPkq14McUgr/wyjdOGbvgSDSmC5z0zDH8DYjz3U
-b5LUw9yQhqqQN3GlidaIsK6MGVQaX0aFRJNAR2jBou6LoVDJbx1J/Iz+ysqP
-+C/VIZCSN/KBefKsaDbc3OHe7Ze0kJLf16Rl/8bZlra6RU11bUJrWdBsv1uz
-KwcXRcxpEpqUyIfCf72hejYYF4tIjobaK3XRfPSDmvnaIEz+S3keuNaL0UaC
-ZRZdwqlewWhF4wpKkRXFZKY0jbgcvgGDITW4RGRChIqy+5bQ26KZrUGj2HKb
-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
-AA==
+H4sIAAAAAAAAA+1963LcRpbm/3wKLPvH2IpCWZJ1pXq6t0yWWqUWL0tS8ng7
+OkiwCiRhVQFlACWK09a7zLPsk+25Zp4EUJTdMxuxG7ETPRYLl0ReTp7rd06m
+aeraol3mu8nO283iepWXbTL9hP89rqu2mlfL5Ju30+Nvd1x2eVnnn/C56fGO
+W1TzMlvBa4s6u2rT26y8Tn/O1+nP0kiaYyPpWhpJHz5386zNr6v6bjfJP69d
+s7lcFU1TVGV7t4Z2ZtOz165Y17tJW2+a9vHDhy8fPnYLeGc3efzw8bP04cv0
+8TP3Mb+7rerFrkvSRL+Ffy/yZX6dtdAc/vqU18VVMfe/s/m82pRtdlksi/YO
+r0xmSXYN7zbONW1WLs6zZVXCp+7yxjWrrG7Pf9lUbd7sJmXl1sVu8jcYxyhp
+qrqt86sG/rpb4R9/dy7btDdVjT1yCfxfUcJLP42TH2FK6ALP00+bXwq4Ei7n
+q6xY7iZNcV1my/9+s1llpQ5oXNX8zKaGL9+07brZ/e6766K92VyO59Xqu5uf
+m7RZ53PnyqpewTA/5bvOFeWV+TUej51LUxj8ZdPW2bx17uymaBJYuQ0t8yK/
+Ksq8SdqbPLl37UdJlpT5BhpZOp7Z7HKZJ7TCCX8S//Hrkdb5EtZtAdPeNjAf
+CQ1u5GBUWVn8O61KtsTJvGpvszqH9kt4eNNWZbWqNg2vDMxw0+arBkYBnUhw
+uPBl6O9VtamTYrXatKYb0K9LmHc/jm/eQrf3PVEk3+x/O3Jneb0qSrlw9i1/
+94OhleSbD9+Ok1mYm4zWB4by9vTokD8F9FJv5u0G+93YLhQL+C+Q1wjebrP5
+jb71Y36ZnOIq4zvQsR9Pv3WWQJMKfvGje1lZlXB5KbOUnEIzK3xp7/TbZB7u
+5gu3zu6WVbZAUqQupkC0xRVMeXKTNTc0NCDQvM7LeZ40QG3QuTk8XZSLfJ2X
+2Fn3Cdpa8JfgQ/OPeHuRr9ZA+TAg2DX5GjZH/L4f/sK+XufNZtnC7fwzvIvb
+GrpRLpZFeT3iHY284KqA2SrKNq+ho3lDC+BgtnhdeHcml7BVF1kNS81Ln+5V
+MG+6IspR8I91DkOGa3UGNFwDIWdlAv3ELsFOg/0M3Vovszu3yudwr2hWsLhl
+ssaZmm+WWT1KQvsVNFRWLbzyy6aAC1nSVut0CWu7hOswCWM3Ke2cQAdgDMAR
+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
+dv8bFIIBTOzFAAA=
 
 -->
 

@@ -81,31 +81,31 @@ Copyright Notice
 
 Table of Contents
 
-   1.  Companion Drafts  . . . . . . . . . . . . . . . . . . . . . .   4
-   2.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   4
-   3.  Protocol Objective and Non-Goals  . . . . . . . . . . . . . .   5
-   4.  Objective . . . . . . . . . . . . . . . . . . . . . . . . . .   5
-   5.  Non-Goals . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-   6.  Design Principles . . . . . . . . . . . . . . . . . . . . . .   7
-   7.  Requirements Language . . . . . . . . . . . . . . . . . . . .   8
-   8.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   8
-   9.  Core Event Object . . . . . . . . . . . . . . . . . . . . . .  10
-   10. Field Semantics . . . . . . . . . . . . . . . . . . . . . . .  11
-   11. jep . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  11
-   12. id  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  11
-   13. verb  . . . . . . . . . . . . . . . . . . . . . . . . . . . .  12
-   14. who . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  12
-   15. when  . . . . . . . . . . . . . . . . . . . . . . . . . . . .  12
-   16. what  . . . . . . . . . . . . . . . . . . . . . . . . . . . .  13
-   17. aud . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  14
-   18. ref . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  14
-   19. ext and ext_crit  . . . . . . . . . . . . . . . . . . . . . .  15
-   20. sig . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  15
-   21. Event Verb Semantics  . . . . . . . . . . . . . . . . . . . .  15
-   22. J - Judgment  . . . . . . . . . . . . . . . . . . . . . . . .  15
-   23. D - Delegation  . . . . . . . . . . . . . . . . . . . . . . .  16
-   24. T - Termination . . . . . . . . . . . . . . . . . . . . . . .  16
-   25. V - Verification  . . . . . . . . . . . . . . . . . . . . . .  17
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   4
+     1.1.  Companion Specifications  . . . . . . . . . . . . . . . .   5
+   2.  Protocol Objective and Non-Goals  . . . . . . . . . . . . . .   5
+     2.1.  Objective . . . . . . . . . . . . . . . . . . . . . . . .   5
+     2.2.  Non-Goals . . . . . . . . . . . . . . . . . . . . . . . .   6
+   3.  Design Principles . . . . . . . . . . . . . . . . . . . . . .   7
+   4.  Requirements Language . . . . . . . . . . . . . . . . . . . .   8
+   5.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   8
+   6.  Core Event Object . . . . . . . . . . . . . . . . . . . . . .  10
+   7.  Field Semantics . . . . . . . . . . . . . . . . . . . . . . .  11
+     7.1.  jep . . . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     7.2.  id  . . . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     7.3.  verb  . . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     7.4.  who . . . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     7.5.  when  . . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     7.6.  what  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     7.7.  aud . . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     7.8.  ref . . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     7.9.  ext and ext_crit  . . . . . . . . . . . . . . . . . . . .  15
+     7.10. sig . . . . . . . . . . . . . . . . . . . . . . . . . . .  15
+   8.  Event Verb Semantics  . . . . . . . . . . . . . . . . . . . .  15
+     8.1.  J - Judgment  . . . . . . . . . . . . . . . . . . . . . .  15
+     8.2.  D - Delegation  . . . . . . . . . . . . . . . . . . . . .  16
+     8.3.  T - Termination . . . . . . . . . . . . . . . . . . . . .  16
+     8.4.  V - Verification  . . . . . . . . . . . . . . . . . . . .  17
 
 
 
@@ -114,54 +114,54 @@ Wang                      Expires 30 March 2027                 [Page 2]
 Internet-Draft                     JEP                    September 2026
 
 
-   26. Event Identity, Delivery, and Acceptance  . . . . . . . . . .  18
-   27. Event Identity  . . . . . . . . . . . . . . . . . . . . . . .  18
-   28. Delivery Is Not Event Creation  . . . . . . . . . . . . . . .  18
-   29. Idempotent Acceptance . . . . . . . . . . . . . . . . . . . .  18
-   30. Atomicity . . . . . . . . . . . . . . . . . . . . . . . . . .  19
-   31. Acceptance-State Lifetime . . . . . . . . . . . . . . . . . .  19
-   32. Optional Challenge and Replay Profiles  . . . . . . . . . . .  19
-   33. References and Chain Boundaries . . . . . . . . . . . . . . .  20
-   34. Algorithm-Tagged Digest Strings . . . . . . . . . . . . . . .  20
-   35. Signing Input and Event Hash  . . . . . . . . . . . . . . . .  21
-   36. Signature, Hash, and Algorithm Agility  . . . . . . . . . . .  21
-   37. Trust Profile Interface . . . . . . . . . . . . . . . . . . .  22
-   38. Validation Model  . . . . . . . . . . . . . . . . . . . . . .  23
-   39. Independent Validation Checks . . . . . . . . . . . . . . . .  23
-   40. Overall Validation Status . . . . . . . . . . . . . . . . . .  24
-   41. Validation Modes  . . . . . . . . . . . . . . . . . . . . . .  24
-   42. Deterministic Core Validation Order . . . . . . . . . . . . .  25
-   43. Validation Result Object  . . . . . . . . . . . . . . . . . .  26
-   44. Failure Codes . . . . . . . . . . . . . . . . . . . . . . . .  27
-   45. Syntax and Identity Errors  . . . . . . . . . . . . . . . . .  27
-   46. Cryptographic Errors  . . . . . . . . . . . . . . . . . . . .  27
-   47. Actor and Trust Errors  . . . . . . . . . . . . . . . . . . .  28
-   48. Freshness and Acceptance Errors . . . . . . . . . . . . . . .  28
-   49. Reference Errors  . . . . . . . . . . . . . . . . . . . . . .  28
-   50. Extension Errors  . . . . . . . . . . . . . . . . . . . . . .  29
-   51. Policy Errors . . . . . . . . . . . . . . . . . . . . . . . .  29
-   52. Extension Rules and Conflict Handling . . . . . . . . . . . .  29
-   53. Conformance Requirements  . . . . . . . . . . . . . . . . . .  30
-   54. Producer Conformance  . . . . . . . . . . . . . . . . . . . .  30
-   55. Verifier Conformance  . . . . . . . . . . . . . . . . . . . .  30
-   56. Acceptance-Processor Conformance  . . . . . . . . . . . . . .  31
-   57. Baseline Algorithm Conformance  . . . . . . . . . . . . . . .  31
-   58. Determinability Boundary  . . . . . . . . . . . . . . . . . .  32
-   59. Observable Protocol Facts . . . . . . . . . . . . . . . . . .  32
-   60. External Target Facts . . . . . . . . . . . . . . . . . . . .  32
-   61. Observed Log Assumptions  . . . . . . . . . . . . . . . . . .  33
-   62. Relationship to HJS and JAC . . . . . . . . . . . . . . . . .  33
-   63. Security Considerations . . . . . . . . . . . . . . . . . . .  34
-   64. Event ID Security . . . . . . . . . . . . . . . . . . . . . .  35
-   65. Replay and Safe Retry . . . . . . . . . . . . . . . . . . . .  35
-   66. Acceptance-State Failure  . . . . . . . . . . . . . . . . . .  35
-   67. Downgrade Resistance  . . . . . . . . . . . . . . . . . . . .  36
-   68. Human-in-the-Loop Semantics . . . . . . . . . . . . . . . . .  36
-   69. AI Actor Semantics  . . . . . . . . . . . . . . . . . . . . .  36
-   70. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  36
-   71. Registry Considerations . . . . . . . . . . . . . . . . . . .  37
-   72. Versioning and Compatibility  . . . . . . . . . . . . . . . .  37
-   73. Wire Version  . . . . . . . . . . . . . . . . . . . . . . . .  37
+   9.  Event Identity, Delivery, and Acceptance  . . . . . . . . . .  18
+     9.1.  Event Identity  . . . . . . . . . . . . . . . . . . . . .  18
+     9.2.  Delivery Is Not Event Creation  . . . . . . . . . . . . .  18
+     9.3.  Idempotent Acceptance . . . . . . . . . . . . . . . . . .  18
+     9.4.  Atomicity . . . . . . . . . . . . . . . . . . . . . . . .  19
+     9.5.  Acceptance-State Lifetime . . . . . . . . . . . . . . . .  19
+     9.6.  Optional Challenge and Replay Profiles  . . . . . . . . .  19
+   10. References and Chain Boundaries . . . . . . . . . . . . . . .  20
+   11. Algorithm-Tagged Digest Strings . . . . . . . . . . . . . . .  20
+   12. Signing Input and Event Hash  . . . . . . . . . . . . . . . .  21
+   13. Signature, Hash, and Algorithm Agility  . . . . . . . . . . .  21
+   14. Trust Profile Interface . . . . . . . . . . . . . . . . . . .  22
+   15. Validation Model  . . . . . . . . . . . . . . . . . . . . . .  23
+     15.1.  Independent Validation Checks  . . . . . . . . . . . . .  23
+     15.2.  Overall Validation Status  . . . . . . . . . . . . . . .  24
+     15.3.  Validation Modes . . . . . . . . . . . . . . . . . . . .  24
+     15.4.  Deterministic Core Validation Order  . . . . . . . . . .  25
+   16. Validation Result Object  . . . . . . . . . . . . . . . . . .  26
+   17. Failure Codes . . . . . . . . . . . . . . . . . . . . . . . .  27
+     17.1.  Syntax and Identity Errors . . . . . . . . . . . . . . .  27
+     17.2.  Cryptographic Errors . . . . . . . . . . . . . . . . . .  27
+     17.3.  Actor and Trust Errors . . . . . . . . . . . . . . . . .  28
+     17.4.  Freshness and Acceptance Errors  . . . . . . . . . . . .  28
+     17.5.  Reference Errors . . . . . . . . . . . . . . . . . . . .  28
+     17.6.  Extension Errors . . . . . . . . . . . . . . . . . . . .  29
+     17.7.  Policy Errors  . . . . . . . . . . . . . . . . . . . . .  29
+   18. Extension Rules and Conflict Handling . . . . . . . . . . . .  29
+   19. Conformance Requirements  . . . . . . . . . . . . . . . . . .  30
+     19.1.  Producer Conformance . . . . . . . . . . . . . . . . . .  30
+     19.2.  Verifier Conformance . . . . . . . . . . . . . . . . . .  30
+     19.3.  Acceptance-Processor Conformance . . . . . . . . . . . .  31
+     19.4.  Baseline Algorithm Conformance . . . . . . . . . . . . .  31
+   20. Determinability Boundary  . . . . . . . . . . . . . . . . . .  32
+     20.1.  Observable Protocol Facts  . . . . . . . . . . . . . . .  32
+     20.2.  External Target Facts  . . . . . . . . . . . . . . . . .  32
+   21. Observed Log Assumptions  . . . . . . . . . . . . . . . . . .  33
+   22. Relationship to HJS and JAC . . . . . . . . . . . . . . . . .  33
+   23. Security Considerations . . . . . . . . . . . . . . . . . . .  34
+     23.1.  Event ID Security  . . . . . . . . . . . . . . . . . . .  35
+     23.2.  Replay and Safe Retry  . . . . . . . . . . . . . . . . .  35
+     23.3.  Acceptance-State Failure . . . . . . . . . . . . . . . .  35
+     23.4.  Downgrade Resistance . . . . . . . . . . . . . . . . . .  36
+     23.5.  Human-in-the-Loop Semantics  . . . . . . . . . . . . . .  36
+     23.6.  AI Actor Semantics . . . . . . . . . . . . . . . . . . .  36
+   24. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  36
+   25. Registry Considerations . . . . . . . . . . . . . . . . . . .  37
+   26. Versioning and Compatibility  . . . . . . . . . . . . . . . .  37
+     26.1.  Wire Version . . . . . . . . . . . . . . . . . . . . . .  37
 
 
 
@@ -170,35 +170,20 @@ Wang                      Expires 30 March 2027                 [Page 3]
 Internet-Draft                     JEP                    September 2026
 
 
-   74. Historical Verification . . . . . . . . . . . . . . . . . . .  37
-   75. Future Compatibility  . . . . . . . . . . . . . . . . . . . .  38
-   76. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .  38
-   77. Minimal Judgment Event Shape  . . . . . . . . . . . . . . . .  38
-   78. Judgment Event with Audience and Event Reference  . . . . . .  38
-   79. Changes from -06  . . . . . . . . . . . . . . . . . . . . . .  39
-   80. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  40
-   81. References  . . . . . . . . . . . . . . . . . . . . . . . . .  40
-     81.1.  Normative References . . . . . . . . . . . . . . . . . .  40
-     81.2.  Informative References . . . . . . . . . . . . . . . . .  41
+     26.2.  Historical Verification  . . . . . . . . . . . . . . . .  37
+     26.3.  Future Compatibility . . . . . . . . . . . . . . . . . .  38
+   27. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .  38
+     27.1.  Minimal Judgment Event Shape . . . . . . . . . . . . . .  38
+     27.2.  Judgment Event with Audience and Event Reference . . . .  38
+   28. Changes from -06  . . . . . . . . . . . . . . . . . . . . . .  39
+   29. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  40
+   30. References  . . . . . . . . . . . . . . . . . . . . . . . . .  40
+     30.1.  Normative References . . . . . . . . . . . . . . . . . .  40
+     30.2.  Informative References . . . . . . . . . . . . . . . . .  41
    Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  41
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  41
 
-1.  Companion Drafts
-
-   This draft defines JEP-Core.  Optional identity, credential,
-   attestation, chain, archival, mandate, and domain bindings are
-   defined by companion profiles and extensions.
-
-   Existing companion drafts written against JEP-Core 0.6 remain
-   historical documents until revised for JEP-Core 0.7.  Where an
-   earlier companion draft conflicts with this document, this document
-   controls JEP-Core 0.7 semantics.
-
-   Schemas, test vectors, validation-result structure, and reference
-   validator behavior for JEP-Core 0.7 are expected to be defined by a
-   matching conformance revision.
-
-2.  Introduction
+1.  Introduction
 
    Autonomous and semi-autonomous systems increasingly make, assist
    with, delegate, terminate, verify, or record judgments across
@@ -218,14 +203,6 @@ Internet-Draft                     JEP                    September 2026
 
    JEP separates event identity from signed-artifact identity:
 
-
-
-
-Wang                      Expires 30 March 2027                 [Page 4]
-
-Internet-Draft                     JEP                    September 2026
-
-
    *  the event identity identifies the judgment-related act;
 
    *  the event hash identifies a particular full signed artifact.
@@ -240,14 +217,38 @@ Internet-Draft                     JEP                    September 2026
    profiles, extensions, HJS-like archival layers, JAC-like chain-
    composition layers, or application-specific systems.
 
+
+
+
+
+Wang                      Expires 30 March 2027                 [Page 4]
+
+Internet-Draft                     JEP                    September 2026
+
+
    JEP records verifiable protocol facts.  It does not by itself prove
    external target facts.  In partially observed systems, a signed event
    log can support audit and accountability workflows without
    guaranteeing complete or zero-error determination of external facts.
 
-3.  Protocol Objective and Non-Goals
+1.1.  Companion Specifications
 
-4.  Objective
+   This draft defines JEP-Core.  Optional identity, credential,
+   attestation, chain, archival, mandate, and domain bindings are
+   defined by companion profiles and extensions.
+
+   Existing companion drafts written against JEP-Core 0.6 remain
+   historical documents until revised for JEP-Core 0.7.  Where an
+   earlier companion draft conflicts with this document, this document
+   controls JEP-Core 0.7 semantics.
+
+   Schemas, test vectors, validation-result structure, and reference
+   validator behavior for JEP-Core 0.7 are expected to be defined by a
+   matching conformance revision.
+
+2.  Protocol Objective and Non-Goals
+
+2.1.  Objective
 
    JEP-Core defines a neutral event layer for verifiable judgment-
    related acts.  Subject to the applicable validation mode and trust
@@ -276,7 +277,6 @@ Internet-Draft                     JEP                    September 2026
 
 
 
-
 Wang                      Expires 30 March 2027                 [Page 5]
 
 Internet-Draft                     JEP                    September 2026
@@ -286,7 +286,7 @@ Internet-Draft                     JEP                    September 2026
        than once for the same event identity within one acceptance
        domain.
 
-5.  Non-Goals
+2.2.  Non-Goals
 
    JEP-Core does not define:
 
@@ -343,7 +343,7 @@ Internet-Draft                     JEP                    September 2026
    unless an applicable external profile and evidence policy makes that
    determination.
 
-6.  Design Principles
+3.  Design Principles
 
    JEP-Core follows these principles:
 
@@ -405,7 +405,7 @@ Internet-Draft                     JEP                    September 2026
         under the rules that produced them and MUST NOT be silently
         rewritten into newer JEP representations.
 
-7.  Requirements Language
+4.  Requirements Language
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -413,7 +413,7 @@ Internet-Draft                     JEP                    September 2026
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-8.  Terminology
+5.  Terminology
 
    *Actor:* The entity identified by who that is claimed by the event.
    An actor MAY be a human, organization, model, agent, tool, service,
@@ -506,7 +506,7 @@ Wang                      Expires 30 March 2027                 [Page 9]
 Internet-Draft                     JEP                    September 2026
 
 
-9.  Core Event Object
+6.  Core Event Object
 
    A JEP event is a JSON object [RFC8259].  Producers MUST emit I-JSON-
    compatible JSON [RFC7493] and MUST NOT emit duplicate JSON member
@@ -566,9 +566,9 @@ Internet-Draft                     JEP                    September 2026
    add new top-level members outside this specification unless defined
    by a future JEP revision.
 
-10.  Field Semantics
+7.  Field Semantics
 
-11.  jep
+7.1.  jep
 
    The jep member identifies the wire-format major version.  For this
    draft, the value is "1".
@@ -583,7 +583,7 @@ Internet-Draft                     JEP                    September 2026
    A verifier MUST NOT infer Internet-Draft revision number or release
    maturity solely from jep.
 
-12.  id
+7.2.  id
 
    id identifies one event instance within the namespace of who.  Event
    Identity is the pair (who, id).
@@ -629,7 +629,7 @@ Internet-Draft                     JEP                    September 2026
    Re-signing an otherwise identical unsigned event MAY produce a
    different Event Hash while retaining the same Event Identity.
 
-13.  verb
+7.3.  verb
 
    The verb member identifies the event verb.  It MUST be one of J, D,
    T, or V.
@@ -637,7 +637,7 @@ Internet-Draft                     JEP                    September 2026
    Event verbs do not determine cryptographic algorithms, storage
    policy, privacy mode, identity method, transport, or legal effect.
 
-14.  who
+7.4.  who
 
    who identifies the actor claimed by the event.
 
@@ -659,7 +659,7 @@ Internet-Draft                     JEP                    September 2026
    Because Event Identity includes who, two different actors MAY use the
    same id string without creating the same Event Identity.
 
-15.  when
+7.5.  when
 
    when is an actor-declared event time in Unix seconds.
 
@@ -699,7 +699,7 @@ Internet-Draft                     JEP                    September 2026
    but such a window is a profile or deployment rule rather than proof
    that when is externally accurate.
 
-16.  what
+7.6.  what
 
    what carries the event claim, digest, descriptor, or report.  It
    records what the actor asserted, judged, delegated, terminated, or
@@ -730,7 +730,7 @@ Wang                      Expires 30 March 2027                [Page 13]
 Internet-Draft                     JEP                    September 2026
 
 
-17.  aud
+7.7.  aud
 
    aud indicates an intended audience or validation context.
 
@@ -740,7 +740,7 @@ Internet-Draft                     JEP                    September 2026
    aud does not by itself enforce access control.  Access control,
    retention, redaction, and disclosure policy are outside JEP-Core.
 
-18.  ref
+7.8.  ref
 
    ref is a reference field.  A reference does not by itself imply
    endorsement, truth, authorization validity, legal effect, or
@@ -790,7 +790,7 @@ Internet-Draft                     JEP                    September 2026
    refers only to an exact signed artifact, but it MUST NOT be described
    as the stable Event Identity.
 
-19.  ext and ext_crit
+7.9.  ext and ext_crit
 
    ext contains named extension objects. ext_crit contains the
    identifiers of critical extensions.
@@ -804,15 +804,15 @@ Internet-Draft                     JEP                    September 2026
    carry that mechanism in a registered extension or transport/profile
    layer rather than redefining JEP-Core fields.
 
-20.  sig
+7.10.  sig
 
    sig carries the detached signature container.  JEP-Core uses detached
    JWS over the JCS-canonicalized unsigned event unless another
    registered signature profile applies.
 
-21.  Event Verb Semantics
+8.  Event Verb Semantics
 
-22.  J - Judgment
+8.1.  J - Judgment
 
    A Judgment event records that an actor made, accepted, produced,
    approved, selected, rejected, ranked, classified, or otherwise
@@ -844,7 +844,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  evidence assessment.
 
-23.  D - Delegation
+8.2.  D - Delegation
 
    A Delegation event records that an actor declared a delegation of a
    task, authority, responsibility, capability, or judgment context to
@@ -868,7 +868,7 @@ Internet-Draft                     JEP                    September 2026
    Permission-chain enforcement and downstream authorization are outside
    JEP-Core.
 
-24.  T - Termination
+8.3.  T - Termination
 
    A Termination event records that an actor declared a previous
    delegation, authority, session, capability, workflow context,
@@ -898,7 +898,7 @@ Wang                      Expires 30 March 2027                [Page 16]
 Internet-Draft                     JEP                    September 2026
 
 
-25.  V - Verification
+8.4.  V - Verification
 
    A Verification event records that an actor performed a validation,
    audit, review, confirmation, rejection, or verification action over
@@ -954,9 +954,9 @@ Wang                      Expires 30 March 2027                [Page 17]
 Internet-Draft                     JEP                    September 2026
 
 
-26.  Event Identity, Delivery, and Acceptance
+9.  Event Identity, Delivery, and Acceptance
 
-27.  Event Identity
+9.1.  Event Identity
 
    The Event Identity is (who, id).
 
@@ -971,7 +971,7 @@ Internet-Draft                     JEP                    September 2026
    equivalent collision-resistant representation sufficient to detect
    conflicting reuse.
 
-28.  Delivery Is Not Event Creation
+9.2.  Delivery Is Not Event Creation
 
    Network delivery, queue delivery, storage import, export, retry, or
    replication of an existing signed event does not create a new JEP
@@ -983,7 +983,7 @@ Internet-Draft                     JEP                    September 2026
    A receiver MUST NOT require a new JEP Event Identity merely because a
    transport retry occurs.
 
-29.  Idempotent Acceptance
+9.3.  Idempotent Acceptance
 
    An acceptance processor MUST NOT apply acceptance effects more than
    once for the same Event Identity within one acceptance domain.
@@ -1015,7 +1015,7 @@ Internet-Draft                     JEP                    September 2026
    If the same Event Identity is presented with different unsigned event
    content, the event MUST be rejected with ERR_EVENT_ID_CONFLICT.
 
-30.  Atomicity
+9.4.  Atomicity
 
    The operation that records first acceptance and the operation that
    applies its state-changing acceptance effect MUST be atomic or
@@ -1031,7 +1031,7 @@ Internet-Draft                     JEP                    September 2026
    compare-and-set, ledger consumption, or equivalent mechanisms are
    suitable approaches.
 
-31.  Acceptance-State Lifetime
+9.5.  Acceptance-State Lifetime
 
    An implementation claiming at-most-once acceptance MUST preserve
    enough acceptance state to prevent reapplication for as long as the
@@ -1043,7 +1043,7 @@ Internet-Draft                     JEP                    September 2026
 
    Archival verification MUST NOT consume acceptance state.
 
-32.  Optional Challenge and Replay Profiles
+9.6.  Optional Challenge and Replay Profiles
 
    JEP-Core does not require a nonce.
 
@@ -1080,7 +1080,7 @@ Internet-Draft                     JEP                    September 2026
    alone does not establish, including current liveness, server
    challenge freshness, total order, or single-use authority.
 
-33.  References and Chain Boundaries
+10.  References and Chain Boundaries
 
    A JEP reference proves only that one signed event referenced another
    object.  It does not prove causality, endorsement, truth,
@@ -1102,7 +1102,7 @@ Internet-Draft                     JEP                    September 2026
    A chain system MUST NOT reinterpret a JEP Event Hash as the stable
    Event Identity.
 
-34.  Algorithm-Tagged Digest Strings
+11.  Algorithm-Tagged Digest Strings
 
    JEP uses algorithm-tagged digest strings for Event Hashes, content
    digests, exact-artifact pins, and other digest references.
@@ -1122,15 +1122,13 @@ Wang                      Expires 30 March 2027                [Page 20]
 Internet-Draft                     JEP                    September 2026
 
 
-   Example:
-
-   text
-   sha256:3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7
+   A SHA-256 digest string therefore begins with sha256: followed by 64
+   lower-case hexadecimal digits.
 
    Additional digest algorithms MAY be defined by conformance profiles,
    trust profiles, or registered extensions.
 
-35.  Signing Input and Event Hash
+12.  Signing Input and Event Hash
 
    The JEP Signing Payload is the unsigned event object with sig
    omitted, canonicalized using JCS [RFC8785] and encoded as UTF-8
@@ -1156,7 +1154,7 @@ Internet-Draft                     JEP                    September 2026
    unsigned event content MAY result in a different Event Hash without
    creating a different Event Identity.
 
-36.  Signature, Hash, and Algorithm Agility
+13.  Signature, Hash, and Algorithm Agility
 
    JEP-Core preserves algorithm agility.
 
@@ -1169,6 +1167,8 @@ Internet-Draft                     JEP                    September 2026
    The concrete signature algorithm, key type, hash algorithm, and
    algorithm acceptability policy are determined by JOSE headers,
    conformance profiles, and trust profiles.
+
+
 
 
 
@@ -1196,7 +1196,7 @@ Internet-Draft                     JEP                    September 2026
    archival validation.  An algorithm MAY be acceptable for historical
    verification while being prohibited for newly produced events.
 
-37.  Trust Profile Interface
+14.  Trust Profile Interface
 
    JEP-Core does not define a global identity or trust framework.
 
@@ -1242,9 +1242,9 @@ Internet-Draft                     JEP                    September 2026
    specific identity system is OPTIONAL and MUST NOT be required for
    JEP-Core conformance.
 
-38.  Validation Model
+15.  Validation Model
 
-39.  Independent Validation Checks
+15.1.  Independent Validation Checks
 
    JEP-Core does not define cumulative validation levels.
 
@@ -1300,7 +1300,7 @@ Internet-Draft                     JEP                    September 2026
 
    A verifier MUST NOT report an unperformed check as pass.
 
-40.  Overall Validation Status
+15.2.  Overall Validation Status
 
    The overall validation status is one of:
 
@@ -1322,7 +1322,7 @@ Internet-Draft                     JEP                    September 2026
    Checks not required by the requested mode or profile MAY be
    not_checked.
 
-41.  Validation Modes
+15.3.  Validation Modes
 
    Initial validation modes are:
 
@@ -1358,7 +1358,7 @@ Internet-Draft                     JEP                    September 2026
    deployment policy.  Policy results MUST NOT be presented as intrinsic
    properties of JEP-Core.
 
-42.  Deterministic Core Validation Order
+15.4.  Deterministic Core Validation Order
 
    A JEP-Core verifier SHOULD process an event in this order:
 
@@ -1414,7 +1414,7 @@ Internet-Draft                     JEP                    September 2026
    SHOULD bound acceptance-state resource use according to their trust,
    audience, retention, and abuse-control policy.
 
-43.  Validation Result Object
+16.  Validation Result Object
 
    A verifier SHOULD return a structured validation result.
 
@@ -1465,11 +1465,11 @@ Internet-Draft                     JEP                    September 2026
 
    *  policy outcome from JEP-Core validity.
 
-44.  Failure Codes
+17.  Failure Codes
 
    A conforming validator SHOULD return structured failure codes.
 
-45.  Syntax and Identity Errors
+17.1.  Syntax and Identity Errors
 
    *  ERR_INVALID_JSON
 
@@ -1489,7 +1489,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  ERR_EVENT_ID_CONFLICT
 
-46.  Cryptographic Errors
+17.2.  Cryptographic Errors
 
    *  ERR_CANONICALIZATION_FAILED
 
@@ -1526,7 +1526,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  ERR_ALG_DEPRECATED_FOR_NEW_EVENTS
 
-47.  Actor and Trust Errors
+17.3.  Actor and Trust Errors
 
    *  ERR_ACTOR_UNRESOLVED
 
@@ -1540,7 +1540,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  ERR_TRUST_PROFILE_UNSUPPORTED
 
-48.  Freshness and Acceptance Errors
+17.4.  Freshness and Acceptance Errors
 
    *  ERR_EVENT_EXPIRED
 
@@ -1552,7 +1552,7 @@ Internet-Draft                     JEP                    September 2026
 
    already_accepted is an acceptance outcome, not an error code.
 
-49.  Reference Errors
+17.5.  Reference Errors
 
    *  ERR_REF_UNRESOLVED
 
@@ -1574,7 +1574,7 @@ Internet-Draft                     JEP                    September 2026
    cascade, cycle, and complete-log failures, belong to the applicable
    chain profile rather than JEP-Core.
 
-50.  Extension Errors
+17.6.  Extension Errors
 
    *  ERR_UNKNOWN_CRITICAL_EXTENSION
 
@@ -1584,7 +1584,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  ERR_EXTENSION_CONFLICT
 
-51.  Policy Errors
+17.7.  Policy Errors
 
    *  ERR_POLICY_REJECTED
 
@@ -1592,7 +1592,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  ERR_DOMAIN_REQUIREMENT_UNSATISFIED
 
-52.  Extension Rules and Conflict Handling
+18.  Extension Rules and Conflict Handling
 
    An extension MUST declare:
 
@@ -1640,9 +1640,9 @@ Internet-Draft                     JEP                    September 2026
 
    *  experimental x-* identifiers.
 
-53.  Conformance Requirements
+19.  Conformance Requirements
 
-54.  Producer Conformance
+19.1.  Producer Conformance
 
    A JEP-Core-0.7 producer MUST support:
 
@@ -1664,7 +1664,7 @@ Internet-Draft                     JEP                    September 2026
    A producer MUST NOT reuse one Event Identity for different unsigned
    event content.
 
-55.  Verifier Conformance
+19.2.  Verifier Conformance
 
    A JEP-Core-0.7 verifier MUST support:
 
@@ -1701,7 +1701,7 @@ Internet-Draft                     JEP                    September 2026
    credential, attestation, blockchain, AI platform, agent framework,
    challenge, transport, or chain profile.
 
-56.  Acceptance-Processor Conformance
+19.3.  Acceptance-Processor Conformance
 
    An implementation claiming JEP-Core-0.7 acceptance-processor
    conformance MUST additionally support:
@@ -1722,7 +1722,7 @@ Internet-Draft                     JEP                    September 2026
    A profile MAY add freshness, audience, challenge-response,
    authorization, or single-use-authority requirements.
 
-57.  Baseline Algorithm Conformance
+19.4.  Baseline Algorithm Conformance
 
    A baseline conformance class MAY require detached JWS using JCS
    canonicalization, sha256 algorithm-tagged digest strings, and Ed25519
@@ -1745,12 +1745,12 @@ Internet-Draft                     JEP                    September 2026
    identifiers, key representations, downgrade policies, and validation
    behavior are specified.
 
-58.  Determinability Boundary
+20.  Determinability Boundary
 
    JEP distinguishes observable protocol facts from external target
    facts.
 
-59.  Observable Protocol Facts
+20.1.  Observable Protocol Facts
 
    JEP can support determination of protocol-level facts such as:
 
@@ -1773,7 +1773,7 @@ Internet-Draft                     JEP                    September 2026
 
    *  which validation checks were actually performed.
 
-60.  External Target Facts
+20.2.  External Target Facts
 
    JEP alone does not determine external target facts such as:
 
@@ -1804,7 +1804,7 @@ Internet-Draft                     JEP                    September 2026
    A profile MAY define evidence rules for external target facts.  Such
    rules are outside JEP-Core.
 
-61.  Observed Log Assumptions
+21.  Observed Log Assumptions
 
    An observed JEP log is not necessarily a complete log.
 
@@ -1832,7 +1832,7 @@ Internet-Draft                     JEP                    September 2026
    JEP-Core does not itself compute chain completeness, termination
    cascade, or responsibility lineage.
 
-62.  Relationship to HJS and JAC
+22.  Relationship to HJS and JAC
 
    JEP defines atomic signed judgment-related events.
 
@@ -1860,7 +1860,7 @@ Internet-Draft                     JEP                    September 2026
    authorization, lifecycle, and termination-cascade interpretations are
    defined by JAC or another chain/profile layer.
 
-63.  Security Considerations
+23.  Security Considerations
 
    JEP-Core provides mechanisms and invariants for:
 
@@ -1913,7 +1913,7 @@ Internet-Draft                     JEP                    September 2026
       profile requires stronger single-use semantics than event
       acceptance.
 
-64.  Event ID Security
+23.1.  Event ID Security
 
    id is not a secret and MUST NOT be used as an authorization token.
 
@@ -1929,7 +1929,7 @@ Internet-Draft                     JEP                    September 2026
    lookup interfaces.  Profiles MAY impose stronger identifier-
    generation rules.
 
-65.  Replay and Safe Retry
+23.2.  Replay and Safe Retry
 
    A copied, unmodified signed event can remain cryptographically valid.
    Signature validity alone therefore does not prevent repeated
@@ -1944,7 +1944,7 @@ Internet-Draft                     JEP                    September 2026
    use an appropriate challenge, nonce, sequence, timestamp, counter,
    reservation, or ledger profile in addition to JEP-Core.
 
-66.  Acceptance-State Failure
+23.3.  Acceptance-State Failure
 
    If an implementation cannot reliably determine whether an Event
    Identity was already accepted, it MUST NOT claim a fresh accepted
@@ -1962,26 +1962,26 @@ Wang                      Expires 30 March 2027                [Page 35]
 Internet-Draft                     JEP                    September 2026
 
 
-67.  Downgrade Resistance
+23.4.  Downgrade Resistance
 
    A verifier MUST reject algorithms prohibited by the applicable
    profile.  A verifier MUST NOT accept a weaker algorithm merely
    because it is syntactically valid in JOSE.
 
-68.  Human-in-the-Loop Semantics
+23.5.  Human-in-the-Loop Semantics
 
    A human-review event records that a human actor emitted or endorsed a
    review-related claim.  It does not prove that the human fully
    understood the underlying material, that the judgment was correct, or
    that legal compliance was satisfied.
 
-69.  AI Actor Semantics
+23.6.  AI Actor Semantics
 
    JEP-Core does not mandate any specific AI actor identity scheme.  AI
    actor identity, model identity, tool identity, service identity, and
    session identity are defined by trust profiles or extensions.
 
-70.  Privacy Considerations
+24.  Privacy Considerations
 
    JEP events may reveal actor identity, event identity, subject
    identity, judgment timing, delegation structure, organizational
@@ -2018,7 +2018,7 @@ Wang                      Expires 30 March 2027                [Page 36]
 Internet-Draft                     JEP                    September 2026
 
 
-71.  Registry Considerations
+25.  Registry Considerations
 
    JEP registries SHOULD cover:
 
@@ -2048,9 +2048,9 @@ Internet-Draft                     JEP                    September 2026
    update to JEP-Core explaining why existing verbs plus extensions are
    insufficient.
 
-72.  Versioning and Compatibility
+26.  Versioning and Compatibility
 
-73.  Wire Version
+26.1.  Wire Version
 
    For JEP-Core 0.7, jep remains "1".
 
@@ -2058,7 +2058,7 @@ Internet-Draft                     JEP                    September 2026
    artifacts.  Their use of jep: "1" does not require JEP-Core 0.7 to
    preserve their field set.
 
-74.  Historical Verification
+26.2.  Historical Verification
 
    Implementations MAY retain historical pre--07 decoders.
 
@@ -2086,7 +2086,7 @@ Internet-Draft                     JEP                    September 2026
 
    3.  silently retry as JEP-Core 0.6 based only on field presence.
 
-75.  Future Compatibility
+26.3.  Future Compatibility
 
    Future revisions MAY add optional fields or extensions without
    changing the wire major when the core event object remains
@@ -2100,17 +2100,16 @@ Internet-Draft                     JEP                    September 2026
    Unknown critical extensions MUST fail the extension_processing check.
    Unknown non-critical extensions MAY be ignored.
 
-76.  Examples
+27.  Examples
 
-77.  Minimal Judgment Event Shape
+27.1.  Minimal Judgment Event Shape
 
    json { "jep": "1", "id": "urn:uuid:018f4f8d-7c63-7c2e-
    9b43-4ef657eec1c0", "verb": "J", "who": "did:example:agent-789",
-   "when": 1742345678, "what":
-   "sha256:aa55ad4393538f14e6b4961de1a29216eed93517cb6c2631a56a5ee75edb3b7a",
-   "sig": "..." }
+   "when": 1742345678, "what": { "claim": "example-judgment" }, "sig":
+   "..." }
 
-78.  Judgment Event with Audience and Event Reference
+27.2.  Judgment Event with Audience and Event Reference
 
    json { "jep": "1", "id": "urn:uuid:018f4f8d-8ad2-7baf-
    b752-e529e79bc88a", "verb": "J", "who": "did:example:agent-789",
@@ -2125,12 +2124,13 @@ Internet-Draft                     JEP                    September 2026
 
 
 
+
 Wang                      Expires 30 March 2027                [Page 38]
 
 Internet-Draft                     JEP                    September 2026
 
 
-79.  Changes from -06
+28.  Changes from -06
 
    Major changes from draft-wang-jep-judgment-event-protocol-06:
 
@@ -2198,7 +2198,7 @@ Internet-Draft                     JEP                    September 2026
    *  Expanded security considerations for Event ID conflicts, safe
       retry, acceptance-state failure, and optional challenge profiles.
 
-80.  IANA Considerations
+29.  IANA Considerations
 
    This document requests no IANA actions.
 
@@ -2206,9 +2206,9 @@ Internet-Draft                     JEP                    September 2026
    verbs, extension identifiers, validation checks, acceptance outcomes,
    trust profiles, conformance classes, or related identifiers.
 
-81.  References
+30.  References
 
-81.1.  Normative References
+30.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2252,7 +2252,7 @@ Internet-Draft                     JEP                    September 2026
               DOI 10.17487/RFC8785, June 2020,
               <https://www.rfc-editor.org/rfc/rfc8785>.
 
-81.2.  Informative References
+30.2.  Informative References
 
    [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
               Signature Algorithm (EdDSA)", RFC 8032,
