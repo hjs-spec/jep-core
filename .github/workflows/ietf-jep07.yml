@@ -18,31 +18,63 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Render RFCXML v3 with IETF Author Tools
+      - name: Preflight validate Markdown source
         run: |
           mkdir -p ietf-rendered
-          curl --fail-with-body --retry 3 --retry-delay 2 \
+          code=$(curl -sS --retry 3 --retry-delay 2 \
+            -w "%{http_code}" \
+            https://author-tools.ietf.org/api/validate \
+            -X POST \
+            -F "file=@draft-wang-jep-judgment-event-protocol.md" \
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json)
+          cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json
+          test "$code" = "200"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json")
+          data = json.loads(p.read_text())
+          errors = data.get("errors") or []
+          if errors:
+              raise SystemExit("IETF Author Tools source validation errors: " + repr(errors))
+          PY
+
+      - name: Render RFCXML v3 with IETF Author Tools
+        run: |
+          code=$(curl -sS --retry 3 --retry-delay 2 \
+            -w "%{http_code}" \
             https://author-tools.ietf.org/api/render/xml \
             -X POST \
             -F "file=@draft-wang-jep-judgment-event-protocol.md" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml)
+          if [ "$code" != "200" ]; then
+            cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml
+            exit 1
+          fi
 
       - name: Render plaintext with IETF Author Tools
         run: |
-          curl --fail-with-body --retry 3 --retry-delay 2 \
+          code=$(curl -sS --retry 3 --retry-delay 2 \
+            -w "%{http_code}" \
             https://author-tools.ietf.org/api/render/text \
             -X POST \
             -F "file=@draft-wang-jep-judgment-event-protocol.md" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt)
+          if [ "$code" != "200" ]; then
+            cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt
+            exit 1
+          fi
 
-      - name: Validate submission source
+      - name: Validate rendered RFCXML
         run: |
-          curl --fail-with-body --retry 3 --retry-delay 2 \
+          code=$(curl -sS --retry 3 --retry-delay 2 \
+            -w "%{http_code}" \
             https://author-tools.ietf.org/api/validate \
             -X POST \
             -F "file=@ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json)
           cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json
+          test "$code" = "200"
           python - <<'PY'
           import json
           from pathlib import Path
@@ -50,20 +82,22 @@ jobs:
           data = json.loads(p.read_text())
           errors = data.get("errors") or []
           if errors:
-              raise SystemExit("IETF Author Tools validation errors: " + repr(errors))
+              raise SystemExit("IETF Author Tools RFCXML validation errors: " + repr(errors))
           PY
 
       - name: Run IETF submission nits check
         run: |
-          curl --fail-with-body --retry 3 --retry-delay 2 \
+          code=$(curl -sS --retry 3 --retry-delay 2 \
+            -w "%{http_code}" \
             https://author-tools.ietf.org/api/idnits \
             -X POST \
             -F "file=@ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt" \
             -F "verbose=2" \
             -F "hidetext=1" \
             -F "submitcheck=1" \
-            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
+            -o ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt)
           cat ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
+          test "$code" = "200"
 
       - name: Sanity checks
         run: |
@@ -81,6 +115,7 @@ jobs:
           git add \
             ietf-rendered/draft-wang-jep-judgment-event-protocol-07.xml \
             ietf-rendered/draft-wang-jep-judgment-event-protocol-07.txt \
+            ietf-rendered/draft-wang-jep-judgment-event-protocol-07-source-validation.json \
             ietf-rendered/draft-wang-jep-judgment-event-protocol-07-validation.json \
             ietf-rendered/draft-wang-jep-judgment-event-protocol-07-idnits.txt
           if ! git diff --cached --quiet; then
