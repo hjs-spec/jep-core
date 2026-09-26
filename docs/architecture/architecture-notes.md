@@ -31,6 +31,8 @@ Choose components by their actual format, not their repository name. JSONL descr
 | JAC seed | JAC extension/fragment; historical unsigned demo events | Declaration structure and fragment hashes; not event signatures |
 | GitHub Action | Historical 0.6-style workflow artifact or legacy API result | Mode-specific checks; unsigned artifacts are not signed Core events |
 
+The runtime, authority, lineage, replay and three observation-adapter experiments are retired from active development; their formats and readers remain available for historical reproduction. New signed recording and reports belong to the [Agent SDK](https://github.com/hjs-spec/jep-agent-sdk/blob/main/docs/INTEGRATIONS.md). Maintenance status is listed in the organization directory.
+
 No automatic adapter connects these archive formats. A bridge must name the source format, preserve original signed bytes, define its mapping and pass interoperability tests. A lifecycle label such as completion or failure is not automatically a Core `T` statement.
 
 ## Component ownership
