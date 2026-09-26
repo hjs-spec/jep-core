@@ -32,8 +32,8 @@ informative:
 
 --- abstract
 
-This document defines the Judgment Event Protocol (JEP), a semantically
-neutral, verifiable event format for judgment-related acts in human,
+This document defines the Judgment Event Protocol (JEP), a verifiable
+event format for judgment-related statements in human,
 organizational, software, and autonomous agent systems.
 
 JEP specifies four immutable event verbs: Judgment (J), Delegation (D),
@@ -91,12 +91,14 @@ causal-chain, and lifecycle semantics are externalized to profiles,
 extensions, HJS-like archival layers, JAC-like chain-composition layers,
 or application-specific systems.
 
-JEP is semantically neutral with respect to substantive truth, authority,
-legality, policy outcome, causality, and external consequence. JEP-Core
-defines structured signed statements and the protocol-observable
-properties by which those statements can be verified. It does not
-endorse a statement merely because that statement is well-formed or
-cryptographically valid.
+JEP is neutral with respect to substantive truth, authority, legality,
+policy outcome, causality, and external consequence. JEP-Core defines
+structured signed statements and the protocol-observable properties by
+which those statements can be verified. It does not endorse a statement
+merely because that statement is well-formed or cryptographically valid.
+JEP is not semantics-free: J/D/T/V and the Core fields have defined
+protocol semantics. Neutrality concerns the substantive validity and
+consequences of the statements, not their protocol meaning.
 
 In partially observed systems, a signed event log can support audit and
 accountability workflows without guaranteeing complete or zero-error
@@ -121,8 +123,8 @@ matching conformance revision.
 
 ## Objective
 
-JEP-Core defines a semantically neutral event layer for verifiable
-judgment-related statements. Subject to the applicable validation mode
+JEP-Core defines a neutral event layer for verifiable judgment-related
+statements. Subject to the applicable validation mode
 and trust profile, a conforming implementation can support determination
 that:
 
@@ -175,9 +177,9 @@ JEP-Core follows these principles:
 
 1. **Core minimality:** JEP-Core defines the stable narrow-waist event
    layer.
-2. **Semantic neutrality:** JEP-Core records structured signed statements
-   without deciding their substantive truth, authority, legality,
-   causality, policy consequence, or external effect.
+2. **Substantive neutrality:** JEP-Core records structured signed
+   statements without deciding their substantive truth, authority,
+   legality, causality, policy consequence, or external effect.
 3. **Property over mechanism:** JEP-Core defines required protocol
    properties without mandating a single replay, transport, storage, or
    challenge mechanism.
@@ -1226,7 +1228,7 @@ specified.
 
 JEP distinguishes protocol-observable properties of signed statements
 from substantive facts about the external world. This distinction is the
-basis of JEP-Core's semantic neutrality.
+basis of JEP-Core's substantive neutrality.
 
 ## Observable Protocol Properties
 
@@ -1564,7 +1566,7 @@ Major changes from `draft-wang-jep-judgment-event-protocol-06`:
 - Required `result` for V events and clarified the J/V semantic
   boundary.
 - Classified validation checks by Core, profile, and external ownership.
-- Clarified semantic neutrality: Core verifies structured signed
+- Clarified substantive neutrality: Core verifies structured signed
   statements without deciding truth, authority, legality, causality,
   policy consequence, or external effect.
 - Required actor binding to pass before authoritative identity or
