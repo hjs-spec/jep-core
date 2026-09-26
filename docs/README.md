@@ -9,6 +9,7 @@
 - [Profile author guide](PROFILE-AUTHOR-GUIDE.md)
 - [Architecture and diagrams](architecture/README.md)
 - [Signed events and logging](comparisons/logging.md)
+- [Current TSTO/00 interoperability: Binding/02](https://github.com/cognitive-emergence/tsto-spec)
 - [Current runnable Quickstart](https://github.com/hjs-spec/jep-quickstart)
 - [Portable evidence repository decision](decisions/portable-evidence-repository.md) — implementation planning, not a new standard
 
@@ -32,4 +33,5 @@ Consult each document's explicit version. Pre-0.7 examples and cumulative Valida
 - [Error coverage](ERROR-CODE-COVERAGE.md)
 - [Security review notes](SECURITY-REVIEW-NOTES.md)
 - [Privacy review notes](PRIVACY-REVIEW-NOTES.md)
+- [Historical TSTO Binding/01 validation](JEP-TSTO-BINDING-01.md)
 - [Historical 0.6 E2E notes](END-TO-END-DEMO.md)
