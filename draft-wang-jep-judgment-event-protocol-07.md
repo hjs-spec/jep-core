@@ -32,8 +32,8 @@ informative:
 
 --- abstract
 
-This document defines the Judgment Event Protocol (JEP), a neutral
-verifiable event format for judgment-related acts in human,
+This document defines the Judgment Event Protocol (JEP), a semantically
+neutral, verifiable event format for judgment-related acts in human,
 organizational, software, and autonomous agent systems.
 
 JEP specifies four immutable event verbs: Judgment (J), Delegation (D),
@@ -52,11 +52,10 @@ acceptance effects more than once within the same acceptance domain.
 Profiles MAY additionally require nonces, challenges, sequence numbers,
 trusted timestamps, ledger positions, or equivalent mechanisms.
 
-JEP-Core does not define legal liability, authorization validity,
-regulatory compliance, organizational trust decisions, global identity,
-global truth, causal-chain enforcement, or mandatory support for any
-specific credential, identity, AI platform, agent framework, transport,
-or blockchain system.
+JEP-Core does not determine the substantive truth, authority, legality,
+policy consequence, causality, or external effect of the statements it
+carries. It also does not require any specific credential, identity,
+AI platform, agent framework, transport, or blockchain system.
 
 --- middle
 
@@ -91,10 +90,16 @@ causal-chain, and lifecycle semantics are externalized to profiles,
 extensions, HJS-like archival layers, JAC-like chain-composition layers,
 or application-specific systems.
 
-JEP records verifiable protocol facts. It does not by itself prove
-external target facts. In partially observed systems, a signed event log
-can support audit and accountability workflows without guaranteeing
-complete or zero-error determination of external facts.
+JEP is semantically neutral with respect to substantive truth, authority,
+legality, policy outcome, causality, and external consequence. JEP-Core
+defines structured signed statements and the protocol-observable
+properties by which those statements can be verified. It does not
+endorse a statement merely because that statement is well-formed or
+cryptographically valid.
+
+In partially observed systems, a signed event log can support audit and
+accountability workflows without guaranteeing complete or zero-error
+determination of external facts.
 
 ## Companion Specifications
 
@@ -115,9 +120,10 @@ matching conformance revision.
 
 ## Objective
 
-JEP-Core defines a neutral event layer for verifiable judgment-related
-acts. Subject to the applicable validation mode and trust profile, a
-conforming implementation can support determination that:
+JEP-Core defines a semantically neutral event layer for verifiable
+judgment-related statements. Subject to the applicable validation mode
+and trust profile, a conforming implementation can support determination
+that:
 
 1. a specific event identity was asserted by an actor;
 2. an event payload existed;
@@ -168,38 +174,41 @@ JEP-Core follows these principles:
 
 1. **Core minimality:** JEP-Core defines the stable narrow-waist event
    layer.
-2. **Property over mechanism:** JEP-Core defines required protocol
+2. **Semantic neutrality:** JEP-Core records structured signed statements
+   without deciding their substantive truth, authority, legality,
+   causality, policy consequence, or external effect.
+4. **Property over mechanism:** JEP-Core defines required protocol
    properties without mandating a single replay, transport, storage, or
    challenge mechanism.
 3. **Stable event identity:** event identity is a first-class protocol
    concept and is separate from signed-artifact hashing.
-4. **Idempotent acceptance:** repeated delivery of the same event does
+5. **Idempotent acceptance:** repeated delivery of the same event does
    not create a new event and MUST NOT repeatedly apply acceptance
    effects within one acceptance domain.
-5. **Identity-system neutrality:** JEP-Core MUST NOT require a specific
+6. **Identity-system neutrality:** JEP-Core MUST NOT require a specific
    identity system.
-6. **Credential-system neutrality:** JEP-Core MUST NOT require VC or any
+7. **Credential-system neutrality:** JEP-Core MUST NOT require VC or any
    other credential model.
-7. **Platform neutrality:** JEP-Core MUST NOT require an AI platform,
+8. **Platform neutrality:** JEP-Core MUST NOT require an AI platform,
    agent framework, cloud provider, transport, or blockchain network.
-8. **Profile-based interoperability:** identity, credentials,
+9. **Profile-based interoperability:** identity, credentials,
    attestation, authorization, challenge-response, and archival policy
    are handled by optional profiles.
-9. **Orthogonal verification:** syntax, cryptographic validity,
+10. **Orthogonal verification:** syntax, cryptographic validity,
    actor-binding, freshness, audience, event identity, references,
    extensions, chain analysis, and policy evaluation are independent
    checks rather than cumulative quality levels.
-10. **Explicit determinability boundary:** protocol validity is not the
+11. **Explicit determinability boundary:** protocol validity is not the
     same as external truth.
-11. **Privacy by minimization:** sensitive evidence SHOULD be referenced
+12. **Privacy by minimization:** sensitive evidence SHOULD be referenced
     by digest or controlled evidence mechanisms rather than embedded in
     event payloads.
-12. **Extension without semantic capture:** extensions MUST NOT redefine
+13. **Extension without semantic capture:** extensions MUST NOT redefine
     JEP-Core semantics.
-13. **Algorithm agility:** cryptographic algorithms are selected by JOSE
+14. **Algorithm agility:** cryptographic algorithms are selected by JOSE
     headers, conformance profiles, and trust profiles rather than by
     event verbs.
-14. **Historical immutability:** historical signed events are verified
+15. **Historical immutability:** historical signed events are verified
     under the rules that produced them and MUST NOT be silently rewritten
     into newer JEP representations.
 
@@ -413,15 +422,16 @@ verified. It does not by itself prove external truth.
 
 A J event MUST contain `what`.
 
-A D event MUST contain an object-valued `what` that identifies at least
-a delegatee and a scope, directly or through a profile-defined structure.
+A D event MUST contain an object-valued `what` with the Core members
+`delegatee` and `scope`.
 
-A T event MUST contain an object-valued `what` that identifies a
-termination scope. The target of termination is identified by `ref`.
-JEP-Core does not require duplication of the target inside `what`.
+A T event MUST contain an object-valued `what` with the Core member
+`termination_scope`. The target of termination is identified by
+`ref`. JEP-Core does not require duplication of the target inside
+`what`.
 
-A V event MUST contain an object-valued `what` that declares a
-verification scope.
+A V event MUST contain an object-valued `what` with the Core members
+`verification_scope` and `result`.
 
 Additional domain semantics belong to profiles or extensions.
 
@@ -502,37 +512,54 @@ than redefining JEP-Core fields.
 
 ## `sig`
 
-`sig` carries the detached signature container. JEP-Core uses detached
-JWS over the JCS-canonicalized unsigned event unless another registered
-signature profile applies.
+`sig` carries the detached signature container. JEP-Core defines the
+JEP Signing Payload. The applicable signature or conformance profile
+defines the exact signature serialization, protected headers, algorithm
+identifiers, key identifiers, and `sig` representation.
+
+The baseline profile uses detached JWS over the JCS-canonicalized
+unsigned event. Other registered signature profiles MAY define an
+alternative container without changing J/D/T/V semantics.
 
 # Event Verb Semantics
 
+The following table defines the minimum Core distinction among the four
+verbs. Profiles and extensions MAY add domain-specific members but MUST
+NOT replace these Core requirements with differently named equivalents.
+
+| Verb | `what` requirement | `ref` requirement | Core distinction |
+|---|---|---|---|
+| J | REQUIRED claim, object, or permitted digest | OPTIONAL | expresses or adopts a judgment |
+| D | REQUIRED object with `delegatee` and `scope` | OPTIONAL | declares a scoped delegation |
+| T | REQUIRED object with `termination_scope` | REQUIRED | declares termination of future reliance on a target |
+| V | REQUIRED object with `verification_scope` and `result` | REQUIRED | records a scoped evaluation result over a target |
+
 ## J - Judgment
 
-A Judgment event records that an actor made, accepted, produced,
-approved, selected, rejected, ranked, classified, or otherwise committed
-to a judgment-related claim.
+A Judgment event records that an actor expressed or adopted a judgment
+about a claim, choice, classification, recommendation, or proposed
+result.
 
-A J event MUST NOT be interpreted as proof that the judged claim is true.
+A J event records the actor's judgment. It MUST NOT be interpreted as
+proof that the judged claim is true, authorized, or externally effective.
 
 Typical uses include:
 
-- model output approval;
-- human approval;
+- approval or rejection of a proposed result;
 - risk classification;
-- tool-selection decision;
-- policy decision;
+- selection among alternatives;
 - recommendation acceptance;
-- evidence assessment.
+- policy or operational judgment;
+- assessment expressed as a judgment rather than as a scoped
+  verification result.
 
 ## D - Delegation
 
-A Delegation event records that an actor declared a delegation of a task,
-authority, responsibility, capability, or judgment context to another
-actor or system.
+A Delegation event records that an actor declared a delegation to a
+delegatee within an explicit scope.
 
-A D event MUST identify a delegatee and scope. It MAY identify:
+A D event MUST contain `what.delegatee` and `what.scope`. It MAY
+identify:
 
 - constraints;
 - expiry;
@@ -548,13 +575,12 @@ JEP-Core.
 
 ## T - Termination
 
-A Termination event records that an actor declared a previous
-delegation, authority, session, capability, workflow context,
-verification context, or future-reliance relationship ended, revoked,
-expired, superseded, or no longer valid for a stated termination scope.
+A Termination event records that an actor declared a referenced target
+no longer eligible for future reliance within a stated termination
+scope.
 
-A T event MUST identify its target through `ref` and MUST declare a
-termination scope.
+A T event MUST identify its target through `ref` and MUST contain
+`what.termination_scope`.
 
 A T event does not delete historical events, erase past facts,
 retroactively invalidate an event, or by itself prove that all downstream
@@ -566,14 +592,20 @@ profiles.
 
 ## V - Verification
 
-A Verification event records that an actor performed a validation, audit,
-review, confirmation, rejection, or verification action over an event,
-digest, subject, credential, policy, evidence, chain result, or external
-object.
+A Verification event records that an actor evaluated a referenced target
+under an explicitly declared verification scope and recorded the result
+of that evaluation.
 
-A V event MUST identify its verification target through `ref` and MUST
-declare its verification scope. A V event MUST NOT imply verification
-beyond its declared scope.
+A V event MUST identify its verification target through `ref`, MUST
+contain `what.verification_scope`, and MUST contain `what.result`.
+A V event MUST NOT imply verification beyond its declared scope.
+
+Use V when the statement is the result of evaluating a referenced target
+under an explicit verification scope. Use J when an actor expresses or
+adopts a judgment without asserting that scoped verification relation.
+For example, "I reject proposal X" is a J statement; "I evaluated
+artifact X under integrity check S and obtained result FAIL" is a V
+statement.
 
 Initial verification scopes include:
 
@@ -821,18 +853,30 @@ JEP-Core conformance.
 
 JEP-Core does not define cumulative validation levels.
 
-A verifier reports independent checks. Initial check identifiers include:
+A verifier reports independent checks. Their ownership is intentionally
+separated:
+
+JEP-Core-defined checks:
 
 - `syntax`;
 - `cryptographic`;
-- `actor_binding`;
-- `freshness`;
-- `audience`;
 - `event_identity`;
 - `reference_integrity`;
-- `extension_processing`;
+- `extension_processing`.
+
+Trust- or acceptance-profile checks:
+
+- `actor_binding`;
+- `freshness`;
+- `audience`.
+
+Companion or external checks:
+
 - `chain_integrity`;
 - `policy`.
+
+Listing a companion or external check in a JEP validation result does
+not make its semantics part of JEP-Core.
 
 A check status is one of:
 
@@ -905,7 +949,8 @@ A JEP-Core verifier SHOULD process an event in this order:
 7. canonicalize the unsigned event using JCS;
 8. verify the detached signature;
 9. compute the Event Hash if needed;
-10. evaluate Event Identity consistency if identity state is available;
+10. evaluate Event Identity consistency provisionally if identity state
+    is available;
 11. resolve actor/key and actor binding if required;
 12. validate audience if required by the requested profile;
 13. evaluate freshness if required by the requested profile;
@@ -918,9 +963,13 @@ A JEP-Core verifier SHOULD process an event in this order:
 19. return a structured validation result.
 
 An implementation MUST perform cryptographic validation before writing
-new acceptance state for an untrusted input. Deployments SHOULD bound
-acceptance-state resource use according to their trust, audience, retention,
-and abuse-control policy.
+new authoritative Event Identity or acceptance state for an untrusted
+input. When the requested acceptance profile requires actor binding, the
+implementation MUST NOT commit authoritative Event Identity or
+acceptance state until actor binding has passed.
+
+Deployments SHOULD bound acceptance-state resource use according to
+their trust, audience, retention, and abuse-control policy.
 
 # Validation Result Object
 
@@ -1167,11 +1216,14 @@ specified.
 
 # Determinability Boundary
 
-JEP distinguishes observable protocol facts from external target facts.
+JEP distinguishes protocol-observable properties of signed statements
+from substantive facts about the external world. This distinction is the
+basis of JEP-Core's semantic neutrality.
 
 ## Observable Protocol Facts
 
-JEP can support determination of protocol-level facts such as:
+Subject to the checks actually performed, JEP can support determination
+of protocol-level properties such as:
 
 - whether an Event Identity was asserted in a signed event;
 - whether an unsigned payload was signed by a key;
@@ -1197,8 +1249,10 @@ JEP alone does not determine external target facts such as:
 - whether all downstream systems honored a Termination event;
 - whether an observed event log is complete.
 
-A profile MAY define evidence rules for external target facts. Such rules
-are outside JEP-Core.
+A profile MAY define evidence rules for external target facts. Such
+rules are outside JEP-Core. A JEP-Core-valid event MUST NOT be presented
+as JEP endorsing the actor's claim, authority, policy position, legal
+status, or requested consequence.
 
 # Observed Log Assumptions
 
@@ -1497,6 +1551,17 @@ Major changes from `draft-wang-jep-judgment-event-protocol-06`:
   acceptance processors.
 - Expanded security considerations for Event ID conflicts, safe retry,
   acceptance-state failure, and optional challenge profiles.
+- Tightened J/D/T/V minimum semantics and added a verb-requirements
+  matrix.
+- Required `result` for V events and clarified the J/V semantic
+  boundary.
+- Classified validation checks by Core, profile, and external ownership.
+- Clarified semantic neutrality: Core verifies structured signed
+  statements without deciding truth, authority, legality, causality,
+  policy consequence, or external effect.
+- Required actor binding to pass before authoritative identity or
+  acceptance state is committed when the active profile requires actor
+  binding.
 
 # IANA Considerations
 
