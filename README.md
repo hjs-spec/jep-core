@@ -94,6 +94,12 @@ Datatracker = external publication record
 
 See [docs/VERSIONING.md](docs/VERSIONING.md).
 
+## Developer documentation
+
+[Documentation index](docs/README.md) · [Architecture](docs/architecture/README.md) · [Logging comparison](docs/comparisons/logging.md) · [Current Quickstart](https://github.com/hjs-spec/jep-quickstart)
+
+Architecture and logging explanations are maintained here after [repository consolidation](docs/REPOSITORY-CONSOLIDATION-2026-09.md). Their original repositories retain historical links.
+
 ## Companion ecosystem
 
 JEP Core is intentionally narrower than the wider JEP ecosystem. Profiles, conformance rules, semantic bindings, chain composition, runtime behavior, SDKs, and application integrations may evolve independently, but MUST NOT silently redefine Core semantics.
