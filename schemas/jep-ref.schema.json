@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://jep.org/schemas/jep-ref-0.6.schema.json",
-  "title": "JEP Reference",
+  "$id": "https://jep.org/schemas/jep-ref-0.7.schema.json",
+  "title": "JEP Core 0.7 Reference",
   "oneOf": [
     {
       "type": "string",
-      "pattern": "^[a-z0-9-]+:[0-9a-f]+$"
+      "pattern": "^[a-z0-9][a-z0-9-]*:[0-9a-f]+$"
     },
     {
       "type": "object",
@@ -13,19 +13,54 @@
         "type",
         "value"
       ],
+      "additionalProperties": true,
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "value": {},
         "hash": {
           "type": "string",
-          "pattern": "^[a-z0-9-]+:[0-9a-f]+$"
+          "pattern": "^[a-z0-9][a-z0-9-]*:[0-9a-f]+$"
         }
-      }
-    },
-    {
-      "type": "null"
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "jep:event"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "who",
+                  "id"
+                ],
+                "properties": {
+                  "who": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }
