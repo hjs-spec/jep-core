@@ -11,7 +11,8 @@ Core defines event structure and observable checks. It does not decide truth, au
 | Read the published protocol | [Frozen Internet-Draft -07](releases/draft-07/) |
 | Read the working source | [Editor's Copy](draft-wang-jep-judgment-event-protocol.md) |
 | Implement or migrate | [Implementer guide](docs/IMPLEMENTER-GUIDE.md) · [0.7 migration](docs/MIGRATION-0.7.md) |
-| Run a signed example | [Quickstart](https://github.com/hjs-spec/jep-quickstart) |
+| Create, export and independently verify locally | [Agent SDK local example](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification) |
+| Try a locally hosted HTTP API | [HTTP Quickstart](https://github.com/hjs-spec/jep-quickstart) |
 | Choose a client or recorder | [Integration directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md#integrate) |
 | Understand component boundaries | [Architecture](docs/architecture/README.md) |
 

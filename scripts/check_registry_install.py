@@ -1,7 +1,10 @@
 """Read-only registry/release hash comparison and clean installed-wheel smoke gate."""
 from __future__ import annotations
 
+import argparse
 import hashlib
+import platform
+import re
 import json
 import os
 from pathlib import Path
@@ -50,13 +53,34 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def main():
-    output = Path(sys.argv[1] if len(sys.argv) > 1 else 'release-install-evidence').resolve()
+def installation_set(current_release=False):
+    """Default: published baseline. Post-publish: the coordinated new release set."""
+    packages, extras = list(PACKAGES), list(EXTRAS)
+    if current_release:
+        version = Path(__file__).resolve().parents[1].joinpath('VERSION').read_text().strip()
+        if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
+            raise ValueError('invalid Core software version')
+        packages[0] = ('jep-core-conformance', version, 'hjs-spec/jep-core')
+        packages[1] = ('jep-agent-sdk', '2.1.6', 'hjs-spec/jep-agent-sdk')
+        extras[-1] = ('hjs-spec/jep-api', 'v0.8.5')
+    return packages, extras
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('output', nargs='?', default='release-install-evidence')
+    parser.add_argument('--current-release', action='store_true',
+                        help='verify the coordinated set after API/Agent and Core publication')
+    args = parser.parse_args(argv)
+    packages, extras = installation_set(args.current_release)
+    output = Path(args.output).resolve()
     output.mkdir(parents=True, exist_ok=True)
-    report = {'status': 'running', 'artifacts': [], 'packages': []}
+    report = {'status': 'running', 'artifacts': [], 'packages': [],
+              'platform': platform.platform(), 'python': platform.python_version(),
+              'release_set': 'current-release' if args.current_release else 'published-baseline'}
     wheels = []
     try:
-        for name, version, repo in PACKAGES:
+        for name, version, repo in packages:
             metadata = json.loads(read(f'https://pypi.org/pypi/{name}/{version}/json'))
             github = release(repo, 'v' + version)
             assets = {a['name']: a for a in github['assets']}
@@ -82,7 +106,7 @@ def main():
                 report['artifacts'].append({'file': str(path.relative_to(output)), 'sha256': hash_value,
                     'registry_url': file['url'], 'release_url': asset['browser_download_url']})
             report['packages'].append({'name': name, 'version': version, 'source': github['target_commitish']})
-        for repo, tag in EXTRAS:
+        for repo, tag in extras:
             github = release(repo, tag)
             for asset in github['assets']:
                 filename = asset['name']
