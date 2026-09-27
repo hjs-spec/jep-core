@@ -1,3 +1,16 @@
+# Software 0.7.5
+
+Align structural schemas with current verifier boundaries: non-empty extension
+identifiers and exact whole-string digest matching, including terminal newlines.
+A cross-repository hostile-input gate checks Core/API/Agent archival and acceptance
+results, diagnostic check categories, unchanged hashes, corrected retries and
+idempotence. It complements, rather than replaces, the existing signed-artifact
+and historical interoperability gates.
+
+Published -07 and existing signed fixtures remain byte-for-byte unchanged. The
+local example path and post-publication installed-wheel checks are separate from
+hosted API configuration and external policy/authority guarantees.
+
 # Software 0.7.4
 
 Complete the JCS numeric roundtrip repair: accept the canonical shortest decimal spelling of a binary64 number as well as its exact integer value. For example, JavaScript emits `1000000000000000100` for the float whose exact integer value is `1000000000000000128`. Both serialize to the same JCS bytes. Noncanonical precision-losing integers and overflow remain rejected.

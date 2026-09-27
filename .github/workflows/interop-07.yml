@@ -14,12 +14,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/jep-api
-          ref: 0ed259f8f137f57c8122487ba44e0dcfce5bc172
+          ref: 9381cddf0dafba55cd07aa7fc4d4316c95440d08
           path: ecosystem/jep-api
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/jep-agent-sdk
-          ref: 59d8f4879a5b8f544f10b78d4282a7f6817ad2d2
+          ref: a1cf18a10c229c4535d6ea46e75e0d9832cff772
           path: ecosystem/jep-agent-sdk
       - uses: actions/checkout@v4
         with:
@@ -71,7 +71,12 @@ jobs:
         run: python -m pytest ecosystem/cli/tests -q
       - name: Check signed artifact transport and Binding/02 references
         run: python integration/verify_current_07.py --workspace ecosystem | tee interop-07-report.json
+      - name: Check common hostile-input boundaries and side-effect-free rejection
+        run: python integration/input_boundaries_07.py --workspace ecosystem --report input-boundaries-07-report.json
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: current-07-interop-report
-          path: interop-07-report.json
+          path: |
+            interop-07-report.json
+            input-boundaries-07-report.json

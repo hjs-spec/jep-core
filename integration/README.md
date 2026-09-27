@@ -51,3 +51,26 @@ python integration/verify_packages.py \
 ```
 
 Omit `--go-version` when testing local unmerged changes. Wheel and tarball files must be trusted release artifacts or locally built packages. The separate `jep-agent-sdk/scripts/check_coexistence.py` checks the legacy/current Python namespaces and CLI commands in fresh environments, both installation orders and independent uninstalls.
+
+## Current hostile-input boundary gate
+
+`python integration/input_boundaries_07.py --workspace ecosystem --report input-boundaries-07-report.json`
+runs real signatures through Core, API and Agent SDK in archival and acceptance modes.
+It covers strict structural boundaries, UTF-8/Unicode/numeric/header handling,
+valid noncanonical header controls, unchanged artifact hashes, and rejection that
+does not consume an Event Identity. A corrected event is then accepted exactly
+once, with an idempotent retry. Diagnostic check categories are compared; exact
+implementation-specific error messages/codes need not be identical.
+
+The CI gate pins all source revisions. It complements the existing positive
+transport/Binding checks and does not alter the frozen Binding/02 harness.
+
+## Publication versus installation
+
+The pull-request installation matrix deliberately checks the already published
+0.7.4 baseline; it does not claim to install unpublished candidate code. After
+API 0.8.5 and Agent SDK 2.1.6 are released, Core's release workflow publishes its
+new wheel, then runs `check_registry_install.py --current-release` on Linux,
+Windows and macOS. Each report names the exact downloaded versions, platform
+and digests. Failed post-publication checks retain evidence and do not imply
+a successful installation or authorize replacing already-published artifacts.
