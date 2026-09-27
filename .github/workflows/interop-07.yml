@@ -14,33 +14,38 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/jep-api
-          ref: e58160184a65849639d1a2c7e318066fe146eb56
+          ref: 0ed259f8f137f57c8122487ba44e0dcfce5bc172
           path: ecosystem/jep-api
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/jep-agent-sdk
-          ref: 95710ecba1e67eeaa97e6204c842cf24162b3cb7
+          ref: 59d8f4879a5b8f544f10b78d4282a7f6817ad2d2
           path: ecosystem/jep-agent-sdk
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/sdk-go
-          ref: e9faad983df66cc61169227228080bae5633b9a2
+          ref: f6712380988fcda27a07abd0d61bed0a6eb1d9ca
           path: ecosystem/sdk-go
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/Agent-Blackbox
-          ref: 817e2ef2e17627227279f1b0fec724c7c7062d0c
+          ref: 2950f215c74cf419506fdeae4a54670ae980a2e0
           path: ecosystem/Agent-Blackbox
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/sdk-py
-          ref: 3e475be981bfeb92169cbf315adffe875dd92291
+          ref: 1bd6c0c40c70f2ba721b720cb310dca837874fc5
           path: ecosystem/sdk-py
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/sdk-js
-          ref: 74c79804e6be8fe2ed1c6388ccec22a290b725a7
+          ref: 1b5ec75239527be67e118183b0a14953ab344977
           path: ecosystem/sdk-js
+      - uses: actions/checkout@v4
+        with:
+          repository: hjs-spec/cli
+          ref: 33c5053a6e24b6b940d7ccdf1919123c8ef7a4e8
+          path: ecosystem/cli
       - uses: actions/checkout@v4
         with:
           repository: cognitive-emergence/tsto-spec
@@ -61,7 +66,9 @@ jobs:
           pip install -e '.[test]' \
             -r ecosystem/jep-api/requirements.txt \
             -r ecosystem/tsto-spec/scripts/requirements-binding-02.txt \
-            -e ecosystem/jep-agent-sdk -e ecosystem/sdk-py -e ecosystem/Agent-Blackbox
+            -e ecosystem/jep-agent-sdk -e ecosystem/sdk-py -e ecosystem/Agent-Blackbox -e ecosystem/cli
+      - name: Recheck current CLI input boundaries
+        run: python -m pytest ecosystem/cli/tests -q
       - name: Check signed artifact transport and Binding/02 references
         run: python integration/verify_current_07.py --workspace ecosystem | tee interop-07-report.json
       - uses: actions/upload-artifact@v4
