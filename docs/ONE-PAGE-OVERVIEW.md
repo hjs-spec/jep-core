@@ -1,5 +1,7 @@
 # JEP v0.6 One-Page Overview
 
+> Historical Core 0.6 overview and illustrative event shape. For current Core 0.7 events, use the [implementer guide](IMPLEMENTER-GUIDE.md) and [Quickstart](https://github.com/hjs-spec/jep-quickstart).
+
 ## What JEP is
 
 JEP is a neutral, signed, verifiable event protocol for judgment-related acts in human, organizational, software, and AI-agent systems.

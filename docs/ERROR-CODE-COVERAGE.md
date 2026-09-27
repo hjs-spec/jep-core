@@ -1,6 +1,8 @@
 # JEP v0.6 Error Code Coverage Matrix
 
-The executable source of expectations is the root `test-manifest.json`. A negative vector passes only when the expected validity, exact error code, and completed validation level all match.
+> Historical Core 0.6 coverage record. Use the explicit `test-manifest-0.6.json` for these legacy expectations. Current Core 0.7 results use [independent checks](VALIDATION-CHECKS.md) and `test-manifest-0.7.json`.
+
+The executable source of these legacy expectations is the root `test-manifest-0.6.json`. A negative vector passes only when the expected validity, exact error code, and completed validation level all match.
 
 | Error code | Executed seed vector |
 |---|---|

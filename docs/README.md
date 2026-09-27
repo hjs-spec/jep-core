@@ -21,17 +21,18 @@
 - [Historical release work](RELEASE-DELIVERY-2026-09.md)
 - [Historical ecosystem hardening](ECOSYSTEM-HARDENING-2026-09.md)
 
-## Additional and historical material
+## Historical Core 0.6 material
 
 Consult each document's explicit version. Pre-0.7 examples and cumulative Validation Levels do not define the current Core contract.
 
-- [Positioning](POSITIONING.md)
-- [IETF submission checklist](IETF-SUBMISSION-CHECKLIST.md)
+- [Historical positioning](POSITIONING.md)
+- [Historical IETF submission checklist](IETF-SUBMISSION-CHECKLIST.md)
 - [Historical 0.6 overview](ONE-PAGE-OVERVIEW.md)
 - [Historical validation levels](CONFORMANCE-LEVELS.md)
-- [Interoperability report template](INTEROPERABILITY-REPORT-TEMPLATE.md)
-- [Error coverage](ERROR-CODE-COVERAGE.md)
-- [Security review notes](SECURITY-REVIEW-NOTES.md)
-- [Privacy review notes](PRIVACY-REVIEW-NOTES.md)
+- [Historical interoperability report template](INTEROPERABILITY-REPORT-TEMPLATE.md)
+- [Historical error coverage](ERROR-CODE-COVERAGE.md)
+- [Historical implementation alignment](IMPLEMENTATION-ALIGNMENT-0.6.1.md)
+- [Historical security review notes](SECURITY-REVIEW-NOTES.md)
+- [Historical privacy review notes](PRIVACY-REVIEW-NOTES.md)
 - [Historical TSTO Binding/01 validation](JEP-TSTO-BINDING-01.md)
 - [Historical 0.6 E2E notes](END-TO-END-DEMO.md)

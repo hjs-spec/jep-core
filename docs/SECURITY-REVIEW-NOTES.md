@@ -1,5 +1,7 @@
 # JEP v0.6 Security Review Notes
 
+> Historical Core 0.6 review checklist and failure codes. For Core 0.7, use [independent validation checks](VALIDATION-CHECKS.md) and the [profile author guide](PROFILE-AUTHOR-GUIDE.md); nonce, chain and policy checks are not universal Core requirements.
+
 This document lists security review focus areas for JEP-Core, Profiles, and Conformance.
 
 It is non-normative and intended for reviewers.

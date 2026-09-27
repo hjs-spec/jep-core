@@ -17,4 +17,4 @@ flowchart TB
     Signer -->|trusted public-key source| Verifier
 ```
 
-Caller identity, authorization, signing, external execution, storage and verification have distinct trust assumptions. Public-key availability is not sufficient trust by itself: the verifier needs a configured trusted source or key. API Level 1 does not bind who to the signer or approve the underlying action.
+Caller identity, authorization, signing, external execution, storage and verification have distinct trust assumptions. Public-key availability is not sufficient trust by itself: the verifier needs a configured trusted source or key. A Core 0.7 `cryptographic: pass` does not bind `who` to the signer or approve the underlying action. Actor binding and policy require their own checks and evidence.

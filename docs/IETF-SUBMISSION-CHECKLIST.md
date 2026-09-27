@@ -1,5 +1,7 @@
 # IETF Submission Checklist for JEP v0.6
 
+> Historical submission checklist for Core -06 and Profiles/Conformance -00. Do not use this upload list for a new publication. Follow [versioning and publication rules](VERSIONING.md) and the [frozen -07 record](../releases/draft-07/README.md).
+
 ## Primary upload order
 
 1. `draft-wang-jep-judgment-event-protocol-06`

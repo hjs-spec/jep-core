@@ -37,7 +37,7 @@ No automatic adapter connects these archive formats. A bridge must name the sour
 
 ## Component ownership
 
-Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language ergonomics. The Agent SDK owns local agent recording and reports. Quickstart owns the introductory workflow. Optional runtime experiments own only their explicitly described envelopes and policies.
+Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language ergonomics. The Agent SDK owns local agent recording and reports. Quickstart owns the introductory workflow. Retired runtime experiments preserve only their historical envelopes, policies and readers; they are outside the active feature roadmap.
 
 The [organization directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md) is the sole repository inventory. This document explains boundaries, rather than duplicating installation or release tables.
 
