@@ -24,7 +24,7 @@ bodies = {
     'J': {'claim': 'synthetic smoke', 'large': 1000000000000000100, 'exact': 1000000000000000128},
     'D': {'delegatee': 'did:example:worker', 'scope': {'action': 'smoke'}},
     'T': {'termination_scope': 'future_reliance'},
-    'V': {'verification_scope': 'synthetic_smoke', 'result': 'pass'},
+    'V': {'verification_scope': ['synthetic_smoke'], 'result': 'pass'},
 }
 events = []
 for verb, what in bodies.items():
