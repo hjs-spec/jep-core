@@ -1,0 +1,28 @@
+name: Published package installation
+on:
+  pull_request:
+    paths: ['scripts/check_registry_install.py', 'scripts/installed_smoke.py', '.github/workflows/registry-install.yml']
+  push:
+    branches: [main]
+    paths: ['scripts/check_registry_install.py', 'scripts/installed_smoke.py', '.github/workflows/registry-install.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  registry-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download, compare and install published artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/check_registry_install.py release-install-evidence
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-install-evidence
+          path: release-install-evidence/
