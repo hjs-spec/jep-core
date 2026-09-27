@@ -1,0 +1,33 @@
+name: Prepare isolated hardening workspace
+on:
+  push:
+    branches: ['audit/core07-hardening-workspace']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Snapshot public sources and test dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p workspace wheels
+          for repo in jep-core jep-api jep-agent-sdk jep-quickstart sdk-py sdk-js sdk-go Agent-Blackbox cli .github; do
+            git clone --depth 1 "https://github.com/hjs-spec/$repo.git" "workspace/$repo"
+            printf '%s %s\n' "hjs-spec/$repo" "$(git -C "workspace/$repo" rev-parse HEAD)" >> workspace/REVISIONS.txt
+          done
+          git clone --depth 1 https://github.com/cognitive-emergence/tsto-spec.git workspace/tsto-spec
+          printf '%s %s\n' cognitive-emergence/tsto-spec "$(git -C workspace/tsto-spec rev-parse HEAD)" >> workspace/REVISIONS.txt
+          python -m pip download --dest wheels rfc8785 jcs pynacl 'psycopg[binary]' build
+          tar --exclude='.git' -czf hardening-workspace.tar.gz workspace wheels
+      - uses: actions/upload-artifact@v4
+        with:
+          name: isolated-public-source-workspace
+          path: hardening-workspace.tar.gz
+          retention-days: 3
