@@ -1,5 +1,7 @@
 # JEP v0.6 Interoperability Report Template
 
+> Historical Core 0.6 report template. Do not report current Core 0.7 results as cumulative Validation Levels. Use [independent checks](VALIDATION-CHECKS.md) and the [current interoperability gate](../integration/README.md#current-core-07--binding02).
+
 Use this template to publish implementation interoperability results.
 
 ```json

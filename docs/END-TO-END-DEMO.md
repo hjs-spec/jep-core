@@ -1,5 +1,7 @@
 # JEP v0.6 End-to-End Demo
 
+> Historical Core 0.6 companion demonstration. Its vectors and chain command are compatibility material, not the current installation path. Start with [Quickstart](https://github.com/hjs-spec/jep-quickstart) for signed Core 0.7 events.
+
 This demo shows how JEP, HJS, and JAC can work together without crossing boundaries.
 
 ## Scenario

@@ -1,5 +1,7 @@
 # JEP v0.6 Implementation Alignment Pass
 
+> Historical Core 0.6 implementation record. Its executable expectations now live in `test-manifest-0.6.json`; the default manifest targets Core 0.7. See the [current validation checks](VALIDATION-CHECKS.md).
+
 This pass aligns executable repository artifacts with the validation boundaries declared by JEP-Core-0.6 and the companion conformance draft. It does not change J/D/T/V semantics.
 
 ## Corrected
@@ -27,4 +29,4 @@ This pass aligns executable repository artifacts with the validation boundaries 
 
 ## Conformance evidence
 
-The root `test-manifest.json` is the executable source of test expectations. Every negative vector identifies the exact failure code and completed validation level expected from the Python reference implementation. Cross-language JCS edge vectors are shared with the TypeScript seed.
+The root `test-manifest-0.6.json` is the executable source of these legacy test expectations. Every negative vector identifies the exact failure code and completed validation level expected from the legacy Python reference implementation. Cross-language JCS edge vectors are shared with the TypeScript seed.

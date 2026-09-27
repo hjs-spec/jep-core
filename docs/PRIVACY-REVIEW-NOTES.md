@@ -1,5 +1,7 @@
 # JEP v0.6 Privacy Review Notes
 
+> Historical Core 0.6 privacy review notes. Data minimization concerns remain relevant, but current event structure and profile boundaries are defined by the [Core 0.7 implementer guide](IMPLEMENTER-GUIDE.md) and [profile author guide](PROFILE-AUTHOR-GUIDE.md).
+
 This document lists privacy review considerations for JEP deployments.
 
 JEP is an accountability event protocol component. It should not become a general monitoring protocol.

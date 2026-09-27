@@ -1,5 +1,7 @@
 # JEP v0.6 Positioning
 
+> Historical Core 0.6 positioning. The nonce and Validation Level descriptions below are not the current Core contract. Use the [current protocol entry](../README.md) and [architecture boundaries](architecture/architecture-notes.md).
+
 JEP is the neutral event layer for verifiable judgment acts.
 
 ## What JEP is
