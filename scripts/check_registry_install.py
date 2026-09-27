@@ -72,7 +72,6 @@ def main():
                 hash_value = digest(actual)
                 if hash_value != file['digests']['sha256'] or asset.get('digest') != 'sha256:' + hash_value:
                     raise ValueError(f'{filename}: registry/release hash mismatch')
-                # Compare the actual GitHub bytes too, not only its metadata.
                 if digest(read(asset['browser_download_url'])) != hash_value:
                     raise ValueError('GitHub download differs from registry')
                 path = output / 'python' / filename
@@ -106,10 +105,17 @@ def main():
             python = env / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
             subprocess.run([str(python), '-I', '-m', 'pip', '--isolated', 'install', '--no-cache-dir',
                 '--index-url', 'https://pypi.org/simple', *map(str, wheels)], cwd=temp, check=True)
+            freeze = subprocess.run([str(python), '-I', '-m', 'pip', 'freeze'], cwd=temp,
+                                    check=True, capture_output=True, text=True)
+            (output / 'installed-environment.txt').write_text(freeze.stdout, encoding='utf-8')
             smoke = Path(__file__).with_name('installed_smoke.py').resolve()
-            result = subprocess.run([str(python), '-I', str(smoke)], cwd=temp, check=True,
+            result = subprocess.run([str(python), '-I', str(smoke)], cwd=temp,
                                     text=True, capture_output=True)
             (output / 'installed-smoke.json').write_text(result.stdout, encoding='utf-8')
+            (output / 'installed-smoke.stderr.txt').write_text(result.stderr, encoding='utf-8')
+            if result.returncode:
+                print(result.stderr, file=sys.stderr)
+            result.check_returncode()
             for command in ['jep-validate', 'jep-validate-07', 'jep-validate-06', 'jep']:
                 executable = python.parent / (command + '.exe' if os.name == 'nt' else command)
                 subprocess.run([str(executable), '--help'], cwd=temp, check=True, capture_output=True)
