@@ -1,10 +1,10 @@
-name: Published package installation
+name: Current published package installation
 on:
   pull_request:
-    paths: ['scripts/check_registry_install.py', 'scripts/installed_smoke.py', '.github/workflows/registry-install.yml', 'tests/test_registry_install_selection.py', '.github/workflows/release.yml']
+    paths: ['scripts/check_registry_install.py', 'scripts/check_npm_release.py', 'scripts/installed_smoke.py', '.github/workflows/registry-install.yml', 'tests/test_registry_install_selection.py', 'tests/test_npm_release_check.py', '.github/workflows/release.yml']
   push:
     branches: [main]
-    paths: ['scripts/check_registry_install.py', 'scripts/installed_smoke.py', '.github/workflows/registry-install.yml', 'tests/test_registry_install_selection.py', '.github/workflows/release.yml']
+    paths: ['scripts/check_registry_install.py', 'scripts/check_npm_release.py', 'scripts/installed_smoke.py', '.github/workflows/registry-install.yml', 'tests/test_registry_install_selection.py', 'tests/test_npm_release_check.py', '.github/workflows/release.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,16 +15,19 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Download, compare and install published artifacts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Download, compare and install the current release combination
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python scripts/check_registry_install.py release-install-evidence
+        run: python scripts/check_registry_install.py release-install-evidence --current-release
       - uses: actions/upload-artifact@v4
         if: always()
         with:

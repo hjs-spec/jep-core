@@ -16,6 +16,7 @@ from urllib.request import Request, urlopen
 from urllib.parse import urlparse
 import venv
 
+# Preserve the dated baseline; --current-release explicitly selects newer bytes.
 PACKAGES = [
     ('jep-core-conformance', '0.7.4', 'hjs-spec/jep-core'),
     ('jep-agent-sdk', '2.1.5', 'hjs-spec/jep-agent-sdk'),
@@ -54,7 +55,7 @@ def digest(data):
 
 
 def installation_set(current_release=False):
-    """Default: published baseline. Post-publish: the coordinated new release set."""
+    """Default: historical baseline. Opt-in: the current coordinated release set."""
     packages, extras = list(PACKAGES), list(EXTRAS)
     if current_release:
         version = Path(__file__).resolve().parents[1].joinpath('VERSION').read_text().strip()
@@ -62,6 +63,7 @@ def installation_set(current_release=False):
             raise ValueError('invalid Core software version')
         packages[0] = ('jep-core-conformance', version, 'hjs-spec/jep-core')
         packages[1] = ('jep-agent-sdk', '2.1.6', 'hjs-spec/jep-agent-sdk')
+        extras[-2] = ('hjs-spec/sdk-js', 'v0.7.2')
         extras[-1] = ('hjs-spec/jep-api', 'v0.8.5')
     return packages, extras
 
@@ -70,7 +72,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', nargs='?', default='release-install-evidence')
     parser.add_argument('--current-release', action='store_true',
-                        help='verify the coordinated set after API/Agent and Core publication')
+                        help='verify the coordinated current set, including the new npm scope')
     args = parser.parse_args(argv)
     packages, extras = installation_set(args.current_release)
     output = Path(args.output).resolve()
@@ -123,6 +125,9 @@ def main(argv=None):
                 path.write_bytes(data)
                 report['artifacts'].append({'file': str(path.relative_to(output)), 'sha256': hash_value,
                     'release_url': asset['browser_download_url']})
+        if args.current_release:
+            from check_npm_release import verify_npm
+            report['npm'] = verify_npm(output / 'sdk-js')
         with tempfile.TemporaryDirectory() as temp:
             env = Path(temp) / 'venv'
             venv.EnvBuilder(with_pip=True).create(env)
@@ -144,6 +149,19 @@ def main(argv=None):
                 executable = python.parent / (command + '.exe' if os.name == 'nt' else command)
                 subprocess.run([str(executable), '--help'], cwd=temp, check=True, capture_output=True)
         report['status'] = 'pass'
+        checksums = ''.join(item['sha256'] + '  ' + item['file'].replace('\\', '/') + '\n'
+                            for item in report['artifacts'])
+        (output / 'SHA256SUMS.txt').write_text(checksums, encoding='utf-8')
+        instructions = ('# Verified installation set\n\nThis contains original release bytes, not newly built replacements. '
+                        'Do not upload them again. Third-party dependencies still require network access.\n\n'
+                        'Use a fresh environment; do not install historical jep-v06-conformance-seed beside current Core.\n\n'
+                        '```sh\npython -m pip install ' + ' '.join(n + '==' + v for n, v, _ in packages) + '\n')
+        if args.current_release:
+            instructions += 'npm install @hjs-api-db/jep-sdk-js@0.7.2\n'
+        instructions += ('```\n\nCore and Agent SDK run locally. HTTP clients need a separately configured API; '
+                         'maintainer hosting is deferred. The local Agent SDK example exports public material, not a production identity. '
+                         'See https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification .\n')
+        (output / 'INSTALL-README.md').write_text(instructions, encoding='utf-8')
     except Exception as exc:
         report['status'] = 'fail'
         report['error'] = type(exc).__name__ + ': ' + str(exc)
