@@ -39,6 +39,14 @@ No automatic adapter connects these archive formats. A bridge must name the sour
 
 Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language ergonomics. The Agent SDK owns local agent recording and reports. Quickstart owns the introductory workflow. Retired runtime experiments preserve only their historical envelopes, policies and readers; they are outside the active feature roadmap.
 
+General MCP tool-list filtering (`shutup-mcp`) is unrelated to JEP/TSTO protocol
+implementation. The AIP sidecar is adjacent independent receipt research, not an
+optional Core component. Neither is imported by the maintained protocol path.
+The Agent SDK's finite-model determinability helpers are also optional research
+APIs: they do not run during Core signing/verification or TSTO binding checks and
+do not establish real-world evidence sufficiency or completion. Keep these outside
+protocol requirements and the default integration path.
+
 The [organization directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md) is the sole repository inventory. This document explains boundaries, rather than duplicating installation or release tables.
 
 ## Core objects and application envelopes
