@@ -14,12 +14,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/jep-api
-          ref: 9381cddf0dafba55cd07aa7fc4d4316c95440d08
+          ref: 14a09cdd3ee9ded13996264cb3158c3cec332f44
           path: ecosystem/jep-api
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/jep-agent-sdk
-          ref: a1cf18a10c229c4535d6ea46e75e0d9832cff772
+          ref: 3c203d7005ff1c5fb55591fad5019254d092e826
           path: ecosystem/jep-agent-sdk
       - uses: actions/checkout@v4
         with:
@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: hjs-spec/sdk-js
-          ref: 1b5ec75239527be67e118183b0a14953ab344977
+          ref: 36f600aded52565a9a23af69f6991c50fbc5fa1f
           path: ecosystem/sdk-js
       - uses: actions/checkout@v4
         with:
@@ -56,7 +56,7 @@ jobs:
           python-version: '3.12'
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - uses: actions/setup-go@v5
         with:
           go-version: '1.24.x'
@@ -69,6 +69,9 @@ jobs:
             -e ecosystem/jep-agent-sdk -e ecosystem/sdk-py -e ecosystem/Agent-Blackbox -e ecosystem/cli
       - name: Recheck current CLI input boundaries
         run: python -m pytest ecosystem/cli/tests -q
+      - name: Check the new-scope SDK metadata, packed import and client behavior
+        run: npm test
+        working-directory: ecosystem/sdk-js
       - name: Check signed artifact transport and Binding/02 references
         run: python integration/verify_current_07.py --workspace ecosystem | tee interop-07-report.json
       - name: Check common hostile-input boundaries and side-effect-free rejection
