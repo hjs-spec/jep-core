@@ -11,7 +11,7 @@ In a fresh Python environment:
 ```sh
 python -m pip install jep-core-conformance==0.7.5
 jep-validate --help
-jep-validate event.json --keys keys.json
+jep-validate validate event.json --keys keys.json
 ```
 
 `event.json` must be the actual event and `keys.json` the verifier's key map; use the [local create/export/verify example](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification) to generate synthetic sample files. Demo-supplied public keys establish signature consistency, not independently trusted actor identity. No hosted API or account is required.
