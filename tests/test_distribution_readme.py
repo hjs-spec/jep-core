@@ -17,3 +17,9 @@ def test_registry_install_is_distinct_from_source_development():
     assert 'python -m pip install jep-core-conformance' in text
     assert '## Develop and test from source' in text
     assert 'Do not install historical `jep-v06-conformance-seed` alongside' in text
+
+
+def test_distribution_readme_uses_current_validator_subcommand():
+    text = (ROOT / 'README.md').read_text(encoding='utf-8')
+    assert 'jep-validate validate event.json --keys keys.json' in text
+    assert 'jep-validate event.json --keys keys.json' not in text
