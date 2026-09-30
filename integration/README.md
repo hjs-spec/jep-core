@@ -1,5 +1,9 @@
 # SDK and API interoperability
 
+For an external implementation with no companion checkouts, start with the
+[BYOI conformance path](../docs/BYOI-CONFORMANCE.md). The ecosystem gates below
+remain separate regression evidence, not independent-adopter certification.
+
 ## Current Core 0.7 / Binding/02
 
 `verify_current_07.py` checks signed artifacts against current implementations. The

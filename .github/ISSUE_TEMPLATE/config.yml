@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Private security reporting
+    url: https://github.com/hjs-spec/jep-core/security/policy
+    about: Report security-sensitive details privately using SECURITY.md.

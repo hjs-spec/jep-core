@@ -22,6 +22,8 @@ Do not install historical `jep-v06-conformance-seed` alongside this package: the
 
 | Task | Entry |
 |---|---|
+| Understand Core 0.7 in one page | [Current overview](https://github.com/hjs-spec/jep-core/blob/main/docs/ONE-PAGE-OVERVIEW.md) |
+| Select exact Core / Profiles / Conformance publications | [Specification sources](https://github.com/hjs-spec/jep-core/blob/main/docs/SPECIFICATION-SOURCES.md) |
 | Read the published protocol | [Frozen Internet-Draft -07](https://github.com/hjs-spec/jep-core/tree/main/releases/draft-07/) |
 | Read the working source | [Editor's Copy](https://github.com/hjs-spec/jep-core/blob/main/draft-wang-jep-judgment-event-protocol.md) |
 | Implement or migrate | [Implementer guide](https://github.com/hjs-spec/jep-core/blob/main/docs/IMPLEMENTER-GUIDE.md) · [0.7 migration](https://github.com/hjs-spec/jep-core/blob/main/docs/MIGRATION-0.7.md) |
@@ -29,6 +31,8 @@ Do not install historical `jep-v06-conformance-seed` alongside this package: the
 | Try a locally hosted HTTP API | [HTTP Quickstart](https://github.com/hjs-spec/jep-quickstart) |
 | Choose a client or recorder | [Integration directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md#integrate) |
 | Understand component boundaries | [Architecture](https://github.com/hjs-spec/jep-core/blob/main/docs/architecture/README.md) |
+| Test your own implementation | [BYOI conformance path](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md) · [Report format](https://github.com/hjs-spec/jep-core/blob/main/docs/INTEROPERABILITY-REPORT.md) |
+| Contribute or report a vulnerability | [Contributing](https://github.com/hjs-spec/jep-core/blob/main/CONTRIBUTING.md) · [Private security reporting](https://github.com/hjs-spec/jep-core/blob/main/SECURITY.md) |
 
 ## Current contract
 
@@ -60,7 +64,7 @@ The default Python validator, schemas and manifest target Core 0.7. [Validator u
 
 | Current | Historical compatibility |
 |---|---|
-| Core `-07`; profiles/conformance `-01` | Core `-06`; profiles/conformance `-00` |
+| Core `-07`; Profiles `-01`; Conformance `-02` | Core `-06`; profiles/conformance `-00` |
 | `test-manifest-0.7.json`, Python `jep_validate_07.py` | `test-manifest-0.6.json`, Python `jep_validate.py` |
 | Versioned 0.7 schemas and vectors | Go and TypeScript validators currently support **0.6 only** |
 
@@ -69,3 +73,17 @@ Schemas and tools are implementation aids; the applicable specification controls
 [Documentation index](https://github.com/hjs-spec/jep-core/blob/main/docs/README.md) · [Versioning](https://github.com/hjs-spec/jep-core/blob/main/docs/VERSIONING.md) · [Logging comparison](https://github.com/hjs-spec/jep-core/blob/main/docs/comparisons/logging.md) · [Current delivery status](https://github.com/hjs-spec/.github/blob/main/DELIVERY-CURRENT.md)
 
 The repository was previously named `jep-v06`. Repository identity is now stable; protocol drafts and software packages have separate versions. Maintainer-operated production API hosting is deferred; self-hosting remains optional.
+
+## External implementation testing (new source functionality)
+
+The BYOI runner is available from this source checkout; it is not included in
+the previously published 0.7.5 wheel. It exports a self-contained signed suite
+and runs a producer, verifier or acceptance adapter without companion repositories.
+Reports disclose actual coverage and do not claim certification. See the
+[source installation and adapter contract](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md).
+
+## Licensing
+
+Original implementation code and implementation aids use [BSD-3-Clause](https://github.com/hjs-spec/jep-core/blob/main/LICENSE).
+Internet-Draft text, extracted Code Components and third-party material retain
+their applicable terms. Read the [licensing scope](https://github.com/hjs-spec/jep-core/blob/main/LICENSING.md) before reuse.

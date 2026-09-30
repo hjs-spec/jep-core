@@ -268,11 +268,13 @@ def validate_shape(event: Any) -> Mapping[str, Any]:
         for name in ("verification_scope", "result"):
             _require(name in what, "ERR_MISSING_REQUIRED_FIELD", f"V requires what.{name}")
         scopes = what["verification_scope"]
-        _require(isinstance(scopes, list) and bool(scopes)
-                 and all(isinstance(x, str) and bool(x) for x in scopes)
-                 and len(scopes) == len(set(scopes)),
-                 "ERR_INVALID_FIELD_TYPE", "verification_scope must be non-empty unique array")
-        _require(all(isinstance(x, str) and bool(x) for x in scopes), "ERR_INVALID_FIELD_TYPE", "verification scopes invalid")
+        # Published Conformance -02 section 9.4 uses a single scope string.
+        # Preserve the list representation used by existing signed 0.7 fixtures.
+        _require((isinstance(scopes, str) and bool(scopes)) or
+                 (isinstance(scopes, list) and bool(scopes)
+                  and all(isinstance(x, str) and bool(x) for x in scopes)
+                  and len(scopes) == len(set(scopes))),
+                 "ERR_INVALID_FIELD_TYPE", "verification_scope must be a non-empty string or unique string array")
     return event
 
 

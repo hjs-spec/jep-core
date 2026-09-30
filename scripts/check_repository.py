@@ -9,10 +9,20 @@ FROZEN = {'releases/draft-07/draft-wang-jep-judgment-event-protocol-07.xml': '60
 
 
 def check(root=ROOT):
+    companion_frozen = {
+        'releases/conformance-02/draft-wang-jep-conformance-02.xml': '7f1d1afd31b92a013e4d00b0f144eb433f20937aa709708d1cb70ac6ae2ace34',
+        'releases/conformance-02/draft-wang-jep-conformance-02.txt': '1337d661017ec7d8d1bf86606f98b8a494281693c2ef99d0bd09167b0bb55fd9',
+        'releases/profiles-01/draft-wang-jep-profiles-01.xml': 'f18f50ba52975ee82c0d36a8a8f5004135fbcfe8e60d4f84f79152cf638383a3',
+        'releases/profiles-01/draft-wang-jep-profiles-01.txt': '9cdf2dc7db3180ceaefe927cfe21d260f955a0298a9bf5f09bba7f4ea64c5c3c',
+    }
     for name, expected in FROZEN.items():
         actual = hashlib.sha256((root / name).read_bytes()).hexdigest()
         if actual != expected:
             raise ValueError(f"Frozen publication changed: {name}; create a new draft revision")
+    for name, expected in companion_frozen.items():
+        actual = hashlib.sha256((root / name).read_bytes()).hexdigest()
+        if actual != expected:
+            raise ValueError(f"Frozen companion publication changed: {name}")
     checksum = (root / "releases/draft-07/SHA256SUMS").read_text().split()[0]
     if checksum != FROZEN["releases/draft-07/draft-wang-jep-judgment-event-protocol-07.xml"]:
         raise ValueError("Published -07 checksum changed")

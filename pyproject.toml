@@ -1,11 +1,13 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "jep-core-conformance"
 version = "0.7.5"
 readme = "README.md"
+license = "BSD-3-Clause"
+license-files = ["LICENSE", "LICENSING.md", "licenses/*.txt"]
 description = "JEP Core 0.7 conformance tools with explicit legacy 0.6 compatibility"
 requires-python = ">=3.10"
 dependencies = [
@@ -24,13 +26,19 @@ Issues = "https://github.com/hjs-spec/jep-core/issues"
 test = ["pytest>=8", "jsonschema>=4.18"]
 
 [tool.setuptools]
+include-package-data = false
 packages = ["jep_conformance"]
 package-dir = {jep_conformance = "reference-validator"}
+
+[tool.setuptools.package-data]
+jep_conformance = ["byoi_suite/*.json", "byoi_suite/vectors/*.json", "byoi_suite/templates/*.json", "byoi_suite/stateful/*.json"]
 
 [project.scripts]
 jep-validate = "jep_conformance.jep_validate_07:main"
 jep-validate-07 = "jep_conformance.jep_validate_07:main"
 jep-validate-06 = "jep_conformance.jep_validate:main"
+jep-byoi = "jep_conformance.byoi:main"
+jep-byoi-reference = "jep_conformance.byoi_reference_adapter:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

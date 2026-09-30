@@ -1,0 +1,48 @@
+name: Independent implementation report
+description: Register an implementation and disclose its scope and dependencies.
+title: "Implementation: "
+body:
+  - type: input
+    id: implementation
+    attributes:
+      label: Implementation, version and source
+      description: Include the exact commit/build and a repository or documentation URL.
+    validations:
+      required: true
+  - type: dropdown
+    id: roles
+    attributes:
+      label: Implemented roles
+      multiple: true
+      options:
+        - Producer
+        - Verifier
+        - Acceptance processor
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Core version, signature class, modes, profiles and limitations
+      description: Name exactly what is supported and what has not been tested.
+    validations:
+      required: true
+  - type: textarea
+    id: independence
+    attributes:
+      label: Independence and reused components
+      description: Identify reused JEP validators, SDKs and other libraries. Wrappers are welcome but must be identified.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and reproduction
+      description: Link a BYOI report when available, or explain what evidence is still missing. Registration is not certification.
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Public disclosure
+      options:
+        - label: I have authority to publish this information and have excluded private keys, credentials and confidential data.
+          required: true

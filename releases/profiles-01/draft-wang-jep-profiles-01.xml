@@ -1,0 +1,722 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rfc ipr="trust200902" docName="draft-wang-jep-profiles-01" category="exp" tocInclude="true" sortRefs="true" symRefs="true" version="3">
+  <front>
+    <title abbrev="JEP Profiles">JEP Profiles and Interoperability</title>
+    <seriesInfo name="Internet-Draft" value="draft-wang-jep-profiles-01"/>
+    <author initials="Y." surname="Wang" fullname="Yuqiang Wang">
+      <organization/>
+      <address>
+        <email>signal@humanjudgment.org</email>
+        <uri>https://github.com/hjs-spec</uri>
+      </address>
+    </author>
+    <date year="2026" month="September" day="26"/>
+    <keyword>JEP</keyword>
+    <keyword>profiles</keyword>
+    <keyword>identity</keyword>
+    <keyword>acceptance</keyword>
+    <keyword>interoperability</keyword>
+    <abstract>
+      <t>This document defines a profile model and optional interoperability bindings for the Judgment Event Protocol (JEP) <xref target="JEP"/>. JEP-Core defines a narrow signed event protocol. Profiles define deployment-specific rules for actor identifiers, key resolution, actor binding, credentials, authorization context, attestation, freshness, audience, replay-related mechanisms, archival evidence, chain interpretation, and policy integration without changing JEP-Core semantics.</t><t>Profiles are optional. A JEP-Core implementation <bcp14>MUST NOT</bcp14>
+require DID, Verifiable Credentials, X.509, OAuth, OpenID Connect, RATS,
+blockchain anchoring, HJS, JAC, a particular AI platform, or any other
+optional profile for Core conformance.</t>
+    </abstract>
+  </front>
+  <middle>
+    <section anchor="introduction"><name>Introduction</name>
+      <t>JEP-Core 0.7 defines signed J/D/T/V events, stable Event Identity, signed-artifact Event Hashes, independent validation checks, validation modes, and idempotent acceptance.</t>
+      <t>JEP-Core intentionally does not define a global identity, credential, authorization, attestation, legal, archival, chain, or policy framework. It also does not mandate one freshness, challenge, replay, transport, or storage mechanism.</t>
+      <t>Operational deployments often require such rules. This document defines a common profile contract so that those rules can be added without capturing or redefining the JEP-Core narrow waist.</t>
+      <t>Conformance classes, schemas, test-vector structure, and reference-validator behavior are defined in <xref target="JEP-CONFORMANCE"/>.</t><t>Where this document conflicts with JEP-Core, JEP-Core controls.</t>
+    </section>
+    <section anchor="requirements-language"><name>Requirements Language</name>
+      <t>The key words <strong><bcp14>MUST</bcp14></strong>, <strong><bcp14>MUST NOT</bcp14></strong>, <strong><bcp14>REQUIRED</bcp14></strong>, <strong><bcp14>SHALL</bcp14></strong>, <strong><bcp14>SHALL NOT</bcp14></strong>, <strong><bcp14>SHOULD</bcp14></strong>, <strong><bcp14>SHOULD NOT</bcp14></strong>, <strong><bcp14>RECOMMENDED</bcp14></strong>, <strong><bcp14>NOT RECOMMENDED</bcp14></strong>, <strong><bcp14>MAY</bcp14></strong>, and <strong><bcp14>OPTIONAL</bcp14></strong> in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals.</t>
+    </section>
+    <section anchor="profile-principles"><name>Profile Principles</name>
+      <t>A JEP profile <bcp14>MUST</bcp14> follow these principles:</t>
+      <ul spacing="normal">
+        <li><t>It <bcp14>MUST NOT</bcp14> redefine JEP-Core J/D/T/V semantics.</t></li>
+        <li><t>It <bcp14>MUST NOT</bcp14> redefine Event Identity <tt>(who,id)</tt>.</t></li>
+        <li><t>It <bcp14>MUST NOT</bcp14> redefine Event Hash as anything other than an identifier for an exact signed artifact.</t></li>
+        <li><t>It <bcp14>MUST NOT</bcp14> redefine the JEP Signing Payload, Core canonicalization requirements, or Core extension semantics.</t></li>
+        <li><t>It <bcp14>MAY</bcp14> make an otherwise optional validation check required for that profile, but <bcp14>MUST NOT</bcp14> change the meaning of a Core check.</t></li>
+        <li><t>It <bcp14>MAY</bcp14> define profile-specific validation checks. Such checks <bcp14>MUST</bcp14> be clearly identified as profile-defined rather than JEP-Core-defined.</t></li>
+        <li><t>It <bcp14>MAY</bcp14> define actor identifier forms, key-resolution mechanisms, credential rules, attestation rules, acceptance requirements, archival rules, chain rules, or policy hooks.</t></li>
+        <li><t>It <bcp14>MUST</bcp14> declare which validation modes and checks it requires.</t></li>
+        <li><t>It <bcp14>MUST</bcp14> declare whether it imposes an algorithm policy and, if so, define that policy. It <bcp14>MUST</bcp14> also define security considerations, privacy considerations, and failure behavior.</t></li>
+        <li><t>It <bcp14>MUST NOT</bcp14> present profile validity as substantive truth, legal effect, authorization, causality, or policy consequence beyond the scope that the profile explicitly evaluates.</t></li>
+        <li><t>It <bcp14>SHOULD</bcp14> be independently implementable and testable.</t></li>
+        <li><t>It <bcp14>SHOULD</bcp14> minimize new top-level wire semantics. Profile-specific signed data <bcp14>SHOULD</bcp14> use registered JEP extensions or referenced external objects.</t></li>
+      </ul>
+      <t>Profiles <bcp14>MUST</bcp14> preserve the distinction between:</t>
+      <sourcecode type="text">
+logical event identity  = Event Identity (who,id)
+exact signed artifact   = Event Hash
+</sourcecode>
+      <t>A profile that refers to a logical JEP event <bcp14>SHOULD</bcp14> use Event Identity. A profile that must bind an exact signed representation <bcp14>MAY</bcp14> additionally use an Event Hash.</t>
+    </section>
+    <section anchor="profile-model"><name>Profile Model</name>
+      <section anchor="profile-categories"><name>Profile Categories</name>
+      <t>A profile <bcp14>MAY</bcp14> belong to one or more of the following categories:</t>
+      <ul spacing="normal">
+        <li><t><strong>trust profile</strong>: actor identifiers, key resolution, actor/key binding, algorithm policy, revocation, and historical validity;</t></li>
+        <li><t><strong>acceptance profile</strong>: audience, freshness, challenge-response, replay-related mechanisms, acceptance-domain rules, or single-use authority;</t></li>
+        <li><t><strong>credential or attestation profile</strong>: credentials, presentations, certificates, remote-attestation evidence, or equivalent evidence;</t></li>
+        <li><t><strong>archival profile</strong>: receipt, archive, retention, custody, redaction, selective disclosure, or long-term verification context;</t></li>
+        <li><t><strong>chain profile</strong>: dependency, delegation, termination, causality, responsibility, or graph interpretation;</t></li>
+        <li><t><strong>policy profile</strong>: domain, organizational, legal, regulatory, or deployment-specific evaluation.</t></li>
+      </ul>
+      <t>A profile category does not grant authority. It identifies which semantics the profile owns.</t>
+      </section>
+      <section anchor="explicit-profile-selection"><name>Explicit Profile Selection</name>
+      <t>The active profile set <bcp14>MUST</bcp14> be explicit to the verifier.</t>
+      <t>A profile <bcp14>MAY</bcp14> be selected by:</t>
+      <ul spacing="normal">
+        <li><t>verifier configuration;</t></li>
+        <li><t>an API validation request;</t></li>
+        <li><t>a transport or application binding;</t></li>
+        <li><t>archive metadata;</t></li>
+        <li><t>a registered signed extension when the profile requires signed profile intent.</t></li>
+      </ul>
+      <t>A verifier <bcp14>MUST NOT</bcp14> silently infer a trust or acceptance profile solely from:</t>
+      <ul spacing="normal">
+        <li><t>the syntax of <tt>who</tt>;</t></li>
+        <li><t>the presence of a DID, certificate, credential, token, or attestation reference;</t></li>
+        <li><t>the presence or absence of <tt>aud</tt>;</t></li>
+        <li><t>the presence of a nonce-like extension;</t></li>
+        <li><t>a failed attempt to validate under another profile.</t></li>
+      </ul>
+      <t>For example, a DID-shaped <tt>who</tt> value does not by itself select the DID/VC profile.</t>
+      <t>A deployment <bcp14>MAY</bcp14> define a deterministic mapping from an input context or identifier form to a profile, provided that the mapping is explicitly configured or published before validation and is reported as part of the validation context. Such a mapping is explicit profile selection, not silent inference.</t>
+      <t>A verifier <bcp14>MUST NOT</bcp14> choose a different profile merely because validation under the initially selected profile failed.</t>
+      <t>If a profile requires the producer's profile choice to be cryptographically bound to the event, the profile <bcp14>MUST</bcp14> define a signed extension carrying that choice.</t>
+      <t>The validation result <bcp14>SHOULD</bcp14> identify the active profile.</t>
+      <t>A verifier <bcp14>MAY</bcp14> apply multiple profiles internally. For an interoperable conformance claim, an otherwise ad hoc combination <bcp14>SHOULD</bcp14> be represented by a named composed profile with its own identifier. If no composed identifier exists, the implementation <bcp14>SHOULD</bcp14> report the component profiles in profile-specific result metadata and <bcp14>MUST NOT</bcp14> imply that one constituent profile represents the entire combination.</t>
+      </section>
+      <section anchor="profile-versioning"><name>Profile Versioning</name>
+      <t>A profile identifier <bcp14>MUST</bcp14> identify one defined semantic version of the profile.</t>
+      <t>A materially different profile semantic contract <bcp14>SHOULD</bcp14> use a new profile identifier or version. Implementations <bcp14>MUST NOT</bcp14> silently reinterpret an older profile identifier using newer incompatible rules.</t>
+      <t>The <tt>:0</tt> identifiers defined by <tt>draft-wang-jep-profiles-00</tt> are historical JEP-Core 0.6 profile seeds. This revision defines <tt>:1</tt> identifiers for the JEP-Core 0.7-aligned profile families below.</t>
+      <t>The <tt>:1</tt> identifiers in this Experimental Internet-Draft are provisional identifiers. They are not IANA-registered identifiers.</t>
+      </section>
+      <section anchor="profile-composition"><name>Profile Composition</name>
+      <t>Multiple profiles <bcp14>MAY</bcp14> be active for one validation request.</t>
+      <t>Unless a composed profile explicitly specifies another rule:</t>
+      <ul spacing="normal">
+        <li><t>required checks are the union of the checks required by all active profiles;</t></li>
+        <li><t>algorithm acceptability is the intersection of the policies imposed by active profiles that define an algorithm policy;</t></li>
+        <li><t>all active audience requirements <bcp14>MUST</bcp14> be satisfied;</t></li>
+        <li><t>all active freshness and challenge requirements <bcp14>MUST</bcp14> be satisfied;</t></li>
+        <li><t>all required actor-binding requirements <bcp14>MUST</bcp14> be satisfied;</t></li>
+        <li><t>all required critical extensions <bcp14>MUST</bcp14> be processed.</t></li>
+      </ul>
+      <t>One profile <bcp14>MUST NOT</bcp14> weaken a JEP-Core requirement or a stricter requirement of another active profile unless the composed profile is explicitly defined as a new profile with its own identifier and security analysis.</t>
+      <t>If active profiles impose irreconcilable requirements, the verifier <bcp14>MUST NOT</bcp14> report successful validation. It <bcp14>SHOULD</bcp14> report an <tt>indeterminate</tt> overall status and a profile-specific conflict error unless an independently required check has deterministically failed.</t>
+      <t>Profile composition <bcp14>MUST NOT</bcp14> silently change the semantics of historical events.</t>
+      </section>
+      <section anchor="profile-specific-checks"><name>Profile-Specific Checks</name>
+      <t>Profiles <bcp14>MAY</bcp14> define validation checks beyond the JEP-Core check identifiers.</t>
+      <t>A profile-specific check identifier <bcp14>SHOULD</bcp14> be collision-resistant, for example:</t>
+      <sourcecode type="text">
+jep-profile:did-vc:1#credential_status
+jep-profile:rats:1#attestation
+jep-profile:blockchain-anchor:1#anchoring
+</sourcecode>
+      <t>A profile-specific check <bcp14>MUST NOT</bcp14> reuse the name of a JEP-Core check with a different meaning.</t>
+      <t>A verifier <bcp14>MUST NOT</bcp14> report an unperformed profile-specific check as <tt>pass</tt>.</t>
+      </section>
+    </section>
+    <section anchor="trust-profile-interface"><name>Trust Profile Interface</name>
+      <t>A trust profile defines how a verifier evaluates the relationship between the claimed actor, signing key, applicable algorithms, and historical trust evidence.</t>
+      <t>Where applicable, a trust profile <bcp14>MUST</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>profile identifier and version;</t></li>
+        <li><t>supported actor identifier forms;</t></li>
+        <li><t>key identifier syntax and discovery;</t></li>
+        <li><t>binding rules between <tt>who</tt> and signing keys;</t></li>
+        <li><t>accepted signature algorithms;</t></li>
+        <li><t>downgrade policy;</t></li>
+        <li><t>key rotation handling;</t></li>
+        <li><t>revocation handling;</t></li>
+        <li><t>historical key-validity rules;</t></li>
+        <li><t>credential or attestation dependencies;</t></li>
+        <li><t>audience requirements;</t></li>
+        <li><t>freshness requirements;</t></li>
+        <li><t>challenge-response requirements;</t></li>
+        <li><t>acceptance-domain rules;</t></li>
+        <li><t>policy-evaluation hooks;</t></li>
+        <li><t>required validation checks;</t></li>
+        <li><t>profile-specific checks;</t></li>
+        <li><t>failure mappings;</t></li>
+        <li><t>security considerations;</t></li>
+        <li><t>privacy considerations;</t></li>
+        <li><t>conformance requirements.</t></li>
+      </ul>
+      <t>A trust profile <bcp14>MUST</bcp14> distinguish cryptographic signature validity from actor/key binding.</t>
+      <t>A valid signature by a key does not establish <tt>actor_binding: pass</tt> unless the active trust profile establishes that the key is bound to the actor claimed by <tt>who</tt>.</t>
+    </section>
+    <section anchor="acceptance-freshness-and-replay-profiles"><name>Acceptance, Freshness, and Replay Profiles</name>
+      <section anchor="core-boundary"><name>Core Boundary</name>
+      <t>JEP-Core does not mandate a nonce, challenge, sequence number, counter, ledger, or transport mechanism.</t>
+      <t>JEP-Core requires idempotent acceptance: the same Event Identity <bcp14>MUST NOT</bcp14> apply the same acceptance effect more than once within one acceptance domain.</t>
+      <t>An acceptance profile <bcp14>MAY</bcp14> add stronger properties, including:</t>
+      <ul spacing="normal">
+        <li><t>current liveness;</t></li>
+        <li><t>server-issued challenge freshness;</t></li>
+        <li><t>request ordering;</t></li>
+        <li><t>bounded freshness windows;</t></li>
+        <li><t>single-use authority;</t></li>
+        <li><t>transaction uniqueness;</t></li>
+        <li><t>monotonic ordering;</t></li>
+        <li><t>ledger-backed consumption.</t></li>
+      </ul>
+      </section>
+      <section anchor="profile-defined-mechanisms"><name>Profile-Defined Mechanisms</name>
+      <t>An acceptance profile <bcp14>MAY</bcp14> require:</t>
+      <ul spacing="normal">
+        <li><t>receiver-issued nonce;</t></li>
+        <li><t>sender-generated nonce;</t></li>
+        <li><t>challenge-response;</t></li>
+        <li><t>sequence number;</t></li>
+        <li><t>transaction identifier;</t></li>
+        <li><t>trusted timestamp;</t></li>
+        <li><t>audience-bound token;</t></li>
+        <li><t>monotonic counter;</t></li>
+        <li><t>ledger position;</t></li>
+        <li><t>previous-event commitment.</t></li>
+      </ul>
+      <t>Such a mechanism <bcp14>SHOULD</bcp14> be carried in a registered JEP extension, a transport binding, or a profile-defined external object rather than added as a new JEP-Core top-level member.</t>
+      </section>
+      <section anchor="when-and-freshness"><name><tt>when</tt> and Freshness</name>
+      <t>The JEP <tt>when</tt> member is actor-declared event time. A profile <bcp14>MAY</bcp14> evaluate a freshness window using <tt>when</tt>, but <bcp14>MUST NOT</bcp14> present <tt>when</tt> alone as trusted wall-clock evidence.</t>
+      <t>If trusted time is required, the profile <bcp14>MUST</bcp14> define the external timestamp, receipt, archive, transparency, challenge, or other evidence that establishes the required property.</t>
+      </section>
+      <section anchor="audience"><name>Audience</name>
+      <t>A profile <bcp14>MAY</bcp14> require <tt>aud</tt>.</t>
+      <t>When <tt>aud</tt> is required, the profile <bcp14>MUST</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>acceptable audience syntax;</t></li>
+        <li><t>matching rules;</t></li>
+        <li><t>whether multiple audiences are supported;</t></li>
+        <li><t>whether audience is part of replay isolation;</t></li>
+        <li><t>failure behavior for absent or mismatched audience.</t></li>
+      </ul>
+      <t>The presence of <tt>aud</tt> does not by itself enforce access control.</t>
+      </section>
+      <section anchor="acceptance-result"><name>Acceptance Result</name>
+      <t>Profile-specific freshness, audience, challenge, or authorization checks are additional requirements for the requested acceptance context.</t>
+      <t>They do not replace the Core distinction among:</t>
+      <ul spacing="normal">
+        <li><t><tt>accepted</tt>;</t></li>
+        <li><t><tt>already_accepted</tt>;</t></li>
+        <li><t><tt>rejected</tt>;</t></li>
+        <li><t><tt>indeterminate</tt>.</t></li>
+      </ul>
+      <t>A valid retry of an already accepted Event Identity <bcp14>MUST NOT</bcp14> be transformed into a cryptographic failure merely because the profile also uses a nonce or challenge mechanism.</t>
+      <t>A profile that consumes a nonce, challenge, reservation, or similar single-use value <bcp14>SHOULD</bcp14> define how the consumed value is associated with Event Identity. After an Event Identity has been accepted, repeat delivery of the same signed event <bcp14>SHOULD</bcp14> be recognizable as <tt>already_accepted</tt> rather than treated as a new authority-consumption attempt. Reuse of the same profile-specific value with a different Event Identity <bcp14>MAY</bcp14> fail the relevant profile check.</t>
+      <t>A profile that defines single-use authority <bcp14>MUST</bcp14> distinguish consumption of that authority from Core idempotent acceptance of an event.</t>
+      </section>
+    </section>
+    <section anchor="did-verifiable-credential-profile-family"><name>DID / Verifiable Credential Profile Family</name>
+      <section anchor="did-verifiable-credential-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:did-vc:1
+</sourcecode>
+      </section>
+      <section anchor="did-verifiable-credential-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how JEP deployments may use Decentralized Identifiers <xref target="DID-CORE"/> and Verifiable Credentials <xref target="VC-DATA-MODEL"/> as identity or credential evidence.</t>
+      <t>DID and VC support remains optional for JEP-Core.</t>
+      <t>A concrete profile instance <bcp14>MUST</bcp14> identify the DID methods, credential formats, proof formats, status mechanisms, and trust rules it supports. The family identifier alone is not sufficient to make every DID method or credential format interoperable.</t>
+      </section>
+      <section anchor="did-actor-binding"><name>DID Actor Binding</name>
+      <t>When a DID is used as <tt>who</tt>, the concrete profile <bcp14>MUST</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>supported DID methods;</t></li>
+        <li><t>DID document resolution;</t></li>
+        <li><t>verification-method selection;</t></li>
+        <li><t>controller or equivalent binding rules;</t></li>
+        <li><t>historical key validation;</t></li>
+        <li><t>caching and freshness of DID resolution;</t></li>
+        <li><t>deactivation or revocation handling;</t></li>
+        <li><t>failure behavior.</t></li>
+      </ul>
+      <t><tt>actor_binding</tt> <bcp14>MAY</bcp14> be reported <tt>pass</tt> only when the active profile has bound the verified signing key to the claimed <tt>who</tt>.</t>
+      </section>
+      <section anchor="credential-use"><name>Credential Use</name>
+      <t>A JEP event <bcp14>MAY</bcp14> reference credential evidence by digest, URI, presentation reference, archival reference, or another profile-defined reference.</t>
+      <t>Credential evidence <bcp14>MAY</bcp14> support claims about role, affiliation, qualification, authorization scope, certification, or other attributes.</t>
+      <t>Credential validity is separate from JEP-Core event validity. A valid credential does not make the substantive JEP claim true, and a valid JEP event does not make a credential claim true.</t>
+      <t>A concrete DID/VC profile <bcp14>SHOULD</bcp14> expose credential evaluation using a profile-specific check such as:</t>
+      <sourcecode type="text">
+jep-profile:did-vc:1#credential_status
+</sourcecode>
+      <t>If a credential is required only for policy rather than actor/key binding, its result <bcp14>MUST NOT</bcp14> be reported as <tt>actor_binding</tt>.</t>
+      </section>
+      <section anchor="privacy"><name>Privacy</name>
+      <t>DID resolution and credential presentation can create correlation and disclosure risks. Profiles <bcp14>SHOULD</bcp14> minimize identifiers and claims, avoid unnecessary credential embedding, and define selective-disclosure or access-controlled evidence mechanisms where appropriate.</t>
+      </section>
+    </section>
+    <section anchor="x-509-pki-profile-family"><name>X.509 / PKI Profile Family</name>
+      <section anchor="x-509-pki-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:x509:1
+</sourcecode>
+      </section>
+      <section anchor="x-509-pki-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how X.509 certificates and Internet PKI concepts <xref target="RFC5280"/> may be used to bind a claimed JEP actor to a signing key.</t>
+      <t>A concrete profile <bcp14>MUST</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>certification-path validation rules;</t></li>
+        <li><t>trust anchors;</t></li>
+        <li><t>name-to-actor mapping;</t></li>
+        <li><t>key-usage and extended-key-usage requirements;</t></li>
+        <li><t>certificate-status or revocation processing;</t></li>
+        <li><t>certificate validity for real-time and archival validation;</t></li>
+        <li><t>algorithm policy;</t></li>
+        <li><t>historical validation behavior.</t></li>
+      </ul>
+      <t>A certificate path that validates cryptographically does not by itself establish <tt>actor_binding: pass</tt>. The profile's name-to-actor mapping <bcp14>MUST</bcp14> also succeed.</t>
+      <t>Domain, regulatory, organizational, or legal conclusions remain policy results rather than intrinsic properties of X.509 or JEP-Core.</t>
+      </section>
+    </section>
+    <section anchor="oauth-openid-connect-authorization-context-profile-family"><name>OAuth / OpenID Connect Authorization Context Profile Family</name>
+      <section anchor="oauth-openid-connect-authorization-context-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:oauth-oidc:1
+</sourcecode>
+      </section>
+      <section anchor="oauth-openid-connect-authorization-context-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how OAuth 2.0 <xref target="RFC6749"/> or OpenID Connect <xref target="OIDC-CORE"/> context may be referenced when validating a JEP event.</t>
+      <t>Such evidence <bcp14>MAY</bcp14> describe:</t>
+      <ul spacing="normal">
+        <li><t>authorization context;</t></li>
+        <li><t>client identity;</t></li>
+        <li><t>resource server;</t></li>
+        <li><t>subject;</t></li>
+        <li><t>consent or grant context;</t></li>
+        <li><t>token audience;</t></li>
+        <li><t>token-binding or proof-of-possession evidence.</t></li>
+      </ul>
+      <t>A concrete profile <bcp14>MUST</bcp14> define the token or assertion format, issuer trust, audience rules, lifetime rules, status or revocation behavior where applicable, and binding between the authorization artifact and the JEP event.</t>
+      <t>An OAuth or OpenID Connect artifact does not by itself prove that an external action was authorized, lawful, completed, or policy-compliant.</t>
+      <t>Unless the profile explicitly uses the artifact to bind the JEP signing key to <tt>who</tt>, authorization-context validation <bcp14>MUST NOT</bcp14> be reported as <tt>actor_binding</tt>.</t>
+      <t>A profile <bcp14>MAY</bcp14> define a profile-specific check such as:</t>
+      <sourcecode type="text">
+jep-profile:oauth-oidc:1#authorization_context
+</sourcecode>
+      </section>
+    </section>
+    <section anchor="rats-attestation-profile-family"><name>RATS / Attestation Profile Family</name>
+      <section anchor="rats-attestation-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:rats:1
+</sourcecode>
+      </section>
+      <section anchor="rats-attestation-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how remote-attestation evidence, including evidence modeled using the RATS architecture <xref target="RFC9334"/>, may be used in JEP validation.</t>
+      <t>Attestation evidence <bcp14>MAY</bcp14> support claims about:</t>
+      <ul spacing="normal">
+        <li><t>runtime environment;</t></li>
+        <li><t>device identity;</t></li>
+        <li><t>secure enclave or trusted execution context;</t></li>
+        <li><t>software measurement;</t></li>
+        <li><t>model execution environment;</t></li>
+        <li><t>tool invocation environment.</t></li>
+      </ul>
+      <t>A concrete profile <bcp14>MUST</bcp14> define evidence format, appraisal policy, verifier trust, freshness, reference values, endorsement handling, and binding between the attested environment and the relevant JEP actor, signer, or event.</t>
+      <t>The profile <bcp14>SHOULD</bcp14> report attestation evaluation through a profile-specific check such as:</t>
+      <sourcecode type="text">
+jep-profile:rats:1#attestation
+</sourcecode>
+      <t>Attestation does not establish the substantive correctness of a judgment.</t>
+      </section>
+    </section>
+    <section anchor="local-iam-profile-family"><name>Local IAM Profile Family</name>
+      <section anchor="local-iam-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:local-iam:1
+</sourcecode>
+      </section>
+      <section anchor="local-iam-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how an enterprise or local identity and access-management system may bind local actor identifiers to signing keys.</t>
+      <t>A concrete profile <bcp14>MUST</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>actor namespace;</t></li>
+        <li><t>key registry or key-discovery mechanism;</t></li>
+        <li><t>actor/key binding;</t></li>
+        <li><t>role and group interpretation where used;</t></li>
+        <li><t>revocation;</t></li>
+        <li><t>historical validation;</t></li>
+        <li><t>algorithm policy;</t></li>
+        <li><t>audit export behavior;</t></li>
+        <li><t>acceptance-domain boundaries where applicable.</t></li>
+      </ul>
+      <t>Local authorization or role membership is not automatically a portable or global authorization conclusion.</t>
+      </section>
+    </section>
+    <section anchor="hjs-archive-and-privacy-profile-family"><name>HJS Archive and Privacy Profile Family</name>
+      <section anchor="hjs-archive-and-privacy-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:hjs-archive:1
+</sourcecode>
+      </section>
+      <section anchor="hjs-archive-and-privacy-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how HJS-like systems may receive, store, archive, redact, selectively disclose, and preserve JEP events and evidence.</t>
+      <t>An archival profile <bcp14>MAY</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>receipt records;</t></li>
+        <li><t>receipt time;</t></li>
+        <li><t>archive time;</t></li>
+        <li><t>evidence custody;</t></li>
+        <li><t>retention policy;</t></li>
+        <li><t>redaction policy;</t></li>
+        <li><t>selective disclosure;</t></li>
+        <li><t>long-term verification context.</t></li>
+      </ul>
+      <t>HJS-like systems <bcp14>MUST NOT</bcp14> redefine JEP-Core Event Identity, Event Hash, signature semantics, J/D/T/V semantics, or validation-check meanings.</t>
+      </section>
+      <section anchor="event-identity-and-artifact-binding"><name>Event Identity and Artifact Binding</name>
+      <t>An archive receipt that identifies the logical event <bcp14>SHOULD</bcp14> record Event Identity.</t>
+      <t>An archive receipt that asserts custody or preservation of an exact signed artifact <bcp14>SHOULD</bcp14> additionally bind the Event Hash.</t>
+      <t>Thus:</t>
+      <sourcecode type="text">
+Event Identity -&gt; which JEP event
+Event Hash     -&gt; which exact signed artifact was archived
+</sourcecode>
+      <t>An archive <bcp14>MUST NOT</bcp14> silently replace one with the other.</t>
+      </section>
+      <section anchor="time-and-evidence-boundary"><name>Time and Evidence Boundary</name>
+      <t>Receipt time and archive time are distinct from JEP <tt>when</tt>.</t>
+      <t>An archival profile <bcp14>MAY</bcp14> provide stronger external time evidence, but that evidence <bcp14>MUST</bcp14> be described according to the mechanism actually used.</t>
+      <t>Receipt presence alone does not establish substantive truth, legal effect, complete logging, or actor authority.</t>
+      <t>A profile <bcp14>MAY</bcp14> expose archival evaluation through a profile-specific check such as:</t>
+      <sourcecode type="text">
+jep-profile:hjs-archive:1#archival_integrity
+</sourcecode>
+      </section>
+    </section>
+    <section anchor="jac-chain-profile-family"><name>JAC Chain Profile Family</name>
+      <section anchor="jac-chain-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:jac-chain:1
+</sourcecode>
+      </section>
+      <section anchor="jac-chain-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how JAC-like systems may compose JEP events into dependency, delegation, termination, verification, causality, responsibility, or workflow graphs.</t>
+      <t>JEP-Core defines atomic signed statements. Chain interpretation belongs to the chain profile.</t>
+      <t>A JAC-like profile <bcp14>MUST NOT</bcp14> redefine:</t>
+      <ul spacing="normal">
+        <li><t>JEP Event Identity;</t></li>
+        <li><t>JEP Event Hash;</t></li>
+        <li><t>JEP J/D/T/V semantics;</t></li>
+        <li><t>JEP signing semantics;</t></li>
+        <li><t>Core validation checks.</t></li>
+      </ul>
+      </section>
+      <section anchor="references"><name>References</name>
+      <t>A chain edge referring to a logical JEP event <bcp14>SHOULD</bcp14> use Event Identity.</t>
+      <t>A chain profile <bcp14>MAY</bcp14> additionally pin an Event Hash when the exact signed representation matters.</t>
+      <t>A JEP reference does not by itself prove causality, endorsement, authorization, completeness, or responsibility.</t>
+      </section>
+      <section anchor="chain-result"><name>Chain Result</name>
+      <t>A chain result <bcp14>SHOULD</bcp14> expose <tt>chain_integrity</tt> separately from JEP-Core validity.</t>
+      <t>A concrete chain profile <bcp14>MUST</bcp14> define, where applicable:</t>
+      <ul spacing="normal">
+        <li><t>edge types;</t></li>
+        <li><t>resolution rules;</t></li>
+        <li><t>observed-log assumptions;</t></li>
+        <li><t>complete-log assumptions;</t></li>
+        <li><t>cycle handling;</t></li>
+        <li><t>delegation-scope interpretation;</t></li>
+        <li><t>termination-cascade interpretation;</t></li>
+        <li><t>verification-path interpretation;</t></li>
+        <li><t>causal interpretation;</t></li>
+        <li><t>failure behavior.</t></li>
+      </ul>
+      <t>Legal, moral, regulatory, or organizational responsibility remains a policy determination unless an explicitly selected policy profile defines the required evidence and rules.</t>
+      </section>
+    </section>
+    <section anchor="blockchain-or-transparency-anchoring-profile-family"><name>Blockchain or Transparency Anchoring Profile Family</name>
+      <section anchor="blockchain-or-transparency-anchoring-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:blockchain-anchor:1
+</sourcecode>
+      </section>
+      <section anchor="blockchain-or-transparency-anchoring-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines how an exact JEP signed artifact may be anchored in a distributed ledger, transparency log, timestamp service, or similar external system.</t>
+      <t>Because anchoring ordinarily commits to exact bytes, the object anchored <bcp14>SHOULD</bcp14> be the Event Hash or another profile-defined digest of the exact signed artifact, not Event Identity alone.</t>
+      <t>A concrete profile <bcp14>MUST</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>anchoring system;</t></li>
+        <li><t>digest algorithm;</t></li>
+        <li><t>inclusion or commitment proof;</t></li>
+        <li><t>confirmation or finality rule, where applicable;</t></li>
+        <li><t>timestamp semantics, if any;</t></li>
+        <li><t>verifier procedure;</t></li>
+        <li><t>historical-verification behavior;</t></li>
+        <li><t>failure behavior.</t></li>
+      </ul>
+      <t>A profile <bcp14>MAY</bcp14> expose this through a profile-specific check such as:</t>
+      <sourcecode type="text">
+jep-profile:blockchain-anchor:1#anchoring
+</sourcecode>
+      <t>Anchoring may support existence, ordering, timestamp, or non-equivocation evidence according to the selected system. It does not prove that the JEP claim is true, authorized, lawful, complete, or externally effective.</t>
+      </section>
+    </section>
+    <section anchor="ai-actor-profile-family"><name>AI Actor Profile Family</name>
+      <section anchor="ai-actor-profile-family-identifier"><name>Identifier</name>
+      <sourcecode type="text">
+jep-profile:ai-actor:1
+</sourcecode>
+      </section>
+      <section anchor="ai-actor-profile-family-scope"><name>Scope</name>
+      <t>This optional profile family defines actor-identifier and binding conventions for AI-native actors, including:</t>
+      <ul spacing="normal">
+        <li><t>model actors;</t></li>
+        <li><t>agent actors;</t></li>
+        <li><t>tool actors;</t></li>
+        <li><t>service actors;</t></li>
+        <li><t>workflow actors;</t></li>
+        <li><t>session actors;</t></li>
+        <li><t>human-agent composites;</t></li>
+        <li><t>organization-agent composites.</t></li>
+      </ul>
+      <t>A concrete profile <bcp14>MUST</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>actor identifier syntax;</t></li>
+        <li><t>actor lifecycle;</t></li>
+        <li><t>signing-key ownership, control, or attestation model;</t></li>
+        <li><t>session or deployment binding where relevant;</t></li>
+        <li><t>key rotation and revocation;</t></li>
+        <li><t>historical validation;</t></li>
+        <li><t>algorithm policy.</t></li>
+      </ul>
+      <t>An AI actor identifier does not prove internal model state, intent, understanding, sentience, competence, correctness, or factual truth.</t>
+      <t>Where an AI actor is operated on behalf of another principal, the profile <bcp14>MUST NOT</bcp14> infer delegated authority merely from operator, deployment, or model identity. Delegated authority requires the applicable delegation, authorization, or mandate evidence.</t>
+      </section>
+    </section>
+    <section anchor="profile-registration-template"><name>Profile Registration Template</name>
+      <t>A profile specification or registration <bcp14>SHOULD</bcp14> define:</t>
+      <ul spacing="normal">
+        <li><t>profile identifier;</t></li>
+        <li><t>profile name;</t></li>
+        <li><t>profile version;</t></li>
+        <li><t>profile category or categories;</t></li>
+        <li><t>description;</t></li>
+        <li><t>supported JEP-Core release;</t></li>
+        <li><t>compatible wire major;</t></li>
+        <li><t>applicable validation modes;</t></li>
+        <li><t>required JEP-Core checks;</t></li>
+        <li><t>optional JEP-Core checks;</t></li>
+        <li><t>profile-specific check identifiers;</t></li>
+        <li><t>actor identifier forms;</t></li>
+        <li><t>key resolution and actor-binding rules;</t></li>
+        <li><t>credential or attestation dependencies;</t></li>
+        <li><t>whether the profile imposes an algorithm policy and, if so, its algorithm and downgrade rules;</t></li>
+        <li><t>audience requirements;</t></li>
+        <li><t>freshness requirements;</t></li>
+        <li><t>challenge or replay-related mechanisms;</t></li>
+        <li><t>acceptance-domain rules;</t></li>
+        <li><t>extension identifiers and whether they may be critical;</t></li>
+        <li><t>logical-reference rules;</t></li>
+        <li><t>exact-artifact pinning rules;</t></li>
+        <li><t>failure codes and status mapping;</t></li>
+        <li><t>dependencies on other profiles;</t></li>
+        <li><t>profile-composition rules;</t></li>
+        <li><t>historical-validation rules;</t></li>
+        <li><t>security considerations;</t></li>
+        <li><t>privacy considerations;</t></li>
+        <li><t>change controller;</t></li>
+        <li><t>test vectors or reference implementation, if available.</t></li>
+      </ul>
+      <t>A registration <bcp14>MUST</bcp14> identify which requirements are intrinsic to the profile and which are deployment choices.</t>
+      <t>A registration <bcp14>MUST NOT</bcp14> claim JEP-Core semantics for a profile-specific check.</t>
+    </section>
+    <section anchor="security-considerations"><name>Security Considerations</name>
+      <t>Profiles expand the trust and interpretation surface around JEP-Core.</t>
+      <t>A malicious, ambiguous, or poorly specified profile can cause:</t>
+      <ul spacing="normal">
+        <li><t>actor misbinding;</t></li>
+        <li><t>key-substitution attacks;</t></li>
+        <li><t>algorithm downgrade;</t></li>
+        <li><t>stale credential acceptance;</t></li>
+        <li><t>replay or challenge confusion;</t></li>
+        <li><t>audience confusion;</t></li>
+        <li><t>authorization overclaim;</t></li>
+        <li><t>attestation overclaim;</t></li>
+        <li><t>chain overinterpretation;</t></li>
+        <li><t>archival substitution;</t></li>
+        <li><t>false policy conclusions;</t></li>
+        <li><t>excessive disclosure.</t></li>
+      </ul>
+      <t>Profile selection <bcp14>MUST</bcp14> be explicit. Silent profile inference can cause a verifier to apply unintended trust or acceptance semantics.</t>
+      <t>Profile composition <bcp14>MUST</bcp14> be analyzed for conflicts and downgrade paths.</t>
+      <t>A profile that uses external resolvers, credential issuers, certificate authorities, authorization servers, attestation verifiers, archives, transparency services, or ledgers <bcp14>MUST</bcp14> define the trust and failure assumptions for those dependencies.</t>
+      <t>Profiles <bcp14>MUST</bcp14> preserve the distinction between signature validity, actor-binding validity, acceptance eligibility, chain interpretation, policy outcome, and substantive external truth.</t>
+    </section>
+    <section anchor="privacy-considerations"><name>Privacy Considerations</name>
+      <t>Profiles can introduce identifiers, credentials, roles, organizational relationships, token metadata, device measurements, execution metadata, location information, archive links, and chain relationships.</t>
+      <t>Profiles <bcp14>SHOULD</bcp14> apply data minimization and <bcp14>SHOULD</bcp14> avoid embedding sensitive evidence when a digest, controlled reference, selective-disclosure mechanism, or access-controlled evidence store is sufficient.</t>
+      <t>Stable actor identifiers, Event IDs, Event Hashes, credential identifiers, and archival references can create cross-context correlation.</t>
+      <t>A profile <bcp14>SHOULD</bcp14> state:</t>
+      <ul spacing="normal">
+        <li><t>which data is disclosed;</t></li>
+        <li><t>to whom it is disclosed;</t></li>
+        <li><t>how long it is retained;</t></li>
+        <li><t>whether correlation across audiences is expected;</t></li>
+        <li><t>whether selective disclosure or redaction is available;</t></li>
+        <li><t>whether digest references enable confirmation or dictionary attacks.</t></li>
+      </ul>
+    </section>
+    <section anchor="iana-and-registry-considerations"><name>IANA and Registry Considerations</name>
+      <t>This document requests no IANA actions.</t>
+      <t>A future standards-track revision may request registries for:</t>
+      <ul spacing="normal">
+        <li><t>JEP profile identifiers;</t></li>
+        <li><t>profile categories;</t></li>
+        <li><t>profile-specific validation-check identifiers;</t></li>
+        <li><t>profile-specific failure codes;</t></li>
+        <li><t>profile-specific verification scopes;</t></li>
+        <li><t>registered extension identifiers associated with profiles.</t></li>
+      </ul>
+      <t>Until such registries exist, profile identifiers <bcp14>SHOULD</bcp14> be collision-resistant and specifications <bcp14>SHOULD</bcp14> identify a change controller. The identifiers defined by this document remain provisional and <bcp14>MUST NOT</bcp14> be represented as IANA-registered values.</t>
+    </section>
+    <section anchor="initial-jep-core-0-7-profile-families"><name>Initial JEP-Core 0.7 Profile Families</name>
+      <table>
+        <thead><tr>
+          <th>Profile family</th>
+          <th>Identifier</th>
+          <th>Primary ownership</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>DID / VC</td>
+            <td><tt>jep-profile:did-vc:1</tt></td>
+            <td>identity / credential</td>
+          </tr>
+          <tr>
+            <td>X.509 / PKI</td>
+            <td><tt>jep-profile:x509:1</tt></td>
+            <td>trust / actor binding</td>
+          </tr>
+          <tr>
+            <td>OAuth / OIDC</td>
+            <td><tt>jep-profile:oauth-oidc:1</tt></td>
+            <td>authorization context</td>
+          </tr>
+          <tr>
+            <td>RATS</td>
+            <td><tt>jep-profile:rats:1</tt></td>
+            <td>attestation</td>
+          </tr>
+          <tr>
+            <td>Local IAM</td>
+            <td><tt>jep-profile:local-iam:1</tt></td>
+            <td>local trust / actor binding</td>
+          </tr>
+          <tr>
+            <td>HJS Archive</td>
+            <td><tt>jep-profile:hjs-archive:1</tt></td>
+            <td>archival / privacy</td>
+          </tr>
+          <tr>
+            <td>JAC Chain</td>
+            <td><tt>jep-profile:jac-chain:1</tt></td>
+            <td>chain interpretation</td>
+          </tr>
+          <tr>
+            <td>Blockchain / Transparency Anchor</td>
+            <td><tt>jep-profile:blockchain-anchor:1</tt></td>
+            <td>exact-artifact anchoring</td>
+          </tr>
+          <tr>
+            <td>AI Actor</td>
+            <td><tt>jep-profile:ai-actor:1</tt></td>
+            <td>AI actor identity / binding</td>
+          </tr>
+        </tbody>
+      </table>
+      <t>These profile-family sections define interoperability boundaries and minimum requirements. A deployment that requires additional method-specific, credential-specific, issuer-specific, ledger-specific, or policy-specific choices <bcp14>SHOULD</bcp14> publish a more specific profile identifier.</t>
+    </section>
+    <section anchor="changes-from-00"><name>Changes from -00</name>
+      <t>Major changes from <tt>draft-wang-jep-profiles-00</tt>:</t>
+      <ul spacing="normal">
+        <li><t>aligned the companion Core reference with JEP-Core 0.7;</t></li>
+        <li><t>aligned conformance references with <tt>draft-wang-jep-conformance-01</tt>;</t></li>
+        <li><t>replaced validation-level impact with independent validation-check requirements;</t></li>
+        <li><t>added explicit profile categories;</t></li>
+        <li><t>required explicit profile selection and prohibited silent profile inference;</t></li>
+        <li><t>clarified that an explicitly configured or published deterministic deployment mapping counts as explicit profile selection;</t></li>
+        <li><t>clarified that generic profiles only define algorithm policy when they actually impose one;</t></li>
+        <li><t>marked the <tt>:1</tt> profile-family identifiers as provisional and not IANA-registered;</t></li>
+        <li><t>added profile versioning and composition rules;</t></li>
+        <li><t>added conflict and downgrade handling for composed profiles;</t></li>
+        <li><t>added profile-specific check identifiers;</t></li>
+        <li><t>added the acceptance/freshness/replay profile model;</t></li>
+        <li><t>moved nonce, challenge, counter, sequence, ledger, and similar mechanisms explicitly outside JEP-Core;</t></li>
+        <li><t>clarified that <tt>when</tt> is declared event time rather than trusted time;</t></li>
+        <li><t>clarified that profiles may require <tt>aud</tt> without making it a Core requirement;</t></li>
+        <li><t>preserved Core idempotent acceptance independently of profile replay mechanisms;</t></li>
+        <li><t>separated Event Identity from exact signed-artifact Event Hash across HJS, JAC, and anchoring profiles;</t></li>
+        <li><t>mapped identity profiles to <tt>actor_binding</tt> rather than Validation Level 2;</t></li>
+        <li><t>mapped chain profiles to <tt>chain_integrity</tt> rather than Validation Level 3;</t></li>
+        <li><t>kept policy conclusions separate rather than Validation Level 4;</t></li>
+        <li><t>versioned the initial profile-family identifiers from <tt>:0</tt> to <tt>:1</tt> to avoid semantic aliasing between the 0.6 and 0.7 profile contracts;</t></li>
+        <li><t>expanded the profile registration template;</t></li>
+        <li><t>changed IANA language to request no actions in this Experimental revision.</t></li>
+      </ul>
+    </section>
+    <section anchor="author-s-address"><name>Author's Address</name>
+      <t>Yuqiang Wang Email: signal@humanjudgment.org URI: https://github.com/hjs-spec</t>
+    </section>
+  </middle>
+  <back>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <reference anchor="JEP">
+          <front><title>Judgment Event Protocol (JEP)</title><author initials="Y." surname="Wang" fullname="Yuqiang Wang"/><date year="2026" month="September" day="26"/></front>
+          <seriesInfo name="Internet-Draft" value="draft-wang-jep-judgment-event-protocol-07"/>
+        </reference>
+        <reference anchor="JEP-CONFORMANCE">
+          <front><title>JEP Conformance and Test Suite</title><author initials="Y." surname="Wang" fullname="Yuqiang Wang"/><date year="2026" month="September" day="26"/></front>
+          <seriesInfo name="Internet-Draft" value="draft-wang-jep-conformance-01"/>
+        </reference>
+        <reference anchor="RFC2119">
+          <front><title>Key words for use in RFCs to Indicate Requirement Levels</title><author initials="S." surname="Bradner"/><date year="1997" month="March"/></front>
+          <seriesInfo name="BCP" value="14"/><seriesInfo name="RFC" value="2119"/>
+        </reference>
+        <reference anchor="RFC8174">
+          <front><title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title><author initials="B." surname="Leiba"/><date year="2017" month="May"/></front>
+          <seriesInfo name="BCP" value="14"/><seriesInfo name="RFC" value="8174"/>
+        </reference>
+      </references>
+      <references>
+        <name>Informative References</name>
+        <reference anchor="RFC5280">
+          <front><title>Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</title><author initials="D." surname="Cooper"/><date year="2008" month="May"/></front>
+          <seriesInfo name="RFC" value="5280"/>
+        </reference>
+        <reference anchor="RFC6749">
+          <front><title>The OAuth 2.0 Authorization Framework</title><author initials="D." surname="Hardt"/><date year="2012" month="October"/></front>
+          <seriesInfo name="RFC" value="6749"/>
+        </reference>
+        <reference anchor="RFC9334">
+          <front><title>Remote ATtestation procedureS (RATS) Architecture</title><author initials="H." surname="Birkholz"/><date year="2023" month="January"/></front>
+          <seriesInfo name="RFC" value="9334"/>
+        </reference>
+        <reference anchor="DID-CORE" target="https://www.w3.org/TR/did-core/">
+          <front><title>Decentralized Identifiers (DIDs) v1.0</title><author><organization>W3C</organization></author><date year="2022" month="July" day="19"/></front>
+        </reference>
+        <reference anchor="VC-DATA-MODEL" target="https://www.w3.org/TR/vc-data-model-2.0/">
+          <front><title>Verifiable Credentials Data Model v2.0</title><author><organization>W3C</organization></author><date year="2025" month="May" day="15"/></front>
+        </reference>
+        <reference anchor="OIDC-CORE" target="https://openid.net/specs/openid-connect-core-1_0.html">
+          <front><title>OpenID Connect Core 1.0</title><author><organization>OpenID Foundation</organization></author><date year="2014" month="February" day="25"/></front>
+        </reference>
+      </references>
+    </references>
+  </back>
+</rfc>

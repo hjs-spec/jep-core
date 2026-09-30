@@ -1,0 +1,54 @@
+name: Interoperability result
+description: Submit a reproducible Core 0.7 report, including failures or partial results.
+title: "Interop: "
+body:
+  - type: input
+    id: implementation
+    attributes:
+      label: Implementation version and exact source revision
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Core version, roles, modes, signature class and profiles
+      description: Also disclose reused JEP components and whether this is an independent implementation or wrapper.
+    validations:
+      required: true
+  - type: textarea
+    id: suite
+    attributes:
+      label: Suite name, version and SHA-256 digest
+      description: Copy conformance_suite from the generated report. Counts alone are not comparable.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Report artifact and reproduction command
+      description: Attach the JSON report or link a stable artifact; name the adapter/probe revision and local prerequisites. Never include credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Failures, unsupported operations, untested areas and effect scope
+      description: For acceptance, explain how the probe observes committed effects. Do not infer effects from returned booleans.
+    validations:
+      required: true
+  - type: dropdown
+    id: verification
+    attributes:
+      label: Evidence status
+      options:
+        - Self-reported
+        - Reproduced by another party (identify them in the evidence)
+    validations:
+      required: true
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Public disclosure
+      options:
+        - label: This report uses synthetic data, contains no secrets, and does not claim certification or untested capabilities.
+          required: true

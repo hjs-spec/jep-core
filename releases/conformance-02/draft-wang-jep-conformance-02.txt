@@ -1,0 +1,2240 @@
+
+
+
+
+Network Working Group                                            Y. Wang
+Internet-Draft                                         30 September 2026
+Intended status: Experimental                                           
+Expires: 3 April 2027
+
+
+                     JEP Conformance and Test Suite
+                     draft-wang-jep-conformance-02
+
+Abstract
+
+   This document defines conformance classes, validation-result
+   structure, schema requirements, test-vector categories, conformance
+   assertions, reference-validator behavior, implementation disclosure,
+   and interoperability testing guidance for the Judgment Event Protocol
+   (JEP).  It is a companion to JEP-Core 0.7.
+
+   This document does not redefine JEP-Core semantics.  Its purpose is
+   to make JEP-Core 0.7 implementations testable and interoperable
+   across languages, platforms, trust profiles, and deployment
+   environments.  Conformance artifacts described by this document are
+   derived from applicable normative specifications; tests, schemas,
+   examples, and reference implementations do not independently create
+   JEP-Core semantics.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 3 April 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+
+Wang                      Expires 3 April 2027                  [Page 1]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Normative Precedence and Derived Artifacts  . . . . . . .   3
+   2.  Requirements Language . . . . . . . . . . . . . . . . . . . .   4
+   3.  Conformance Model . . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Independent Checks  . . . . . . . . . . . . . . . . . . .   4
+     3.2.  Overall Status  . . . . . . . . . . . . . . . . . . . . .   5
+     3.3.  Validation Modes  . . . . . . . . . . . . . . . . . . . .   6
+   4.  Conformance Classes . . . . . . . . . . . . . . . . . . . . .   7
+     4.1.  JEP-Core-0.7 Producer . . . . . . . . . . . . . . . . . .   7
+     4.2.  JEP-Core-0.7 Verifier . . . . . . . . . . . . . . . . . .   7
+     4.3.  JEP-Core-0.7 Acceptance Processor . . . . . . . . . . . .   8
+     4.4.  JEP-Extension-0.7 Processor . . . . . . . . . . . . . . .   8
+     4.5.  JEP-Baseline-Ed25519-JWS-JCS-0.7  . . . . . . . . . . . .   9
+     4.6.  Profile-Specific Conformance  . . . . . . . . . . . . . .  11
+     4.7.  Historical Decoder Capability . . . . . . . . . . . . . .  12
+   5.  Validation Result Object  . . . . . . . . . . . . . . . . . .  12
+     5.1.  Valid Archival Example  . . . . . . . . . . . . . . . . .  12
+     5.2.  Safe Retry Example  . . . . . . . . . . . . . . . . . . .  12
+     5.3.  Signature Failure Example . . . . . . . . . . . . . . . .  13
+     5.4.  Result Requirements . . . . . . . . . . . . . . . . . . .  14
+     5.5.  Acceptance Outcome Consistency  . . . . . . . . . . . . .  15
+   6.  JSON Schema Requirements  . . . . . . . . . . . . . . . . . .  16
+     6.1.  Minimal Event Schema Seed . . . . . . . . . . . . . . . .  16
+     6.2.  Typed JEP Event Reference Seed  . . . . . . . . . . . . .  20
+   7.  Reference Validation Flow . . . . . . . . . . . . . . . . . .  20
+   8.  Test Vector Categories  . . . . . . . . . . . . . . . . . . .  21
+     8.1.  Valid Core Event Vectors  . . . . . . . . . . . . . . . .  21
+     8.2.  Syntax and Core-Field Vectors . . . . . . . . . . . . . .  22
+     8.3.  Cryptographic Vectors . . . . . . . . . . . . . . . . . .  22
+     8.4.  Event Identity and Delivery Vectors . . . . . . . . . . .  23
+     8.5.  Acceptance Vectors  . . . . . . . . . . . . . . . . . . .  25
+     8.6.  Reference Vectors . . . . . . . . . . . . . . . . . . . .  25
+     8.7.  Extension Vectors . . . . . . . . . . . . . . . . . . . .  26
+     8.8.  Canonicalization and Hash Vectors . . . . . . . . . . . .  26
+     8.9.  Companion and External Check Vectors  . . . . . . . . . .  27
+     8.10. Historical Compatibility Vectors  . . . . . . . . . . . .  27
+     8.11. Profile Selection and Downgrade Vectors . . . . . . . . .  27
+
+
+
+Wang                      Expires 3 April 2027                  [Page 2]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   9.  Seed J/D/T/V Event Shapes . . . . . . . . . . . . . . . . . .  28
+     9.1.  J-basic . . . . . . . . . . . . . . . . . . . . . . . . .  28
+     9.2.  D-basic . . . . . . . . . . . . . . . . . . . . . . . . .  28
+     9.3.  T-basic . . . . . . . . . . . . . . . . . . . . . . . . .  29
+     9.4.  V-basic . . . . . . . . . . . . . . . . . . . . . . . . .  29
+   10. Conformance Test Assertions . . . . . . . . . . . . . . . . .  30
+     10.1.  Normative Coverage . . . . . . . . . . . . . . . . . . .  33
+     10.2.  Assertion Stability  . . . . . . . . . . . . . . . . . .  33
+   11. Reference CLI Behavior  . . . . . . . . . . . . . . . . . . .  34
+   12. Implementation Disclosure and Interoperability Reports  . . .  34
+   13. Security Considerations . . . . . . . . . . . . . . . . . . .  36
+   14. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  37
+   15. Versioning and Historical Compatibility . . . . . . . . . . .  37
+   16. Changes from -01  . . . . . . . . . . . . . . . . . . . . . .  38
+   17. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  39
+   18. Normative References  . . . . . . . . . . . . . . . . . . . .  39
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  40
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  40
+
+1.  Introduction
+
+   JEP-Core [JEP] defines the signed event object, J/D/T/V event
+   semantics, stable Event Identity, Event Hash semantics, validation
+   modes, independent validation checks, extension processing, and
+   idempotent acceptance requirements.
+
+   This document defines how implementations demonstrate conformance to
+   those requirements.  It retains the independent-check conformance
+   model introduced for JEP-Core 0.7 and makes the relationship between
+   normative specifications, executable assertions, test artifacts, and
+   reference implementations explicit.
+
+   Conformance does not mean that an implementation has made a legal,
+   policy, factual, authorization, causal, or external-target
+   determination.  It means that the implementation processes JEP events
+   according to the declared JEP-Core version, validation mode,
+   conformance class, explicitly active profiles, and applicable
+   normative requirements.
+
+   Where this document and JEP-Core conflict, JEP-Core controls.
+
+1.1.  Normative Precedence and Derived Artifacts
+
+   JEP-Core is the normative source for JEP-Core semantics.  This
+   document defines conformance structures and testing conventions for
+   evaluating those semantics; it does not independently redefine JEP-
+   Core.
+
+
+
+
+Wang                      Expires 3 April 2027                  [Page 3]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   Schemas, conformance assertions, test vectors, executable test
+   suites, examples, reference implementations, command-line tools,
+   generated reports, and interoperability reports are derived
+   artifacts.
+
+   A derived artifact MUST NOT introduce a JEP-Core normative
+   requirement that is absent from the applicable normative
+   specification.  A derived artifact MAY encode, exercise, or
+   operationalize an existing normative requirement.
+
+   A test assertion SHOULD identify the normative specification source
+   from which its expected behavior is derived.
+
+   A reference implementation MUST NOT be treated as an independent
+   source of JEP-Core semantics.  Where a derived artifact conflicts
+   with the applicable normative specification, the normative
+   specification controls.
+
+   Implementation behavior, even when shared by multiple
+   implementations, does not by itself create a new JEP-Core
+   requirement.  Profile-specific behavior is normative only within the
+   explicitly selected profile or profile composition that defines that
+   behavior.
+
+2.  Requirements Language
+
+   The key words MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD,
+   SHOULD NOT, RECOMMENDED, NOT RECOMMENDED, MAY, and OPTIONAL in this
+   document are to be interpreted as described in BCP 14 [RFC2119]
+   [RFC8174] when, and only when, they appear in all capitals, as shown
+   here.
+
+3.  Conformance Model
+
+3.1.  Independent Checks
+
+   JEP-Core 0.7 does not define cumulative validation levels.  A
+   conforming validator reports independent checks.
+
+   Core-defined checks are:
+
+   *  syntax
+
+   *  cryptographic
+
+   *  event_identity
+
+   *  reference_integrity
+
+
+
+Wang                      Expires 3 April 2027                  [Page 4]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  extension_processing
+
+   Trust- or acceptance-profile checks include:
+
+   *  actor_binding
+
+   *  freshness
+
+   *  audience
+
+   Companion or external checks include:
+
+   *  chain_integrity
+
+   *  policy
+
+   A check status is one of:
+
+   *  pass
+
+   *  fail
+
+   *  not_checked
+
+   *  not_applicable
+
+   *  unsupported
+
+   *  indeterminate
+
+   An implementation MUST NOT report an unperformed check as pass.
+
+   An implementation MUST NOT convert unsupported, indeterminate, or
+   not_checked into pass merely to produce a successful overall result.
+
+3.2.  Overall Status
+
+   For the requested validation mode and active profile set, the overall
+   status is one of:
+
+   *  valid
+
+   *  invalid
+
+   *  indeterminate
+
+   valid means that all checks required by the active validation context
+   passed or were not applicable.
+
+
+
+Wang                      Expires 3 April 2027                  [Page 5]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   invalid means that at least one required check failed.
+
+   indeterminate means that no required check failed, but at least one
+   required check could not produce a determinate result because it was
+   unsupported, lacked required evidence or state, or otherwise remained
+   indeterminate.
+
+   Checks not required by the requested mode or active profile set MAY
+   be not_checked.
+
+   A successful cryptographic check alone MUST NOT cause the overall
+   result to be valid when another required check has failed or is
+   indeterminate.
+
+3.3.  Validation Modes
+
+   The initial validation modes are:
+
+   *  archival
+
+   *  acceptance
+
+   *  chain
+
+   *  policy
+
+   Archival validation is repeatable and MUST NOT consume acceptance
+   state.
+
+   Acceptance validation includes JEP-Core Event Identity and idempotent
+   acceptance semantics plus any profile-required actor-binding,
+   freshness, audience, challenge, or equivalent checks.
+
+   Chain and policy modes invoke companion or external semantics.  A
+   Core implementation MUST NOT present a chain or policy result as an
+   intrinsic JEP-Core property.
+
+   When profile selection is governed by the JEP profile model
+   [JEP-PROFILES], the active profile set for a validation operation
+   MUST be explicit.  A validator MUST NOT silently substitute a
+   different profile merely because validation under the explicitly
+   selected profile failed.
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                  [Page 6]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+4.  Conformance Classes
+
+4.1.  JEP-Core-0.7 Producer
+
+   A producer conforms to JEP-Core-0.7 Producer if it supports:
+
+   *  I-JSON-compatible event construction as defined by [RFC7493];
+
+   *  a stable id for each event instance;
+
+   *  all required top-level Core members;
+
+   *  J/D/T/V verb-specific Core requirements;
+
+   *  JCS canonicalization of the unsigned event as defined by
+      [RFC8785];
+
+   *  signature generation under at least one declared signature
+      conformance class;
+
+   *  algorithm-tagged digest strings;
+
+   *  ext and ext_crit semantics.
+
+   A conforming producer MUST NOT reuse one Event Identity (who,id) for
+   different unsigned event content.
+
+   A producer MUST NOT present Event Hash as the stable Event Identity.
+
+4.2.  JEP-Core-0.7 Verifier
+
+   A verifier conforms to JEP-Core-0.7 Verifier if it supports:
+
+   *  duplicate JSON member rejection;
+
+   *  Core field and verb-specific validation;
+
+   *  Event Identity validation;
+
+   *  JCS canonicalization as defined by [RFC8785];
+
+   *  signature verification under at least one declared signature
+      conformance class, using [RFC7515] where that class is JWS-based;
+
+   *  Event Hash calculation;
+
+   *  independent validation checks;
+
+
+
+
+Wang                      Expires 3 April 2027                  [Page 7]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  structured validation-result objects;
+
+   *  unknown critical-extension rejection;
+
+   *  archival validation mode.
+
+   A Core verifier MUST NOT require an optional identity, credential,
+   attestation, blockchain, AI-platform, agent-framework, challenge,
+   transport, chain, policy, archival, or vendor-specific profile for
+   Core conformance.
+
+   A verifier MUST NOT claim a check passed if the operation represented
+   by that check was not performed.
+
+4.3.  JEP-Core-0.7 Acceptance Processor
+
+   An implementation claiming JEP-Core-0.7 Acceptance Processor
+   conformance MUST additionally support:
+
+   *  a stable acceptance-domain definition;
+
+   *  detection of conflicting Event Identity reuse;
+
+   *  sufficient acceptance state for the claimed acceptance lifetime;
+
+   *  atomic or equivalent first-acceptance processing;
+
+   *  accepted, already_accepted, rejected, and indeterminate outcomes;
+
+   *  separation of repeated valid delivery from invalid event content.
+
+   The same Event Identity MUST NOT apply the same acceptance effect
+   more than once within one acceptance domain.
+
+   A repeated valid event MUST NOT be converted into a cryptographic or
+   syntax failure solely because it was previously accepted.
+
+   If the processor cannot reliably determine whether an Event Identity
+   has already produced the protected effect, it MUST NOT claim a fresh
+   accepted outcome.
+
+4.4.  JEP-Extension-0.7 Processor
+
+   An extension processor conforms to JEP-Extension-0.7 Processor if it
+   can:
+
+   *  locate extension objects under ext;
+
+
+
+
+Wang                      Expires 3 April 2027                  [Page 8]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  process identifiers named by ext_crit;
+
+   *  fail extension_processing for unknown critical extensions;
+
+   *  ignore unknown non-critical extensions where Core permits this;
+
+   *  detect conflicting critical extensions;
+
+   *  preserve JEP-Core member semantics.
+
+   An implementation MUST NOT treat an unknown critical extension as a
+   warning while continuing to report the applicable
+   extension_processing requirement as successful.
+
+4.5.  JEP-Baseline-Ed25519-JWS-JCS-0.7
+
+   This document defines an interoperable baseline conformance class
+   named JEP-Baseline-Ed25519-JWS-JCS-0.7.
+
+   It requires:
+
+   *  I-JSON-compatible JSON as defined by [RFC7493];
+
+   *  JCS canonicalization as defined by [RFC8785];
+
+   *  detached JWS Compact Serialization as defined by [RFC7515];
+
+   *  the fully specified JOSE alg value Ed25519 defined by [RFC9864];
+
+   *  Ed25519 signature processing as defined by [RFC8032];
+
+   *  algorithm-tagged sha256 digest strings;
+
+   *  Event Hash calculation over the full signed event object including
+      sig.
+
+   For this baseline, the JWS Payload is exactly the JEP Signing
+   Payload: the UTF-8 octets of the RFC 8785 JCS-canonicalized unsigned
+   event.
+
+   The protected JOSE header MUST contain:
+
+   {
+     "alg": "Ed25519"
+   }
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                  [Page 9]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   A kid parameter MAY be present.  If present, kid MUST be carried in
+   the protected header.  Additional protected parameters MAY be present
+   when allowed by the active trust profile.  A verifier MUST process
+   every critical JOSE header parameter that it is required to
+   understand under [RFC7515].
+
+   This baseline uses the ordinary base64url-encoded JWS Payload
+   semantics of [RFC7515].  Producers MUST NOT use b64:false for this
+   conformance class.
+
+   The JWS Signing Input is exactly:
+
+   ASCII(
+     BASE64URL(UTF8(JWS Protected Header))
+     || "."
+     || BASE64URL(JEP Signing Payload)
+   )
+
+   The top-level JEP sig member MUST contain the detached JWS Compact
+   Serialization form:
+
+   BASE64URL(UTF8(JWS Protected Header))
+   || ".."
+   || BASE64URL(JWS Signature)
+
+   The middle payload segment is empty only in the transmitted detached
+   serialization.  During verification, the verifier reconstructs the
+   signing input using the exact JEP Signing Payload.  Base64url
+   segments MUST use the RFC 7515 encoding rules, including omission of
+   = padding and absence of whitespace.
+
+   The JWS Compact Serialization has no unprotected JOSE header.  This
+   baseline therefore does not permit security-relevant signature
+   parameters to be carried outside the protected header.
+
+   Conformance vectors for this baseline MUST publish:
+
+   *  the complete unsigned event;
+
+   *  the exact JEP Signing Payload bytes, encoded in a transport-safe
+      form;
+
+   *  the protected-header JSON;
+
+   *  the protected-header base64url segment;
+
+   *  the detached sig string;
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 10]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  the resulting full signed event;
+
+   *  the Event Hash;
+
+   *  the expected validation result.
+
+   A producer is not required to serialize semantically equivalent
+   protected-header JSON into identical bytes outside a vector that
+   explicitly claims byte-for-byte reproduction.  A verifier MUST verify
+   the exact protected-header segment carried by the JWS.
+
+   This baseline is a conformance-class requirement, not a restriction
+   on JEP-Core algorithm agility.
+
+4.6.  Profile-Specific Conformance
+
+   A profile MAY define additional conformance classes.  Such classes
+   MUST state:
+
+   *  which validation checks are required;
+
+   *  which checks are optional;
+
+   *  which identifiers, credentials, attestations, or evidence are
+      required;
+
+   *  which algorithms are accepted or prohibited;
+
+   *  whether freshness, audience, challenge-response, nonce, counter,
+      sequence, transaction, ledger, or other replay-related mechanisms
+      are required;
+
+   *  how unsupported or indeterminate evidence is reported;
+
+   *  any acceptance-domain requirements.
+
+   Profiles MUST NOT redefine JEP-Core Event Identity, Event Hash,
+   J/D/T/V, signing-payload, or Core check semantics.
+
+   When an implementation claims conformance to the explicit profile-
+   selection model defined by [JEP-PROFILES], failure under one
+   explicitly selected profile MUST NOT cause a verifier or test harness
+   to silently retry another profile and report success under the
+   original validation request.
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 11]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+4.7.  Historical Decoder Capability
+
+   Support for JEP encodings predating Core -07 is OPTIONAL and is not
+   part of JEP-Core-0.7 conformance.
+
+   An implementation advertising a historical decoder MUST name that
+   decoder explicitly.  It MUST NOT select a historical decoder by first
+   failing JEP-Core 0.7 validation and then inferring an older draft
+   format solely from field presence.
+
+   Historical signed events MUST NOT be rewritten or silently upgraded.
+
+5.  Validation Result Object
+
+   A conforming verifier SHOULD return a structured validation result.
+
+5.1.  Valid Archival Example
+
+   {
+     "status": "valid",
+     "mode": "archival",
+     "profile": "jep-core-0.7",
+     "conformance_class": "JEP-Core-0.7 Verifier",
+     "event_identity": {
+       "who": "did:example:agent-789",
+       "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0"
+     },
+     "event_hash": "sha256:...",
+     "checks": {
+       "syntax": "pass",
+       "cryptographic": "pass",
+       "actor_binding": "not_checked",
+       "freshness": "not_checked",
+       "audience": "not_checked",
+       "event_identity": "pass",
+       "reference_integrity": "not_applicable",
+       "extension_processing": "pass",
+       "chain_integrity": "not_checked",
+       "policy": "not_checked"
+     },
+     "warnings": [],
+     "errors": []
+   }
+
+5.2.  Safe Retry Example
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 12]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   {
+     "status": "valid",
+     "mode": "acceptance",
+     "profile": "jep-core-0.7",
+     "event_identity": {
+       "who": "did:example:agent-789",
+       "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0"
+     },
+     "event_hash": "sha256:...",
+     "checks": {
+       "syntax": "pass",
+       "cryptographic": "pass",
+       "event_identity": "pass"
+     },
+     "acceptance": {
+       "outcome": "already_accepted",
+       "effect_applied": false
+     },
+     "warnings": [],
+     "errors": []
+   }
+
+5.3.  Signature Failure Example
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 13]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   {
+     "status": "invalid",
+     "mode": "archival",
+     "profile": "jep-core-0.7",
+     "event_identity": {
+       "who": "did:example:agent-789",
+       "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0"
+     },
+     "event_hash": null,
+     "checks": {
+       "syntax": "pass",
+       "cryptographic": "fail",
+       "event_identity": "not_checked",
+       "reference_integrity": "not_checked",
+       "extension_processing": "not_checked"
+     },
+     "warnings": [],
+     "errors": [
+       {
+         "code": "ERR_SIGNATURE_INVALID",
+         "check": "cryptographic",
+         "message": "The signature does not verify over the JEP Signing Payload."
+       }
+     ]
+   }
+
+5.4.  Result Requirements
+
+   A conformance result object MUST distinguish:
+
+   *  overall status;
+
+   *  requested mode;
+
+   *  active profile or explicitly selected profile set;
+
+   *  Event Identity when available;
+
+   *  Event Hash when calculated;
+
+   *  independent checks;
+
+   *  acceptance outcome when acceptance mode produces an outcome;
+
+   *  warnings;
+
+   *  errors.
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 14]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   The event_identity member reports the (who,id) values asserted by the
+   parsed event.  Its presence does not by itself establish signature
+   validity, actor binding, authority, freshness, or non-conflicting
+   historical use of that Event Identity.
+
+   The event_identity check reports only the JEP-Core Event Identity
+   checks actually performed, including conflicting reuse detection when
+   identity state is available.  It MUST NOT be used as a substitute for
+   cryptographic or actor_binding.
+
+   Similarly, an event_hash member reports the digest calculated for an
+   exact signed artifact.  Its presence does not establish actor
+   binding, substantive truth, authorization, policy acceptance, or
+   external effect.
+
+   An error object SHOULD contain a JEP failure code, the associated
+   check when applicable, and an explanatory message.
+
+   A result MUST NOT contain a cumulative validation level.
+
+5.5.  Acceptance Outcome Consistency
+
+   When mode is acceptance, the result MUST contain an acceptance object
+   once the acceptance processor has produced an outcome.  The outcome
+   and overall status MUST be consistent as follows:
+
+         +====================+================+================+
+         | Acceptance outcome | Overall status | effect_applied |
+         +====================+================+================+
+         | accepted           | valid          | true           |
+         +--------------------+----------------+----------------+
+         | already_accepted   | valid          | false          |
+         +--------------------+----------------+----------------+
+         | rejected           | invalid        | false          |
+         +--------------------+----------------+----------------+
+         | indeterminate      | indeterminate  | false          |
+         +--------------------+----------------+----------------+
+
+                                 Table 1
+
+   accepted means all checks required by the active acceptance context
+   passed or were not applicable and the acceptance effect is applied
+   for the first time.
+
+   already_accepted means the event is valid for the active acceptance
+   context but the same Event Identity has already applied that effect
+   in the same acceptance domain.
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 15]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   rejected means at least one required validation check failed.
+
+   indeterminate means no required validation check failed, but the
+   acceptance processor could not complete a required determination
+   because required evidence, implementation support, durable state, or
+   atomicity guarantees were unavailable.
+
+   effect_applied MUST be true only for accepted.  A verifier MUST NOT
+   report already_accepted as a cryptographic or syntax failure.
+
+   For non-acceptance modes, the acceptance member SHOULD be absent
+   unless a companion result format explicitly carries a separately
+   labeled acceptance observation.
+
+6.  JSON Schema Requirements
+
+   The conformance suite SHOULD provide:
+
+   *  jep-event-0.7.schema.json
+
+   *  jep-ref-0.7.schema.json
+
+   *  jep-extension-0.7.schema.json
+
+   *  jep-validation-result-0.7.schema.json
+
+   *  schemas for any baseline signature or profile objects defined by
+      the suite
+
+   JSON Schema validation does not prove cryptographic validity, actor
+   binding, freshness, reference resolution, policy compliance, or
+   external truth.  Duplicate-member rejection occurs before ordinary
+   parsed-object schema validation.
+
+   Schemas are derived artifacts.  A schema MUST NOT intentionally
+   impose a JEP-Core requirement absent from JEP-Core.  Where a schema
+   and the applicable normative specification conflict, the normative
+   specification controls.
+
+6.1.  Minimal Event Schema Seed
+
+   The following schema is a structural seed.  It intentionally does not
+   attempt to encode every JEP semantic rule.
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 16]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   {
+     "$schema": "https://json-schema.org/draft/2020-12/schema",
+     "$id": "https://jep.org/schemas/jep-event-0.7.schema.json",
+     "title": "JEP-Core 0.7 Event",
+     "type": "object",
+     "required": [
+       "jep",
+       "id",
+       "verb",
+       "who",
+       "when",
+       "what",
+       "sig"
+     ],
+     "properties": {
+       "jep": {
+         "type": "string",
+         "const": "1"
+       },
+       "id": {
+         "type": "string",
+         "minLength": 1,
+         "description": "Non-empty ASCII Event ID; semantic validation is performed by the Core validator."
+       },
+       "verb": {
+         "type": "string",
+         "enum": [
+           "J",
+           "D",
+           "T",
+           "V"
+         ]
+       },
+       "who": {
+         "type": "string",
+         "minLength": 1
+       },
+       "when": {
+         "type": "integer"
+       },
+       "what": {},
+       "aud": {},
+       "ref": {
+         "oneOf": [
+           {
+             "type": "string"
+           },
+           {
+
+
+
+Wang                      Expires 3 April 2027                 [Page 17]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+             "type": "object"
+           }
+         ]
+       },
+       "ext": {
+         "type": "object"
+       },
+       "ext_crit": {
+         "type": "array",
+         "items": {
+           "type": "string"
+         },
+         "uniqueItems": true
+       },
+       "sig": {
+         "oneOf": [
+           {
+             "type": "string"
+           },
+           {
+             "type": "object"
+           }
+         ]
+       }
+     },
+     "allOf": [
+       {
+         "if": {
+           "properties": {
+             "verb": {
+               "const": "D"
+             }
+           }
+         },
+         "then": {
+           "properties": {
+             "what": {
+               "type": "object",
+               "required": [
+                 "delegatee",
+                 "scope"
+               ]
+             }
+           }
+         }
+       },
+       {
+         "if": {
+
+
+
+Wang                      Expires 3 April 2027                 [Page 18]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+           "properties": {
+             "verb": {
+               "const": "T"
+             }
+           }
+         },
+         "then": {
+           "required": [
+             "ref"
+           ],
+           "properties": {
+             "what": {
+               "type": "object",
+               "required": [
+                 "termination_scope"
+               ]
+             }
+           }
+         }
+       },
+       {
+         "if": {
+           "properties": {
+             "verb": {
+               "const": "V"
+             }
+           }
+         },
+         "then": {
+           "required": [
+             "ref"
+           ],
+           "properties": {
+             "what": {
+               "type": "object",
+               "required": [
+                 "verification_scope",
+                 "result"
+               ]
+             }
+           }
+         }
+       }
+     ]
+   }
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 19]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   The schema does not make nonce a Core field.  A nonce or equivalent
+   mechanism MAY appear in a registered extension, profile-defined
+   object, transport binding, or other non-Core layer.
+
+6.2.  Typed JEP Event Reference Seed
+
+   A logical JEP event reference SHOULD use Event Identity:
+
+   {
+     "type": "jep:event",
+     "value": {
+       "who": "did:example:actor-123",
+       "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0"
+     }
+   }
+
+   An exact signed artifact MAY additionally be pinned:
+
+   {
+     "type": "jep:event",
+     "value": {
+       "who": "did:example:actor-123",
+       "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0"
+     },
+     "hash": "sha256:..."
+   }
+
+   The value identifies the logical event.  The optional hash identifies
+   one exact signed artifact.  Event Hash MUST NOT replace Event
+   Identity where logical event identity is required.
+
+7.  Reference Validation Flow
+
+   A reference validator SHOULD process an event in an order equivalent
+   to:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 20]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   validate_event(event, mode, active_profiles, acceptance_domain=None):
+       parse JSON
+       reject duplicate member names
+       validate 0.7 Core shape
+       validate J/D/T/V Core requirements
+       unsigned = event without sig
+       signing_payload = UTF8(JCS(unsigned))
+       verify signature under the active signature profile
+       compute Event Hash when needed
+       evaluate Event Identity consistency if identity state is available
+       resolve actor/key and actor binding if required
+       validate audience if required
+       evaluate freshness if required
+       validate reference syntax and exact-artifact pins if requested
+       process critical extensions
+       invoke chain checks only if requested from a companion chain system
+       invoke policy checks only if requested from an external policy system
+       if mode == acceptance:
+           atomically determine and record the acceptance outcome
+       return structured validation result
+
+   An implementation MUST perform cryptographic validation before
+   writing new authoritative Event Identity or acceptance state for
+   untrusted input.
+
+   When the active acceptance profile requires actor binding, an
+   implementation MUST NOT commit authoritative Event Identity or
+   acceptance state until actor_binding has passed.
+
+   A verifier MUST NOT treat a transport retry as creation of a new
+   event.
+
+   A verifier operating under an explicit profile-selection model MUST
+   NOT select a different trust or acceptance profile merely because
+   validation under the explicitly active profile produced failure,
+   unsupported, or indeterminate results.
+
+8.  Test Vector Categories
+
+8.1.  Valid Core Event Vectors
+
+   The suite SHOULD include:
+
+   *  valid/J-basic.json
+
+   *  valid/D-basic.json
+
+   *  valid/T-basic.json
+
+
+
+Wang                      Expires 3 April 2027                 [Page 21]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  valid/V-basic.json
+
+   *  valid/event-reference-logical.json
+
+   *  valid/event-reference-exact-artifact.json
+
+8.2.  Syntax and Core-Field Vectors
+
+   The suite SHOULD include:
+
+   *  invalid/invalid-json.json
+
+   *  invalid/duplicate-member.json
+
+   *  invalid/missing-id.json
+
+   *  invalid/invalid-what.json
+
+   *  invalid/unknown-verb.json
+
+   *  invalid/invalid-timestamp.json
+
+   *  invalid/D-missing-delegatee.json
+
+   *  invalid/D-missing-scope.json
+
+   *  invalid/T-missing-ref.json
+
+   *  invalid/T-missing-termination-scope.json
+
+   *  invalid/V-missing-ref.json
+
+   *  invalid/V-missing-verification-scope.json
+
+   *  invalid/V-missing-result.json
+
+8.3.  Cryptographic Vectors
+
+   The suite SHOULD include:
+
+   *  invalid/invalid-signature.json
+
+   *  invalid/signature-over-wrong-payload.json
+
+   *  invalid/unsupported-signature-alg.json
+
+   *  invalid/prohibited-signature-alg.json
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 22]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  invalid/alg-key-type-mismatch.json
+
+   *  invalid/alg-profile-mismatch.json
+
+   *  invalid/canonicalization-failed.json
+
+   *  invalid/canonicalization-version-unsupported.json
+
+8.4.  Event Identity and Delivery Vectors
+
+   Event Identity behavior is stateful.  A single isolated JSON event
+   cannot by itself demonstrate conflicting reuse or prior acceptance.
+
+   The suite SHOULD therefore include stateful sequence manifests such
+   as:
+
+   *  stateful/event-identity-retransmission.json
+
+   *  stateful/event-identity-resign-same-content.json
+
+   *  stateful/event-id-conflict.json
+
+   *  stateful/same-id-different-who.json
+
+   A stateful manifest SHOULD declare the identity or acceptance state
+   visible to the harness, the ordered steps, and the expected result
+   for each step.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 23]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   {
+     "name": "event-id-conflict",
+     "mode": "acceptance",
+     "profile": "jep-core-0.7",
+     "acceptance_domain": "example-domain-a",
+     "initial_state": "empty",
+     "steps": [
+       {
+         "input": "stateful/fixtures/J-first.json",
+         "expected_status": "valid",
+         "expected_checks": {
+           "event_identity": "pass"
+         },
+         "expected_acceptance": {
+           "outcome": "accepted",
+           "effect_applied": true
+         }
+       },
+       {
+         "input": "stateful/fixtures/J-conflicting-reuse.json",
+         "expected_status": "invalid",
+         "expected_checks": {
+           "event_identity": "fail"
+         },
+         "expected_error_codes": [
+           "ERR_EVENT_ID_CONFLICT"
+         ],
+         "expected_acceptance": {
+           "outcome": "rejected",
+           "effect_applied": false
+         }
+       }
+     ]
+   }
+
+   The second event in the example uses the same (who,id) but different
+   JCS-canonicalized unsigned event content.
+
+   The suite SHOULD also verify:
+
+   *  retransmission of byte-identical signed content;
+
+   *  re-signing of identical unsigned content with the same Event
+      Identity;
+
+   *  use of the same id string under a different who;
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 24]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  conflicting reuse of one Event Identity with different unsigned
+      content.
+
+   Conflicting reuse MUST produce ERR_EVENT_ID_CONFLICT.  A valid
+   repeated event MUST NOT be reported as a cryptographic failure.
+
+8.5.  Acceptance Vectors
+
+   Acceptance behavior is stateful.  The suite SHOULD include:
+
+   *  stateful/accept-first.json
+
+   *  stateful/accept-safe-retry.json
+
+   *  stateful/accept-state-unavailable.json
+
+   *  stateful/accept-atomicity-unavailable.json
+
+   *  a concurrent first-delivery test
+
+   A safe-retry sequence SHOULD demonstrate that the first valid
+   delivery yields accepted with effect_applied: true and a later valid
+   delivery of the same Event Identity in the same acceptance domain
+   yields already_accepted with effect_applied: false.
+
+   If required acceptance state is unavailable, the result MUST NOT
+   claim a fresh accepted outcome.  It MUST be indeterminate or rejected
+   when an active profile explicitly requires fail-closed rejection.
+
+   If required atomicity cannot be provided, the implementation MUST NOT
+   claim accepted.  When represented as a JEP failure code, the suite
+   SHOULD exercise ERR_ACCEPTANCE_ATOMICITY_UNAVAILABLE.
+
+   The concurrent first-delivery test SHOULD submit multiple equivalent
+   deliveries of the same Event Identity against one acceptance domain
+   and assert that exactly one state-changing acceptance effect is
+   applied.  All other valid deliveries MUST be reported without a
+   second effect, normally as already_accepted.
+
+   Nonce, challenge, sequence-number, counter, ledger, or similar replay
+   tests belong to the profile that requires that mechanism and MUST NOT
+   be presented as universal JEP-Core requirements.
+
+8.6.  Reference Vectors
+
+   The suite SHOULD include:
+
+   *  logical Event Identity resolution;
+
+
+
+Wang                      Expires 3 April 2027                 [Page 25]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  exact-artifact hash success;
+
+   *  exact-artifact hash mismatch;
+
+   *  Event Identity mismatch;
+
+   *  unresolved references when a requested check requires resolution.
+
+8.7.  Extension Vectors
+
+   The suite SHOULD include:
+
+   *  known critical extension success;
+
+   *  unknown critical extension failure;
+
+   *  unknown non-critical extension tolerance;
+
+   *  extension schema failure;
+
+   *  conflicting critical extensions.
+
+   A vector for an unknown critical extension MUST NOT expect
+   extension_processing: pass.  A test harness MUST NOT convert an
+   unknown critical extension into a successful Core result merely
+   because the implementation emitted only a warning.
+
+8.8.  Canonicalization and Hash Vectors
+
+   The suite SHOULD include:
+
+   *  equivalent JSON inputs producing identical JCS bytes;
+
+   *  UTF-16 property-order edge cases required by JCS;
+
+   *  numeric serialization edge cases allowed by I-JSON/JCS;
+
+   *  full signed Event Hash calculation;
+
+   *  unsigned JEP Signing Payload calculation;
+
+   *  proof that changing sig can change Event Hash without changing
+      Event Identity.
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 26]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+8.9.  Companion and External Check Vectors
+
+   Chain and policy fixtures MAY be included for integration testing,
+   but they MUST identify the companion profile, companion
+   specification, or external evaluator that owns the semantics.  They
+   MUST NOT be labeled as Core-only conformance failures.
+
+   External truth, legal effect, authority, policy, or causal
+   conclusions MUST NOT be inferred solely from successful Core
+   conformance.
+
+8.10.  Historical Compatibility Vectors
+
+   If a product advertises a historical pre--07 decoder, the suite
+   SHOULD include:
+
+   *  explicit historical decoder selection;
+
+   *  historical signature verification without rewriting bytes;
+
+   *  refusal to silently fall back from 0.7 based solely on field
+      presence.
+
+   The suite SHOULD include a case in which Core 0.7 validation fails
+   but the harness MUST NOT automatically retry a historical decoder.
+
+8.11.  Profile Selection and Downgrade Vectors
+
+   For implementations that claim the explicit profile-selection
+   behavior defined by [JEP-PROFILES], the suite SHOULD include:
+
+   *  explicit profile selection;
+
+   *  unsupported explicitly selected profile;
+
+   *  failed explicitly selected profile;
+
+   *  multiple explicitly composed profiles where composition is
+      defined;
+
+   *  conflicting profile requirements;
+
+   *  prohibited algorithm under the active profile;
+
+   *  failure under one profile without silent fallback to another
+      profile;
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 27]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  event content that could heuristically suggest a different profile
+      but for which that profile was not explicitly selected.
+
+   A conforming profile-aware verifier MUST NOT infer successful
+   validation under a different profile merely because who resembles an
+   identifier associated with that profile, a credential associated with
+   another profile is present, aud resembles another deployment, a
+   nonce-like or challenge-like extension is present, or the explicitly
+   selected profile failed.
+
+   A profile-selection test MUST identify the profile-selection input
+   visible to the implementation.  The suite MUST distinguish profile-
+   selection behavior from JEP-Core event semantics.
+
+9.  Seed J/D/T/V Event Shapes
+
+   The following examples use placeholder signatures.  They are examples
+   and are not substitutes for signed conformance vectors.
+
+9.1.  J-basic
+
+   {
+     "jep": "1",
+     "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0",
+     "verb": "J",
+     "who": "did:example:agent-789",
+     "when": 1742345678,
+     "what": {
+       "claim": "approve-result"
+     },
+     "sig": "PLACEHOLDER_DETACHED_JWS"
+   }
+
+9.2.  D-basic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 28]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   {
+     "jep": "1",
+     "id": "urn:uuid:018f4f8d-8ad2-7baf-b752-e529e79bc88a",
+     "verb": "D",
+     "who": "did:example:human-123",
+     "when": 1742345681,
+     "what": {
+       "delegatee": "did:example:agent-789",
+       "scope": "summarize-document",
+       "constraints": [
+         "no-external-send"
+       ]
+     },
+     "sig": "PLACEHOLDER_DETACHED_JWS"
+   }
+
+9.3.  T-basic
+
+   {
+     "jep": "1",
+     "id": "urn:uuid:018f4f8d-91c1-7d50-8f7a-c7b0fd8d95d0",
+     "verb": "T",
+     "who": "did:example:human-123",
+     "when": 1742345690,
+     "what": {
+       "termination_scope": "delegation"
+     },
+     "ref": {
+       "type": "jep:event",
+       "value": {
+         "who": "did:example:human-123",
+         "id": "urn:uuid:018f4f8d-8ad2-7baf-b752-e529e79bc88a"
+       }
+     },
+     "sig": "PLACEHOLDER_DETACHED_JWS"
+   }
+
+9.4.  V-basic
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 29]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   {
+     "jep": "1",
+     "id": "urn:uuid:018f4f8d-a1d5-7633-9b6c-63d4928819e2",
+     "verb": "V",
+     "who": "did:example:verifier-123",
+     "when": 1742345700,
+     "what": {
+       "verification_scope": "cryptographic",
+       "result": "pass"
+     },
+     "ref": {
+       "type": "jep:event",
+       "value": {
+         "who": "did:example:agent-789",
+         "id": "urn:uuid:018f4f8d-7c63-7c2e-9b43-4ef657eec1c0"
+       },
+       "hash": "sha256:..."
+     },
+     "sig": "PLACEHOLDER_DETACHED_JWS"
+   }
+
+10.  Conformance Test Assertions
+
+   A stateless test assertion SHOULD name:
+
+   *  a stable assertion identifier;
+
+   *  the input event;
+
+   *  the requested validation mode;
+
+   *  the explicitly active profile or profile set;
+
+   *  the applicable normative source or sources;
+
+   *  the expected overall status;
+
+   *  the expected independent checks;
+
+   *  expected warnings and errors;
+
+   *  the expected Event Hash when applicable.
+
+   An assertion_id identifies an assertion within a conformance suite.
+   An assertion identifier does not itself create a protocol
+   requirement.
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 30]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   An assertion SHOULD identify the normative specification section from
+   which the expected behavior is derived.
+
+   {
+     "assertion_id": "JEP-A-SIG-004",
+     "requirements": [
+       {
+         "document": "JEP-Core-0.7",
+         "section": "Signing and Validation"
+       }
+     ],
+     "name": "invalid-signature",
+     "input": "invalid/invalid-signature.json",
+     "mode": "archival",
+     "profile": "jep-core-0.7",
+     "expected_status": "invalid",
+     "expected_checks": {
+       "syntax": "pass",
+       "cryptographic": "fail"
+     },
+     "expected_error_codes": [
+       "ERR_SIGNATURE_INVALID"
+     ]
+   }
+
+   A stateful test MUST declare the state scope and ordered operations
+   required to obtain the expected result.  It SHOULD use an explicit
+   steps array rather than imply state through a filename.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 31]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   {
+     "assertion_id": "JEP-A-ACC-002",
+     "requirements": [
+       {
+         "document": "JEP-Core-0.7",
+         "section": "Idempotent Acceptance"
+       }
+     ],
+     "name": "safe-retry",
+     "mode": "acceptance",
+     "profile": "jep-core-0.7",
+     "acceptance_domain": "example-domain-a",
+     "initial_state": "empty",
+     "steps": [
+       {
+         "input": "stateful/fixtures/J-retry.json",
+         "expected_status": "valid",
+         "expected_acceptance": {
+           "outcome": "accepted",
+           "effect_applied": true
+         }
+       },
+       {
+         "input": "stateful/fixtures/J-retry.json",
+         "expected_status": "valid",
+         "expected_acceptance": {
+           "outcome": "already_accepted",
+           "effect_applied": false
+         }
+       }
+     ]
+   }
+
+   A concurrency assertion SHOULD additionally declare the number of
+   concurrent deliveries and MUST assert the number of state-changing
+   effects observed by the harness.
+
+   Test assertions MUST NOT use expected_level for JEP-Core 0.7.
+
+   A conformance harness MUST distinguish:
+
+   *  validation output returned by the verifier;
+
+   *  state supplied to the verifier;
+
+   *  state committed by the acceptance processor;
+
+   *  externally observed effect count used to test atomicity.
+
+
+
+Wang                      Expires 3 April 2027                 [Page 32]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   This distinction prevents a test harness from reporting at-most-once
+   acceptance merely because it deduplicated test inputs before invoking
+   the implementation under test.
+
+10.1.  Normative Coverage
+
+   A conformance suite SHOULD document its coverage of machine-testable
+   normative requirements.
+
+   For each machine-testable normative requirement that the suite claims
+   to cover, the suite SHOULD identify one or more assertions exercising
+   that requirement.
+
+   A coverage record MAY classify requirements as covered,
+   partially_covered, not_machine_testable, or out_of_scope.
+
+   A requirement MUST NOT be labeled covered solely because a related
+   example or implementation test exists.
+
+   Where part of a requirement depends on external truth, policy, trust,
+   resolver behavior, or other semantics outside Core, the Core-testable
+   portion SHOULD be distinguished from the external portion.
+
+   A requirement that is not machine-testable at the Core layer SHOULD
+   be identified as such rather than represented by a misleading
+   executable test.  Test count by itself is not evidence of normative
+   coverage.
+
+   A suite claiming complete machine-testable Core coverage SHOULD
+   disclose the number of applicable machine-testable requirements,
+   covered requirements, partially covered requirements, and uncovered
+   requirements.  A suite SHOULD NOT claim complete machine-testable
+   coverage when an applicable machine-testable normative requirement
+   remains uncovered.
+
+10.2.  Assertion Stability
+
+   An assertion identifier SHOULD remain stable across suite releases
+   when the semantic assertion is unchanged.
+
+   If expected normative behavior changes because the applicable
+   specification changes, the suite SHOULD issue a new or versioned
+   assertion rather than silently changing the meaning of an existing
+   published assertion.  Editorial corrections that do not change
+   expected behavior MAY retain the assertion identifier.
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 33]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+11.  Reference CLI Behavior
+
+   A reference implementation is non-normative.  Its purpose is to
+   demonstrate one implementation of the applicable specifications and
+   to execute public conformance artifacts.
+
+   Implementation-specific behavior MUST NOT become a JEP-Core
+   conformance requirement unless that requirement is independently
+   specified by an applicable normative specification.
+
+   A reference implementation SHOULD provide equivalent operations to:
+
+   jep-validate event.json --mode archival
+   jep-validate event.json --mode acceptance --acceptance-domain DOMAIN
+   jep-explain event.json
+   jep-check-profile event.json --profile PROFILE
+   jep-run-tests test-vectors/
+
+   A chain-specific command MAY be provided by a companion validator.
+   Its result MUST remain distinguishable from JEP-Core validation.
+
+   CLI output SHOULD use the structured result object defined in this
+   document.
+
+   If reference implementation behavior conflicts with the applicable
+   normative specification, the implementation behavior is a defect or
+   requires specification clarification; it does not silently amend the
+   specification.
+
+12.  Implementation Disclosure and Interoperability Reports
+
+   A conforming implementation SHOULD document:
+
+   *  supported JEP-Core release;
+
+   *  supported conformance classes;
+
+   *  supported validation modes;
+
+   *  supported independent checks;
+
+   *  supported signature algorithms and canonicalization rules;
+
+   *  supported hash algorithms;
+
+   *  supported trust and acceptance profiles;
+
+   *  supported extensions;
+
+
+
+Wang                      Expires 3 April 2027                 [Page 34]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  acceptance-state durability and atomicity assumptions;
+
+   *  historical decoder capabilities, if any;
+
+   *  conformance-suite identity;
+
+   *  conformance-suite version;
+
+   *  conformance-suite digest;
+
+   *  test-vector results.
+
+   An interoperability report MAY use:
+
+   {
+     "implementation": "example-jep-validator",
+     "version": "0.3.0",
+     "jep_core": "0.7",
+     "wire_major": "1",
+     "conformance_classes": [
+       "JEP-Core-0.7 Verifier",
+       "JEP-Core-0.7 Acceptance Processor",
+       "JEP-Baseline-Ed25519-JWS-JCS-0.7"
+     ],
+     "modes": [
+       "archival",
+       "acceptance"
+     ],
+     "checks": [
+       "syntax",
+       "cryptographic",
+       "event_identity",
+       "reference_integrity",
+       "extension_processing"
+     ],
+     "conformance_suite": {
+       "name": "jep-core-0.7-conformance",
+       "version": "1.0.0",
+       "digest": "sha256:..."
+     },
+     "tests_passed": 0,
+     "tests_failed": 0,
+     "tests_skipped": 0,
+     "date": "2026-09-30"
+   }
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 35]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   The suite digest identifies the exact suite artifact or suite
+   manifest used by the report.  Two reports SHOULD NOT be treated as
+   directly comparable merely because they report the same number of
+   passing tests.
+
+   For direct comparison, reports SHOULD identify the same applicable
+   JEP-Core version, conformance class, suite version, suite digest,
+   validation mode, and profile set.
+
+   A report MUST NOT imply support for checks, profiles, modes,
+   extensions, or conformance classes that were not actually exercised
+   or otherwise demonstrated.
+
+   A report MUST NOT present successful Core conformance as proof of
+   external truth, legal validity, authorization validity, policy
+   compliance, causality, or external effect.
+
+   A suite digest establishes artifact identity.  It does not establish
+   that the suite itself is correct or normative.
+
+13.  Security Considerations
+
+   A conformance suite can detect specified classes of implementation
+   divergence but cannot prove deployment security.
+
+   Implementations MUST verify untrusted cryptographic input before
+   committing authoritative Event Identity or acceptance state.  When
+   actor binding is required for acceptance, actor binding MUST pass
+   before such state is committed.
+
+   Acceptance processors MUST provide atomic or equivalent concurrency
+   guarantees for first acceptance.  A check-then-apply-then-mark
+   sequence that can race is non-conforming.
+
+   Acceptance-state retention MUST be sufficient for the period during
+   which an event remains eligible to produce the protected effect.
+
+   Event IDs are not secrets, bearer tokens, authorization grants, or
+   freshness proofs.
+
+   A valid signature does not prevent repeated delivery.  Deployments
+   requiring current liveness, strict ordering, server challenge
+   freshness, or single-use authority SHOULD use an appropriate profile
+   mechanism in addition to JEP-Core.
+
+   Implementations MUST reject algorithms prohibited by the active
+   profile and MUST NOT silently downgrade to weaker algorithms.
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 36]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   Profile-aware validators MUST NOT silently switch profiles after
+   failure of an explicitly active profile when the applicable profile
+   model requires explicit selection.
+
+   Unknown critical extensions MUST NOT be converted into successful
+   validation merely because the implementation can otherwise continue
+   processing.
+
+   Test keys and test credentials MUST NOT be used in production.
+
+   Incorrect test artifacts can cause false conformance conclusions.
+   Test-suite maintainers therefore SHOULD preserve provenance between
+   assertions and the normative requirements they exercise.
+
+   Reference implementations and test suites SHOULD be independently
+   reviewable.  No reference implementation, test suite, registry,
+   vendor product, or maintainer is by itself a source of JEP-Core
+   semantics.
+
+14.  Privacy Considerations
+
+   Test vectors SHOULD use synthetic identifiers and non-sensitive
+   claims.
+
+   Event IDs, Event Hashes, actor identifiers, references, validation
+   reports, profile identifiers, and interoperability reports can enable
+   correlation.  Conformance fixtures SHOULD avoid unnecessary stable
+   real-world identifiers.
+
+   Exact-artifact hashes may permit correlation or confirmation attacks.
+   Sensitive evidence SHOULD be represented using profile-appropriate
+   privacy mechanisms rather than copied into public conformance
+   vectors.
+
+   Conformance reports SHOULD disclose only the implementation metadata
+   required to establish the interoperability claim being made.
+
+   Normative-source references and assertion identifiers SHOULD NOT
+   embed personal or deployment-secret information.
+
+15.  Versioning and Historical Compatibility
+
+   The conformance suite MAY version its executable artifacts
+   independently from the Internet-Draft revision.
+
+   JEP-Core:          0.7
+   Conformance draft: -02
+   Executable suite:  1.0.0
+
+
+
+Wang                      Expires 3 April 2027                 [Page 37]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   A new executable suite release does not by itself create a new JEP-
+   Core version.
+
+   Artifacts claiming JEP-Core 0.7 conformance MUST use the JEP-Core 0.7
+   event model and validation model defined by this document and the
+   companion Core draft.
+
+   The wire major remains jep: "1" for JEP-Core 0.7.  Pre--07 Internet-
+   Draft encodings that also used jep: "1" are historical draft
+   artifacts and MUST NOT be selected by heuristic fallback.
+
+   Historical signed bytes MUST NOT be rewritten to satisfy a newer
+   conformance suite.
+
+   A new conformance-suite version MAY add assertions for existing
+   normative requirements, improve coverage, add adversarial cases, fix
+   incorrect derived artifacts, or add interoperability metadata.  A
+   suite update MUST NOT silently change a JEP-Core normative
+   requirement.
+
+   If an earlier test assertion is discovered to contradict the
+   applicable normative specification, the suite SHOULD correct the
+   assertion and document the correction.  Such correction does not
+   modify the normative specification.
+
+   A future Core revision that changes stable Event Identity, signing-
+   input, canonicalization, or required Core-field semantics after real-
+   world wire adoption may require a new wire major as specified by JEP-
+   Core.
+
+16.  Changes from -01
+
+   Major changes from draft-wang-jep-conformance-01:
+
+   *  clarified normative precedence between JEP-Core, this conformance
+      specification, derived test artifacts, and reference
+      implementations;
+
+   *  explicitly stated that test suites, schemas, examples, reference
+      implementations, and interoperability reports do not independently
+      create JEP-Core semantics;
+
+   *  required derived artifacts not to introduce JEP-Core requirements
+      absent from the applicable normative specification;
+
+   *  added stable conformance assertion identifiers and normative-
+      source references to the assertion model;
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 38]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   *  added normative coverage guidance for machine-testable
+      requirements and clarified that test count alone is not evidence
+      of normative coverage;
+
+   *  added guidance for assertion stability across executable suite
+      releases;
+
+   *  explicitly stated that reference implementations are non-
+      normative;
+
+   *  added profile-selection and downgrade vectors for implementations
+      claiming the explicit profile-selection model;
+
+   *  strengthened guidance for unknown critical extensions, unperformed
+      checks, historical decoder fallback, and profile inference;
+
+   *  added conformance-suite name, version, and digest to the
+      recommended interoperability report and clarified when reports are
+      directly comparable;
+
+   *  clarified that a suite digest establishes artifact identity but
+      not normative authority;
+
+   *  retained the JEP-Core 0.7 wire model, Event Identity, Event Hash,
+      J/D/T/V semantics, validation-check model, extension semantics,
+      baseline signing class, and idempotent acceptance semantics
+      unchanged.
+
+17.  IANA Considerations
+
+   This document requests no IANA actions.
+
+18.  Normative References
+
+   [JEP]      Wang, Y., "Judgment Event Protocol (JEP)", Work in
+              Progress, Internet-Draft, draft-wang-jep-judgment-event-
+              protocol-07, 26 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-wang-jep-
+              judgment-event-protocol-07>.
+
+   [JEP-PROFILES]
+              Wang, Y., "JEP Profiles and Interoperability", Work in
+              Progress, Internet-Draft, draft-wang-jep-profiles-01, 26
+              September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-wang-jep-profiles-01>.
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 39]
+
+Internet-Draft               JEP Conformance              September 2026
+
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC7493]  Bray, T., "The I-JSON Message Format", RFC 7493, March
+              2015, <https://www.rfc-editor.org/rfc/rfc7493>.
+
+   [RFC7515]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web
+              Signature (JWS)", RFC 7515, May 2015,
+              <https://www.rfc-editor.org/rfc/rfc7515>.
+
+   [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
+              Signature Algorithm (EdDSA)", RFC 8032, January 2017,
+              <https://www.rfc-editor.org/rfc/rfc8032>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, May 2017,
+              <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8785]  Rundgren, A., Jordan, B., and S. Erdtman, "JSON
+              Canonicalization Scheme (JCS)", RFC 8785, June 2020,
+              <https://www.rfc-editor.org/rfc/rfc8785>.
+
+   [RFC9864]  Jones, M.B. and O. Steele, "Fully-Specified Algorithms for
+              JSON Object Signing and Encryption (JOSE) and CBOR Object
+              Signing and Encryption (COSE)", RFC 9864, October 2025,
+              <https://www.rfc-editor.org/rfc/rfc9864>.
+
+Acknowledgments
+
+   The author thanks implementers and reviewers who provided
+   interoperability, security, and deployment feedback on earlier JEP
+   drafts and conformance revisions.
+
+Author's Address
+
+   Yuqiang Wang
+   Email: signal@humanjudgment.org
+   URI:   https://github.com/hjs-spec
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 3 April 2027                 [Page 40]
