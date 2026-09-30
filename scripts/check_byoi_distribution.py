@@ -1,7 +1,6 @@
 """Verify notices/data in distributions and exercise the standalone installed wheel."""
 from email.parser import BytesParser
 import json
-import os
 from pathlib import Path
 import re
 import shlex
@@ -49,13 +48,14 @@ def check():
         scripts = environment / ('Scripts' if sys.platform == 'win32' else 'bin')
         cli = scripts / ('jep-byoi.exe' if sys.platform == 'win32' else 'jep-byoi')
         # Execute the commands users actually copy from the installed README.
-        blocks = re.findall(r'```sh\n(.*?)```', metadata.get_payload(), flags=re.S)
+        blocks = re.findall(r'```sh\r?\n(.*?)```', metadata.get_payload(), flags=re.S)
+        assert len(blocks) >= 2, 'Installed README must contain the first-use and demo commands'
         first = blocks[0].strip().splitlines()
         assert shlex.split(first[0]) == ['python', '-m', 'pip', 'install', 'jep-core-conformance==' + metadata['Version']]
-        command_env = dict(os.environ)
-        command_env['PATH'] = str(scripts) + os.pathsep + command_env.get('PATH', '')
         for line in first[1:] + blocks[1].strip().splitlines():
-            result = subprocess.run(shlex.split(line), cwd=work, env=command_env, check=True, capture_output=True, text=True)
+            argv = shlex.split(line)
+            argv[0] = str(scripts / (argv[0] + ('.exe' if sys.platform == 'win32' else '')))
+            result = subprocess.run(argv, cwd=work, check=True, capture_output=True, text=True)
             if line.startswith('jep-validate '):
                 validation = json.loads(result.stdout)
                 assert validation['status'] == 'valid' and validation['checks']['cryptographic'] == 'pass'
