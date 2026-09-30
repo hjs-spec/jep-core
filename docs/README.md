@@ -1,8 +1,16 @@
 # JEP documentation
 
+## Use an existing implementation
+
+- [Verify a packaged sample](../README.md#verify-your-first-event)
+- [Record events with the local Agent SDK](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification)
+- [Use an HTTP service and clients](https://github.com/hjs-spec/jep-quickstart)
+
 ## Main implementation path
 
-1. [Understand Core 0.7](ONE-PAGE-OVERVIEW.md) and [verify a packaged sample](../README.md#verify-your-first-event).
+For an independent implementation:
+
+1. [Understand Core 0.7](ONE-PAGE-OVERVIEW.md).
 2. [Implement your selected role](IMPLEMENTER-GUIDE.md).
 3. [Test your implementation with BYOI](BYOI-CONFORMANCE.md).
 4. [Publish an interoperability report](INTEROPERABILITY-REPORT.md) through the [contribution routes](../CONTRIBUTING.md).
@@ -18,10 +26,6 @@
 
 ## Optional ecosystem integrations
 
-These are separate choices, not prerequisites for the implementation path above.
-
-- [Create signed events with the local Agent SDK](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification)
-- [Self-hosted HTTP Quickstart](https://github.com/hjs-spec/jep-quickstart)
 - [Client and recorder directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md#integrate)
 - [TSTO/00 interoperability: Binding/02](https://github.com/cognitive-emergence/tsto-spec)
 - [Architecture and component boundaries](architecture/README.md)

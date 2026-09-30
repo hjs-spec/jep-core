@@ -17,7 +17,6 @@ Current Core: **JEP Core 0.7**.
 - [JEP-TSTO Binding/02](https://github.com/cognitive-emergence/tsto-spec) is the current TSTO/00 integration for Core 0.7. Its signed marker, typed carriers, pinned joint validation, fixtures and [experimental release](https://github.com/cognitive-emergence/tsto-spec/releases/tag/jep-tsto-binding-02) are maintained in that repository.
 - [Software delivery status](https://github.com/hjs-spec/.github/blob/main/DELIVERY-CURRENT.md) tracks API, client and recorder releases separately from package-registry and hosted-deployment status. A protocol version does not imply that every deployment has upgraded.
 - [Component format boundaries](architecture/architecture-notes.md#format-and-verification-matrix) identify supported current and historical formats. Preserve each record's original format and signed bytes during migration.
-- Application integrations such as Prooftask and semantic/chain profiles require their own explicit compatibility and deployment evidence. Publishing a binding does not migrate their stored history.
 
 ## Migration invariants
 

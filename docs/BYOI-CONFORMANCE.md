@@ -11,8 +11,7 @@ or clarification requests, not permission to silently redefine Core.
 
 ## Install the released runner
 
-Use a fresh Python environment. Software 0.7.7 includes the checkout-free demonstration below.
-Software 0.7.6 supports `export` and `run`; 0.7.5 predates BYOI.
+Use Python 3.10 or later in a fresh environment.
 
 ```sh
 python -m pip install jep-core-conformance==0.7.7
