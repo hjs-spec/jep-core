@@ -9,7 +9,7 @@ Core defines event structure and observable checks. It does not decide truth, au
 In a fresh Python environment:
 
 ```sh
-python -m pip install jep-core-conformance==0.7.5
+python -m pip install jep-core-conformance==0.7.6
 jep-validate --help
 jep-validate validate event.json --keys keys.json
 ```
@@ -74,13 +74,12 @@ Schemas and tools are implementation aids; the applicable specification controls
 
 The repository was previously named `jep-v06`. Repository identity is now stable; protocol drafts and software packages have separate versions. Maintainer-operated production API hosting is deferred; self-hosting remains optional.
 
-## External implementation testing (new source functionality)
+## External implementation testing
 
-The BYOI runner is available from this source checkout; it is not included in
-the previously published 0.7.5 wheel. It exports a self-contained signed suite
+Software 0.7.6 includes the BYOI runner. It exports a self-contained signed suite
 and runs a producer, verifier or acceptance adapter without companion repositories.
 Reports disclose actual coverage and do not claim certification. See the
-[source installation and adapter contract](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md).
+[installation and adapter contract](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md).
 
 ## Licensing
 
