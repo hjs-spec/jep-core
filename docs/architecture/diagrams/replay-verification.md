@@ -14,4 +14,4 @@ flowchart TB
     Extra -->|report supported scopes| Report
 ```
 
-Core canonicalization and signature verification follow JEP rules. The current reference API reports only checks it actually performs; trust-profile, chain, policy, HJS/JAC, authority, and completeness claims require their corresponding evidence and validators. Never normalize signed payloads with an unrelated JSON format.
+Core canonicalization and signature verification follow JEP rules. The current reference API reports only checks it actually performs. Additional profile, chain or policy checks require corresponding evidence and validators. Preserve the original signed payload during verification.

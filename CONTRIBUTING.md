@@ -1,11 +1,10 @@
 # Contributing to JEP Core
 
-Start with the [current specification sources](docs/SPECIFICATION-SOURCES.md)
-and the [implementer guide](docs/IMPLEMENTER-GUIDE.md). JEP is an individual
-Internet-Draft; a repository contribution is not IETF consensus or endorsement.
+Choose a route below to report a problem, share an implementation or propose a change.
 
 | What you have | Where to send it |
 | --- | --- |
+| A setup question, software bug or documentation fix | [Open an issue](https://github.com/hjs-spec/jep-core/issues/new) with the package version, command, expected result and actual result; small documentation fixes can go directly to a pull request |
 | A specification ambiguity or conflicting implementation behavior | [Open an issue](https://github.com/hjs-spec/jep-core/issues/new); name the exact draft, section, expected behavior and minimal example |
 | An independent implementation | [Implementation report](https://github.com/hjs-spec/jep-core/issues/new?template=independent-implementation.yml) |
 | Reproducible interoperability results | Run the [BYOI path](docs/BYOI-CONFORMANCE.md), then submit an [interoperability report](https://github.com/hjs-spec/jep-core/issues/new?template=interoperability-result.yml) |
@@ -27,10 +26,10 @@ maintainer to execute third-party code or access a submitter's deployment.
 
 ## Changes
 
-1. Explain the observed problem and link the applicable normative requirement.
+1. Explain the observed problem. For protocol behavior, link the applicable requirement in the [specification sources](docs/SPECIFICATION-SOURCES.md).
 2. Make the smallest change on a branch. Keep Core, profile behavior and tools
    distinct; add a regression check when behavior changes.
-3. Run `make repository-check conformance` and the relevant tests. BYOI changes
+3. Set up the [development environment](README.md#develop-and-test-from-source), then run `make repository-check conformance` and the relevant tests. BYOI changes
    also require `python -m pytest tests/test_byoi.py` and `make byoi-check`.
 4. Open a pull request with the result, evidence and known limitations.
 

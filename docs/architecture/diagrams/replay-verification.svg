@@ -23,7 +23,7 @@
   <path d="M 520.0 153 L 180.0 230" class="edge" />
   <text x="350.0" y="183.5" text-anchor="middle" class="small">preserve signed members</text>
   <path d="M 180.0 308 L 180.0 385" class="edge" />
-  <text x="180.0" y="338.5" text-anchor="middle" class="small">report performed checks</text>
+  <text x="194.0" y="338.5" text-anchor="start" class="small">report performed checks</text>
   <path d="M 180.0 463 L 520.0 540" class="edge" />
   <text x="350.0" y="493.5" text-anchor="middle" class="small">report Core outcome</text>
   <path d="M 520.0 153 L 860.0 230" class="edge" />

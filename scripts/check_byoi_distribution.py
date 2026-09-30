@@ -48,17 +48,24 @@ def check():
         scripts = environment / ('Scripts' if sys.platform == 'win32' else 'bin')
         cli = scripts / ('jep-byoi.exe' if sys.platform == 'win32' else 'jep-byoi')
         # Execute the commands users actually copy from the installed README.
-        blocks = re.findall(r'```sh\r?\n(.*?)```', metadata.get_payload(), flags=re.S)
-        assert len(blocks) >= 2, 'Installed README must contain the first-use and demo commands'
+        first_use = re.search(r'^## Verify your first event\r?\n(.*?)(?=^## |\Z)',
+                              metadata.get_payload(), flags=re.S | re.M)
+        assert first_use, 'Installed README must contain the first-use section'
+        blocks = re.findall(r'```sh\r?\n(.*?)```', first_use.group(1), flags=re.S)
+        assert len(blocks) == 1, 'First-use section must contain one runnable command block'
         first = blocks[0].strip().splitlines()
         assert shlex.split(first[0]) == ['python', '-m', 'pip', 'install', 'jep-core-conformance==' + metadata['Version']]
-        for line in first[1:] + blocks[1].strip().splitlines():
+        assert any(line.startswith('jep-validate ') for line in first[1:]), 'First-use commands must validate an event'
+        for line in first[1:]:
             argv = shlex.split(line)
             argv[0] = str(scripts / (argv[0] + ('.exe' if sys.platform == 'win32' else '')))
             result = subprocess.run(argv, cwd=work, check=True, capture_output=True, text=True)
             if line.startswith('jep-validate '):
                 validation = json.loads(result.stdout)
                 assert validation['status'] == 'valid' and validation['checks']['cryptographic'] == 'pass'
+        # The full reference demonstration is documented in the BYOI guide.
+        subprocess.run([str(cli), 'demo', '--report', 'byoi-reference-report.json'],
+                       cwd=work, check=True, capture_output=True, text=True)
         demo = json.loads((work / 'byoi-reference-report.json').read_text())
         assert demo['tests_passed'] == 29 and demo['outcome'] == 'pass'
         assert demo['implementation']['version'] == metadata['Version']

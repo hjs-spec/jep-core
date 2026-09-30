@@ -72,7 +72,9 @@ def arrow(x1: float, y1: float, x2: float, y2: float, label: str | None = None, 
     css_class = "edge dash" if dashed else "edge"
     output = f'  <path d="M {x1} {y1} L {x2} {y2}" class="{css_class}" />\n'
     if label:
-        output += f'  <text x="{(x1 + x2) / 2}" y="{(y1 + y2) / 2 - 8}" text-anchor="middle" class="small">{escape(label)}</text>\n'
+        label_x = x1 + 14 if x1 == x2 else (x1 + x2) / 2
+        anchor = "start" if x1 == x2 else "middle"
+        output += f'  <text x="{label_x}" y="{(y1 + y2) / 2 - 8}" text-anchor="{anchor}" class="small">{escape(label)}</text>\n'
     return output
 
 
@@ -82,7 +84,7 @@ def write_svg(name: str, content: str) -> None:
 
 # Positions are layout only. All labels and relationships come from Mermaid.
 LAYOUTS = {
-    "protocol-stack": {"App": (1, 0), "JEP": (0, 1), "Policy": (2, 1), "HJS": (0, 2), "JAC": (1, 3)},
+    "protocol-stack": {"App": (1, 0), "Local": (0, 1), "HTTP": (2, 1), "Event": (1, 2), "Verifier": (1, 3)},
     "execution-path": {"Request": (1, 0), "Policy": (1, 1), "Tool": (0, 2), "Record": (1, 3), "Archive": (1, 4), "Replay": (1, 5)},
     "delegation-lineage": {"Parent": (1, 0), "D": (1, 1), "Policy": (0, 2), "Tool": (0, 3), "Evidence": (1, 4)},
     "replay-verification": {"Archive": (1, 0), "Core": (0, 1), "Result": (0, 2), "Extra": (2, 1), "Report": (1, 3)},
@@ -119,6 +121,10 @@ def generate(name, positions):
             label_x = (route_x + end_x) / 2
             anchor = "middle"
             label_y = second.y + 29
+            if abs(route_x - end_x) < 120:
+                label_x = route_x + 8
+                anchor = "start"
+                label_y = (first.y + second.y) / 2 + 39
             content += f'<text x="{label_x}" y="{label_y}" text-anchor="{anchor}" class="small">{escape(label)}</text>\n'
         else:
             content += arrow(x1, y1, x2, y2, label)

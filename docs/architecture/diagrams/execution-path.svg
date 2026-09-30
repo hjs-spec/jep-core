@@ -21,17 +21,17 @@
 <rect width="1040" height="985" fill="white" />
 <text x="520" y="35" text-anchor="middle" class="title">Execution and recording</text>
   <path d="M 520.0 153 L 520.0 230" class="edge" />
-  <text x="520.0" y="183.5" text-anchor="middle" class="small">request capability</text>
+  <text x="534.0" y="183.5" text-anchor="start" class="small">request capability</text>
   <path d="M 520.0 308 L 180.0 385" class="edge" />
   <text x="350.0" y="338.5" text-anchor="middle" class="small">allowed operation</text>
 <path d="M 655 269 L 687 269 L 687 579 L 655 579" class="edge" />
-<text x="671.0" y="569" text-anchor="middle" class="small">record decision</text>
+<text x="695" y="424.0" text-anchor="start" class="small">record decision</text>
   <path d="M 180.0 463 L 520.0 540" class="edge" />
   <text x="350.0" y="493.5" text-anchor="middle" class="small">record result or failure</text>
   <path d="M 520.0 618 L 520.0 695" class="edge" />
-  <text x="520.0" y="648.5" text-anchor="middle" class="small">preserve signed bytes</text>
+  <text x="534.0" y="648.5" text-anchor="start" class="small">preserve signed bytes</text>
   <path d="M 520.0 773 L 520.0 850" class="edge" />
-  <text x="520.0" y="803.5" text-anchor="middle" class="small">load evidence</text>
+  <text x="534.0" y="803.5" text-anchor="start" class="small">load evidence</text>
   <rect x="385" y="75" width="270" height="78" class="box protocol" />
   <text x="520.0" y="103" text-anchor="middle" class="label">Application request</text>
   <rect x="385" y="230" width="270" height="78" class="box protocol" />

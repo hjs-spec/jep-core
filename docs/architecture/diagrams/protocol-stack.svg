@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1040" height="675" viewBox="0 0 1040 675" role="img" aria-labelledby="title desc">
-  <title id="title">Protocol responsibilities</title>
+  <title id="title">Recording and verification</title>
   <desc id="desc">Static SVG preview generated from the repository architecture diagram definitions.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
@@ -19,28 +19,26 @@
     </style>
   </defs>
 <rect width="1040" height="675" fill="white" />
-<text x="520" y="35" text-anchor="middle" class="title">Protocol responsibilities</text>
+<text x="520" y="35" text-anchor="middle" class="title">Recording and verification</text>
   <path d="M 520.0 153 L 180.0 230" class="edge" />
-  <text x="350.0" y="183.5" text-anchor="middle" class="small">create and verify</text>
+  <text x="350.0" y="183.5" text-anchor="middle" class="small">record locally</text>
   <path d="M 520.0 153 L 860.0 230" class="edge" />
-  <text x="690.0" y="183.5" text-anchor="middle" class="small">enforce separately</text>
-  <path d="M 180.0 308 L 180.0 385" class="edge" />
-  <text x="180.0" y="338.5" text-anchor="middle" class="small">archive evidence</text>
-<path d="M 45 269 L 20 269 L 20 579 L 385 579" class="edge" />
-<text x="202.5" y="569" text-anchor="middle" class="small">declare relationships</text>
-  <path d="M 180.0 463 L 520.0 540" class="edge" />
-  <text x="350.0" y="493.5" text-anchor="middle" class="small">reference evidence</text>
+  <text x="690.0" y="183.5" text-anchor="middle" class="small">request a service</text>
+  <path d="M 180.0 308 L 520.0 385" class="edge" />
+  <text x="350.0" y="338.5" text-anchor="middle" class="small">sign and export</text>
+  <path d="M 860.0 308 L 520.0 385" class="edge" />
+  <text x="690.0" y="338.5" text-anchor="middle" class="small">sign and export</text>
+  <path d="M 520.0 463 L 520.0 540" class="edge" />
+  <text x="534.0" y="493.5" text-anchor="start" class="small">check with public keys</text>
   <rect x="385" y="75" width="270" height="78" class="box protocol" />
-  <text x="520.0" y="103" text-anchor="middle" class="label">Application and SDK</text>
+  <text x="520.0" y="103" text-anchor="middle" class="label">Application</text>
   <rect x="45" y="230" width="270" height="78" class="box protocol" />
-  <text x="180.0" y="258" text-anchor="middle" class="label">JEP: signed atomic J/D/T/V</text>
-  <rect x="45" y="385" width="270" height="78" class="box protocol" />
-  <text x="180.0" y="413" text-anchor="middle" class="label">HJS: archives, privacy,</text>
-  <text x="180.0" y="431" text-anchor="middle" class="small">receipts</text>
-  <rect x="385" y="540" width="270" height="78" class="box protocol" />
-  <text x="520.0" y="568" text-anchor="middle" class="label">JAC: declared dependencies</text>
+  <text x="180.0" y="258" text-anchor="middle" class="label">Local Agent SDK</text>
   <rect x="725" y="230" width="270" height="78" class="box protocol" />
-  <text x="860.0" y="258" text-anchor="middle" class="label">Application policy and</text>
-  <text x="860.0" y="276" text-anchor="middle" class="small">identity</text>
+  <text x="860.0" y="258" text-anchor="middle" class="label">HTTP API and clients</text>
+  <rect x="385" y="385" width="270" height="78" class="box protocol" />
+  <text x="520.0" y="413" text-anchor="middle" class="label">Signed Core 0.7 event</text>
+  <rect x="385" y="540" width="270" height="78" class="box protocol" />
+  <text x="520.0" y="568" text-anchor="middle" class="label">Core verifier</text>
 <text x="520" y="659" text-anchor="middle" class="small">Explanatory architecture; verification claims depend on implemented scope and trusted evidence.</text>
 </svg>
