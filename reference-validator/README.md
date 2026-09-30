@@ -2,7 +2,11 @@
 
 ## Current: JEP Core 0.7
 
-Use:
+After installing `jep-core-conformance==0.7.7`, follow the
+[packaged first-event example](../README.md#verify-your-first-event). For a full
+reference exchange, run `jep-byoi demo --report byoi-reference-report.json`.
+
+The following commands require a repository checkout:
 
 ```bash
 python reference-validator/jep_validate_07.py validate EVENT.json --keys KEYS.json
@@ -12,6 +16,10 @@ python reference-validator/jep_validate_07.py run-tests test-manifest-0.7.json
 The 0.7 validator reports independent checks and, in acceptance mode,
 `accepted` or `already_accepted`. It uses stable Event Identity
 `(who,id)`; it does not require a Core nonce.
+
+CLI setup failures, such as an unreadable key file, exit 2 with a concise message
+on stderr. A completed
+validation still returns its structured result; a non-valid result exits 1.
 
 ## Legacy: JEP Core 0.6
 

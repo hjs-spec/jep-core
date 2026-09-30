@@ -7,3 +7,8 @@ migration and explicitly selected historical verification.
 Use the [current documentation](../../README.md), [Core sources](../../SPECIFICATION-SOURCES.md)
 and [migration guide](../../MIGRATION-0.7.md) for current work. Do not rewrite
 historical signed bytes or fall back to 0.6 after a current validation failure.
+
+Maintenance records: [validator hardening](HARDENING.md),
+[ecosystem hardening](ECOSYSTEM-HARDENING-2026-09.md), and
+[release delivery](RELEASE-DELIVERY-2026-09.md).
+The [report index](../../../reports/README.md) points to preserved original validation evidence.

@@ -5,10 +5,12 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import hashlib
+from importlib.metadata import PackageNotFoundError, version
 import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 
 PROTOCOL = "jep-byoi/1"
@@ -263,11 +265,31 @@ def run_suite(root, adapter, implementation, roles, *, probe=None, effect_scope=
             'results': results}
 
 
+def reference_demo(timeout=15):
+    """Run the installed reference adapter with explicit reuse disclosure."""
+    try:
+        package_version = version('jep-core-conformance')
+    except PackageNotFoundError:
+        package_version = 'unpackaged-source'
+    implementation = {
+        'name': 'jep-core-reference-demo', 'version': package_version,
+        'source': 'https://github.com/hjs-spec/jep-core',
+        'revision': digest(Path(__file__).with_name('byoi_reference_adapter.py').read_bytes()),
+        'independence': 'reference-wrapper; not an independent implementation',
+        'reused_components': ['jep-core-conformance reference validator and signing helpers'],
+    }
+    return run_suite(SUITE, [sys.executable, '-m', 'jep_conformance.byoi_reference_adapter'],
+                     implementation, ['producer', 'verifier'], timeout=timeout)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description='JEP BYOI: scoped, reproducible external implementation testing')
     commands = parser.add_subparsers(dest='command', required=True)
     export = commands.add_parser('export', help='Export the bundled suite to a new directory')
     export.add_argument('directory', type=Path)
+    demo = commands.add_parser('demo', help='Run the bundled reference example without a checkout')
+    demo.add_argument('--report', type=Path, required=True)
+    demo.add_argument('--timeout', type=float, default=15)
     run = commands.add_parser('run')
     run.add_argument('--adapter', required=True, help='Trusted command as a JSON argv array; no shell expansion')
     run.add_argument('--implementation', required=True, type=Path, help='Implementation disclosure JSON')
@@ -286,8 +308,11 @@ def main(argv=None):
             return 0
         if not 0 < args.timeout <= 60:
             raise ValueError('Timeout must be greater than zero and at most 60 seconds')
-        report = run_suite(args.suite, args.adapter, read_json(args.implementation), args.role,
-                           probe=args.effect_probe, effect_scope=args.effect_scope, timeout=args.timeout)
+        if args.command == 'demo':
+            report = reference_demo(timeout=args.timeout)
+        else:
+            report = run_suite(args.suite, args.adapter, read_json(args.implementation), args.role,
+                               probe=args.effect_probe, effect_scope=args.effect_scope, timeout=args.timeout)
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         print(json.dumps({key: report[key] for key in ('outcome', 'tests_passed', 'tests_failed', 'tests_unsupported', 'tests_not_selected')}))
         return 0 if report['outcome'] == 'pass' else 1

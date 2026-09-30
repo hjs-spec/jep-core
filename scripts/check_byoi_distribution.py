@@ -2,6 +2,8 @@
 from email.parser import BytesParser
 import json
 from pathlib import Path
+import re
+import shlex
 import subprocess
 import sys
 import tarfile
@@ -45,6 +47,23 @@ def check():
         (work / 'implementation.json').write_text(json.dumps(descriptor), encoding='utf-8')
         scripts = environment / ('Scripts' if sys.platform == 'win32' else 'bin')
         cli = scripts / ('jep-byoi.exe' if sys.platform == 'win32' else 'jep-byoi')
+        # Execute the commands users actually copy from the installed README.
+        blocks = re.findall(r'```sh\r?\n(.*?)```', metadata.get_payload(), flags=re.S)
+        assert len(blocks) >= 2, 'Installed README must contain the first-use and demo commands'
+        first = blocks[0].strip().splitlines()
+        assert shlex.split(first[0]) == ['python', '-m', 'pip', 'install', 'jep-core-conformance==' + metadata['Version']]
+        for line in first[1:] + blocks[1].strip().splitlines():
+            argv = shlex.split(line)
+            argv[0] = str(scripts / (argv[0] + ('.exe' if sys.platform == 'win32' else '')))
+            result = subprocess.run(argv, cwd=work, check=True, capture_output=True, text=True)
+            if line.startswith('jep-validate '):
+                validation = json.loads(result.stdout)
+                assert validation['status'] == 'valid' and validation['checks']['cryptographic'] == 'pass'
+        demo = json.loads((work / 'byoi-reference-report.json').read_text())
+        assert demo['tests_passed'] == 29 and demo['outcome'] == 'pass'
+        assert demo['implementation']['version'] == metadata['Version']
+        assert demo['implementation']['independence'].startswith('reference-wrapper')
+        assert demo['tests_not_selected'] == 8 and demo['certification'] is False
         subprocess.run([str(cli), 'run', '--implementation', 'implementation.json', '--role', 'producer',
                         '--role', 'verifier', '--suite', str(work / 'suite'),
                         '--adapter', json.dumps([str(python), '-m', 'jep_conformance.byoi_reference_adapter']),

@@ -1,15 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://jep.org/schemas/jep-signature-0.6.schema.json",
-  "title": "JEP Signature Container",
+  "$id": "https://jep.org/schemas/jep-signature-0.7.schema.json",
+  "title": "JEP Core 0.7 sig container",
+  "$comment": "Structural helper aligned with jep-event.schema.json. The selected signature/profile checks remain separate.",
   "oneOf": [
     {
       "type": "string",
-      "description": "Detached JWS Compact Serialization"
+      "minLength": 1
     },
     {
       "type": "object",
-      "description": "Detached JWS JSON Serialization or registered signature container"
+      "minProperties": 1
     }
   ]
 }

@@ -27,13 +27,18 @@ def check(root=ROOT):
     manifest, _ = byoi.load_suite(root / 'reference-validator/byoi_suite')
     report_schema = json.loads((root / 'schemas/jep-byoi-report.schema.json').read_text())
     assert report_schema == json.loads((root / 'reference-validator/byoi_suite/report.schema.json').read_text())
+    event_schema = json.loads((root / 'schemas/jep-event.schema.json').read_text())
+    for name, field in (('jep-signature', 'sig'), ('jep-extension', 'ext')):
+        helper = json.loads((root / 'schemas' / (name + '.schema.json')).read_text())
+        assert helper['$id'].endswith('-0.7.schema.json')
+        constraints = {key: value for key, value in helper.items() if key not in ('$schema', '$id', 'title', '$comment')}
+        assert constraints == event_schema['properties'][field], name
     for group in ('assertions', 'producer_assertions', 'acceptance_assertions'):
         for case in manifest[group]:
             assert all(source['document'] == 'draft-wang-jep-judgment-event-protocol-07' for source in case['requirements'])
-    entries = ['README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSING.md',
-               'docs/README.md', 'docs/ONE-PAGE-OVERVIEW.md', 'docs/POSITIONING.md',
-               'docs/BYOI-CONFORMANCE.md', 'docs/INTEROPERABILITY-REPORT.md',
-               'docs/INTEROPERABILITY-REPORT-TEMPLATE.md', 'docs/SPECIFICATION-SOURCES.md']
+    entries = ['README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSING.md', 'HARDENING.md']
+    entries += [path.relative_to(root).as_posix() for directory in ('docs', 'schemas', 'reports')
+                for path in (root / directory).rglob('*.md')]
     for entry in entries:
         source = root / entry
         for target in re.findall(r'\]\(([^)]+)\)', source.read_text()):

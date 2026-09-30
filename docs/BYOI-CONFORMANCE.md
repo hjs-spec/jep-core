@@ -11,23 +11,37 @@ or clarification requests, not permission to silently redefine Core.
 
 ## Install the released runner
 
-Use a fresh Python environment. Software 0.7.6 includes the BYOI commands;
-older 0.7.5 packages do not.
+Use a fresh Python environment. Software 0.7.7 includes the checkout-free demonstration below.
+Software 0.7.6 supports `export` and `run`; 0.7.5 predates BYOI.
 
 ```sh
-python -m pip install jep-core-conformance==0.7.6
-jep-byoi export /tmp/jep-byoi-suite
+python -m pip install jep-core-conformance==0.7.7
+jep-byoi export jep-example
+jep-validate validate jep-example/vectors/J-basic.json --keys jep-example/keys.json
 ```
 
 For development, a checkout containing this release can instead be installed
 with `python -m pip install -e '.[test]'`.
 
-Use a new output directory (on Windows, choose a writable local path). Export
+The sample should return `status: "valid"` and a passing cryptographic check.
+Use a new writable output directory. Export
 includes manifest, signed fixtures, public keys, producer templates, coverage and
 report schema. The manifest binds every file by SHA-256. Reports identify the
 exact manifest digest. Do not rewrite a released suite; version changed assertions.
 
-## Describe the implementation
+## Try the complete reference exchange
+
+```sh
+jep-byoi demo --report byoi-reference-report.json
+```
+
+This runs the bundled producer/verifier adapter and writes a report with 29
+passing checks. It needs no Git checkout or `scripts/` directory. The report
+identifies a reference wrapper, package version and code digests; it does not
+claim independent adoption or acceptance effects. A nonzero exit requires
+inspection of the report or command error.
+
+## Describe your implementation
 
 Create `implementation.json` from this shape, replacing the values with the
 actual tested implementation and commit:
@@ -90,15 +104,6 @@ and verifies the returned signed artifacts using the bundled reference verifier.
 This tests that exchange, not every producer behavior. To show both directions,
 select producer and verifier: your verifier receives the bundled signed suite fixtures.
 
-The bundled wiring example can be run without another implementation:
-
-```sh
-python scripts/check_byoi_reference.py --report /tmp/byoi-reference-report.json
-```
-
-That example honestly identifies itself as a reference wrapper. It is not external
-adoption evidence and supports no acceptance-effect claim.
-
 ## Acceptance processors
 
 ```sh
@@ -122,7 +127,7 @@ eight concurrent deliveries followed by a retry, and unavailable-state recovery.
 All concurrent requests reach the target. Temporary `indeterminate` outcomes may
 occur, but the retry and observed ledger must establish exactly one protected effect.
 
-`tests/support/byoi_acceptance_fixture.py` is a synthetic SQLite test target for
+For repository developers, `tests/support/byoi_acceptance_fixture.py` is a synthetic SQLite test target for
 checking the harness, including deliberate double-effect and false-flag failures.
 It is not an independent implementation, production runtime or deployment guarantee.
 

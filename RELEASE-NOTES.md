@@ -1,3 +1,16 @@
+# Software 0.7.7: a direct first-use path
+
+- Start with a packaged signed sample and a four-step implementation/report path.
+- Add `jep-byoi demo` for a reference producer/verifier report without a checkout.
+- Align current schema helpers and version references; preserve original 0.6 helpers.
+- Archive historical maintenance narratives and keep old links as explicit pointers.
+- Remove the noisy historical local report from the active tree; retain its original
+  published snapshot as evidence.
+- Present CLI input/configuration failures without a Python traceback.
+
+Core 0.7, the frozen IETF publications, signed vectors and BYOI suite bytes are
+unchanged. Demonstration reports identify reference reuse and partial coverage.
+
 # Software 0.7.6: external implementation adoption
 
 - Add scoped BSD-3-Clause licensing and package notices.

@@ -21,5 +21,5 @@ def test_registry_install_is_distinct_from_source_development():
 
 def test_distribution_readme_uses_current_validator_subcommand():
     text = (ROOT / 'README.md').read_text(encoding='utf-8')
-    assert 'jep-validate validate event.json --keys keys.json' in text
+    assert 'jep-validate validate jep-example/vectors/J-basic.json --keys jep-example/keys.json' in text
     assert 'jep-validate event.json --keys keys.json' not in text

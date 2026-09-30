@@ -3,3 +3,6 @@
 /reference-validator/byoi_suite/** -text
 # Historical source copies preserve their original Markdown hard line breaks.
 /docs/historical/0.7-source-seeds/*.md whitespace=-blank-at-eol
+
+# Preserve archived schema helper bytes.
+/schemas/legacy/** -text

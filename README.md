@@ -1,38 +1,47 @@
 # JEP Core
 
-The canonical source for **Judgment Event Protocol**: signed statements of Judgment (J), Delegation (D), Termination (T) and Verification (V).
+Judgment Event Protocol defines signed statements of Judgment (J), Delegation (D),
+Termination (T) and Verification (V). Core defines event structure and observable
+checks. It does not decide truth, authority, legal effect, causality, policy or
+external consequences. JEP is an individual Internet-Draft, not an IETF-endorsed standard.
 
-Core defines event structure and observable checks. It does not decide truth, authority, legal effect, causality, policy or external consequences. JEP is an individual Internet-Draft, not an IETF-endorsed standard.
+## Verify your first event
 
-## Install the validator
-
-In a fresh Python environment:
+Use Python 3.10 or later in a fresh environment. These commands work without a
+repository checkout, account, hosted API or another SDK:
 
 ```sh
-python -m pip install jep-core-conformance==0.7.6
-jep-validate --help
-jep-validate validate event.json --keys keys.json
+python -m pip install jep-core-conformance==0.7.7
+jep-byoi export jep-example
+jep-validate validate jep-example/vectors/J-basic.json --keys jep-example/keys.json
 ```
 
-`event.json` must be the actual event and `keys.json` the verifier's key map; use the [local create/export/verify example](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification) to generate synthetic sample files. Demo-supplied public keys establish signature consistency, not independently trusted actor identity. No hosted API or account is required.
+Look for `status: "valid"` and `checks.cryptographic: "pass"`. The keys are public
+synthetic fixtures: this verifies the sample's structure and signature, not trust
+in a real actor. Use a new export directory; an existing directory is not overwritten.
 
-Do not install historical `jep-v06-conformance-seed` alongside this package: they share the `jep_conformance` import namespace. The current package already includes the explicit `jep-validate-06` compatibility command. Existing old environments and signed archives are not silently migrated.
+To generate a complete reference demonstration report:
 
-## Start here
+```sh
+jep-byoi demo --report byoi-reference-report.json
+```
 
-| Task | Entry |
-|---|---|
-| Understand Core 0.7 in one page | [Current overview](https://github.com/hjs-spec/jep-core/blob/main/docs/ONE-PAGE-OVERVIEW.md) |
-| Select exact Core / Profiles / Conformance publications | [Specification sources](https://github.com/hjs-spec/jep-core/blob/main/docs/SPECIFICATION-SOURCES.md) |
-| Read the published protocol | [Frozen Internet-Draft -07](https://github.com/hjs-spec/jep-core/tree/main/releases/draft-07/) |
-| Read the working source | [Editor's Copy](https://github.com/hjs-spec/jep-core/blob/main/draft-wang-jep-judgment-event-protocol.md) |
-| Implement or migrate | [Implementer guide](https://github.com/hjs-spec/jep-core/blob/main/docs/IMPLEMENTER-GUIDE.md) · [0.7 migration](https://github.com/hjs-spec/jep-core/blob/main/docs/MIGRATION-0.7.md) |
-| Create, export and independently verify locally | [Agent SDK local example](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification) |
-| Try a locally hosted HTTP API | [HTTP Quickstart](https://github.com/hjs-spec/jep-quickstart) |
-| Choose a client or recorder | [Integration directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md#integrate) |
-| Understand component boundaries | [Architecture](https://github.com/hjs-spec/jep-core/blob/main/docs/architecture/README.md) |
-| Test your own implementation | [BYOI conformance path](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md) · [Report format](https://github.com/hjs-spec/jep-core/blob/main/docs/INTEROPERABILITY-REPORT.md) |
-| Contribute or report a vulnerability | [Contributing](https://github.com/hjs-spec/jep-core/blob/main/CONTRIBUTING.md) · [Private security reporting](https://github.com/hjs-spec/jep-core/blob/main/SECURITY.md) |
+The report identifies a reference wrapper and its exact code digests. It covers
+25 verifier assertions and four producer checks, with acceptance scenarios not
+selected. It is not evidence of an independent implementation or full conformance.
+
+Do not install historical `jep-v06-conformance-seed` alongside this package: they
+share the `jep_conformance` import namespace. The current package includes the
+explicit `jep-validate-06` compatibility command.
+
+## Continue from here
+
+| Step | Entry |
+| --- | --- |
+| 1. Understand the contract | [One-page overview](https://github.com/hjs-spec/jep-core/blob/main/docs/ONE-PAGE-OVERVIEW.md) · [Exact specification sources](https://github.com/hjs-spec/jep-core/blob/main/docs/SPECIFICATION-SOURCES.md) |
+| 2. Implement your selected role | [Implementer guide](https://github.com/hjs-spec/jep-core/blob/main/docs/IMPLEMENTER-GUIDE.md) |
+| 3. Test your implementation | [BYOI adapter and test guide](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md) |
+| 4. Submit reproducible results | [Report guide](https://github.com/hjs-spec/jep-core/blob/main/docs/INTEROPERABILITY-REPORT.md) · [Contribution routes](https://github.com/hjs-spec/jep-core/blob/main/CONTRIBUTING.md) |
 
 ## Current contract
 
@@ -44,11 +53,13 @@ Do not install historical `jep-v06-conformance-seed` alongside this package: the
 - Freshness mechanisms belong to profiles; Core does not require a nonce.
 - Chain reconstruction, delegation enforcement and termination cascade belong to companion/application layers.
 
-The published -07 snapshot is immutable. Its exact RFCXML and SHA-256 are recorded in the [freeze record](https://github.com/hjs-spec/jep-core/blob/main/releases/draft-07/README.md). Later changes belong to the Editor's Copy and a subsequent draft. [Datatracker](https://datatracker.ietf.org/doc/draft-wang-jep-judgment-event-protocol/) is the external publication record.
+The [published -07 snapshot](https://github.com/hjs-spec/jep-core/tree/main/releases/draft-07/)
+is immutable. Its checksum and the current Profiles -01 and Conformance -02
+publications are listed in the [source map](https://github.com/hjs-spec/jep-core/blob/main/docs/SPECIFICATION-SOURCES.md).
 
 ## Develop and test from source
 
-Clone this repository before using the source-only commands below:
+For repository development, clone this repository first:
 
 ```sh
 git clone https://github.com/hjs-spec/jep-core.git
@@ -58,31 +69,22 @@ make validate conformance repository-check
 python -m pytest
 ```
 
-The default Python validator, schemas and manifest target Core 0.7. [Validator usage](https://github.com/hjs-spec/jep-core/blob/main/reference-validator/README.md) explains keys and acceptance storage.
+[Validator usage](https://github.com/hjs-spec/jep-core/blob/main/reference-validator/README.md)
+explains keys and acceptance storage. Go and TypeScript validators in this
+repository support **0.6 only**; select legacy tools explicitly. Never infer a
+legacy decoder from a current validation failure or rewrite historical signed events.
 
-## Current and historical assets
+## More documentation
 
-| Current | Historical compatibility |
-|---|---|
-| Core `-07`; Profiles `-01`; Conformance `-02` | Core `-06`; profiles/conformance `-00` |
-| `test-manifest-0.7.json`, Python `jep_validate_07.py` | `test-manifest-0.6.json`, Python `jep_validate.py` |
-| Versioned 0.7 schemas and vectors | Go and TypeScript validators currently support **0.6 only** |
+The [documentation index](https://github.com/hjs-spec/jep-core/blob/main/docs/README.md)
+contains profile authoring, migration, architecture, optional SDK/API integrations
+and historical records. No companion repository is required for the path above.
+[Current ecosystem delivery](https://github.com/hjs-spec/.github/blob/main/DELIVERY-CURRENT.md)
+tracks separately released components. Maintainer-operated API hosting remains deferred.
 
-Schemas and tools are implementation aids; the applicable specification controls normative requirements. Use `make conformance-legacy` only for known 0.6 artifacts. Never select a legacy decoder because current validation failed, or rewrite a historical signed artifact.
-
-[Documentation index](https://github.com/hjs-spec/jep-core/blob/main/docs/README.md) · [Versioning](https://github.com/hjs-spec/jep-core/blob/main/docs/VERSIONING.md) · [Logging comparison](https://github.com/hjs-spec/jep-core/blob/main/docs/comparisons/logging.md) · [Current delivery status](https://github.com/hjs-spec/.github/blob/main/DELIVERY-CURRENT.md)
-
-The repository was previously named `jep-v06`. Repository identity is now stable; protocol drafts and software packages have separate versions. Maintainer-operated production API hosting is deferred; self-hosting remains optional.
-
-## External implementation testing
-
-Software 0.7.6 includes the BYOI runner. It exports a self-contained signed suite
-and runs a producer, verifier or acceptance adapter without companion repositories.
-Reports disclose actual coverage and do not claim certification. See the
-[installation and adapter contract](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md).
-
-## Licensing
+## Licensing and security
 
 Original implementation code and implementation aids use [BSD-3-Clause](https://github.com/hjs-spec/jep-core/blob/main/LICENSE).
 Internet-Draft text, extracted Code Components and third-party material retain
-their applicable terms. Read the [licensing scope](https://github.com/hjs-spec/jep-core/blob/main/LICENSING.md) before reuse.
+their applicable terms; see [licensing scope](https://github.com/hjs-spec/jep-core/blob/main/LICENSING.md).
+Report security-sensitive findings through [SECURITY.md](https://github.com/hjs-spec/jep-core/blob/main/SECURITY.md).
