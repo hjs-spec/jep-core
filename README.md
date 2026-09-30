@@ -80,7 +80,7 @@ The [documentation index](https://github.com/hjs-spec/jep-core/blob/main/docs/RE
 contains profile authoring, migration, architecture, optional SDK/API integrations
 and historical records. No companion repository is required for the path above.
 [Current ecosystem delivery](https://github.com/hjs-spec/.github/blob/main/DELIVERY-CURRENT.md)
-tracks separately released components. Maintainer-operated API hosting remains deferred.
+tracks separately released components.
 
 ## Licensing and security
 
