@@ -1,4 +1,4 @@
-# Unreleased: external implementation adoption
+# Software 0.7.6: external implementation adoption
 
 - Add scoped BSD-3-Clause licensing and package notices.
 - Preserve exact Profiles -01 and Conformance -02 publications, with provenance
@@ -9,9 +9,10 @@
 - Accept the single-string V verification scope shown in published Conformance
   -02 while retaining existing signed array-scope artifacts. Core -07 is unchanged.
 
-The package VERSION is not bumped here. BYOI commands require this source
-revision until a subsequent package release is explicitly made. Existing release
-artifacts must not be overwritten.
+Install `jep-core-conformance==0.7.6` to use `jep-byoi` and the bundled suite.
+This is a software/tooling release for Core 0.7, not a new Core protocol revision.
+Reports disclose partial coverage and do not claim certification. Existing
+release artifacts and published Core -07 bytes remain unchanged.
 
 # Software 0.7.5
 

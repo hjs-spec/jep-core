@@ -9,16 +9,18 @@ The normative sources are [Core -07, Profiles -01 and Conformance -02](SPECIFICA
 Tests and reference code do not override them. Disagreements are reportable bugs
 or clarification requests, not permission to silently redefine Core.
 
-## Install this source revision
+## Install the released runner
 
-The BYOI commands are new source functionality. Published `jep-core-conformance`
-0.7.5 predates them; do not assume that installing that release provides BYOI.
-From a checkout containing this change:
+Use a fresh Python environment. Software 0.7.6 includes the BYOI commands;
+older 0.7.5 packages do not.
 
 ```sh
-python -m pip install -e '.[test]'
+python -m pip install jep-core-conformance==0.7.6
 jep-byoi export /tmp/jep-byoi-suite
 ```
+
+For development, a checkout containing this release can instead be installed
+with `python -m pip install -e '.[test]'`.
 
 Use a new output directory (on Windows, choose a writable local path). Export
 includes manifest, signed fixtures, public keys, producer templates, coverage and
