@@ -2,6 +2,8 @@
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 from jsonschema import Draft202012Validator
@@ -11,6 +13,23 @@ from jep_conformance import jep_validate_07 as core
 
 ROOT = Path(__file__).resolve().parents[1]
 VECTORS = ROOT / "test-vectors/0.7"
+
+
+@pytest.mark.parametrize('operation', ['validate', 'canonicalize', 'run-tests'])
+def test_cli_configuration_errors_are_concise_and_side_effect_free(operation, tmp_path):
+    missing = str(tmp_path / 'missing.json')
+    state = tmp_path / 'acceptance.json'
+    arguments = [operation, missing]
+    if operation == 'validate':
+        arguments = ['validate', str(VECTORS / 'valid/J-basic.json'), '--keys', missing,
+                     '--mode', 'acceptance', '--acceptance-state', str(state)]
+    process = subprocess.run([sys.executable, '-m', 'jep_conformance.jep_validate_07', *arguments],
+                              cwd=tmp_path, text=True, capture_output=True)
+    assert process.returncode == 2
+    assert not process.stdout
+    assert 'input/configuration error' in process.stderr
+    assert 'Traceback' not in process.stderr
+    assert not state.exists()
 
 
 @pytest.fixture

@@ -43,6 +43,20 @@ def test_reference_producer_and_verifier_end_to_end():
     Draft202012Validator(json.loads((ROOT / 'schemas/jep-byoi-report.schema.json').read_text())).validate(report)
 
 
+def test_packaged_demo_needs_no_checkout_or_git(tmp_path):
+    report_path = tmp_path / 'demo.json'
+    process = subprocess.run([sys.executable, '-m', 'jep_conformance.byoi', 'demo',
+                              '--report', str(report_path)], cwd=tmp_path, text=True, capture_output=True)
+    assert process.returncode == 0, process.stderr
+    report = json.loads(report_path.read_text())
+    assert report['outcome'] == 'pass' and report['tests_passed'] == 29
+    assert report['tests_not_selected'] == 8
+    assert report['implementation']['independence'].startswith('reference-wrapper')
+    assert report['implementation']['revision'].startswith('sha256:')
+    assert report['certification'] is False and report['complete_core_coverage'] is False
+    Draft202012Validator(json.loads((ROOT / 'schemas/jep-byoi-report.schema.json').read_text())).validate(report)
+
+
 def test_acceptance_uses_real_ledger_observations_and_fresh_processes():
     report = byoi.run_suite(byoi.SUITE, ACCEPTANCE, DISCLOSURE, ['acceptance'],
                            probe=ACCEPTANCE + ['--probe'], effect_scope='Synthetic SQLite receipts')

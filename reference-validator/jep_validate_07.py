@@ -596,18 +596,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     c.add_argument("json_file")
     args = ap.parse_args(argv)
 
-    if args.command == "validate":
-        output = validate_file(args.event, keys=load_keys(args.keys), mode=args.mode,
-                               trust_profile=args.trust_profile, expected_audience=args.aud,
-                               now=args.now, max_age=args.max_age,
-                               acceptance_state=args.acceptance_state)
-    elif args.command == "run-tests":
-        output = run_tests(args.manifest_or_root)
-    else:
-        sysout = canonicalize(load_json(args.json_file))
-        import sys
-        sys.stdout.buffer.write(sysout + b"\n")
-        return 0
+    try:
+        if args.command == "validate":
+            output = validate_file(args.event, keys=load_keys(args.keys), mode=args.mode,
+                                   trust_profile=args.trust_profile, expected_audience=args.aud,
+                                   now=args.now, max_age=args.max_age,
+                                   acceptance_state=args.acceptance_state)
+        elif args.command == "run-tests":
+            output = run_tests(args.manifest_or_root)
+        else:
+            sysout = canonicalize(load_json(args.json_file))
+            import sys
+            sys.stdout.buffer.write(sysout + b"\n")
+            return 0
+    except (Fault, OSError, ValueError) as exc:
+        ap.exit(2, f"JEP input/configuration error: {exc}\n")
 
     print(json.dumps(output, ensure_ascii=False, indent=2))
     if args.command == "run-tests":

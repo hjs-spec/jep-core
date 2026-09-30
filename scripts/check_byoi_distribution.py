@@ -1,7 +1,10 @@
 """Verify notices/data in distributions and exercise the standalone installed wheel."""
 from email.parser import BytesParser
 import json
+import os
 from pathlib import Path
+import re
+import shlex
 import subprocess
 import sys
 import tarfile
@@ -45,6 +48,22 @@ def check():
         (work / 'implementation.json').write_text(json.dumps(descriptor), encoding='utf-8')
         scripts = environment / ('Scripts' if sys.platform == 'win32' else 'bin')
         cli = scripts / ('jep-byoi.exe' if sys.platform == 'win32' else 'jep-byoi')
+        # Execute the commands users actually copy from the installed README.
+        blocks = re.findall(r'```sh\n(.*?)```', metadata.get_payload(), flags=re.S)
+        first = blocks[0].strip().splitlines()
+        assert shlex.split(first[0]) == ['python', '-m', 'pip', 'install', 'jep-core-conformance==' + metadata['Version']]
+        command_env = dict(os.environ)
+        command_env['PATH'] = str(scripts) + os.pathsep + command_env.get('PATH', '')
+        for line in first[1:] + blocks[1].strip().splitlines():
+            result = subprocess.run(shlex.split(line), cwd=work, env=command_env, check=True, capture_output=True, text=True)
+            if line.startswith('jep-validate '):
+                validation = json.loads(result.stdout)
+                assert validation['status'] == 'valid' and validation['checks']['cryptographic'] == 'pass'
+        demo = json.loads((work / 'byoi-reference-report.json').read_text())
+        assert demo['tests_passed'] == 29 and demo['outcome'] == 'pass'
+        assert demo['implementation']['version'] == metadata['Version']
+        assert demo['implementation']['independence'].startswith('reference-wrapper')
+        assert demo['tests_not_selected'] == 8 and demo['certification'] is False
         subprocess.run([str(cli), 'run', '--implementation', 'implementation.json', '--role', 'producer',
                         '--role', 'verifier', '--suite', str(work / 'suite'),
                         '--adapter', json.dumps([str(python), '-m', 'jep_conformance.byoi_reference_adapter']),
