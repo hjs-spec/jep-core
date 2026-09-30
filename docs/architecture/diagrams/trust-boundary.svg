@@ -21,7 +21,7 @@
 <rect width="1040" height="830" fill="white" />
 <text x="520" y="35" text-anchor="middle" class="title">Trust responsibilities</text>
   <path d="M 520.0 153 L 520.0 230" class="edge" />
-  <text x="520.0" y="183.5" text-anchor="middle" class="small">request</text>
+  <text x="534.0" y="183.5" text-anchor="start" class="small">request</text>
   <path d="M 520.0 308 L 180.0 385" class="edge" />
   <text x="350.0" y="338.5" text-anchor="middle" class="small">record statement</text>
   <path d="M 520.0 308 L 860.0 385" class="edge" />
@@ -31,7 +31,7 @@
   <path d="M 860.0 463 L 520.0 540" class="edge" />
   <text x="690.0" y="493.5" text-anchor="middle" class="small">outcome evidence</text>
   <path d="M 520.0 618 L 520.0 695" class="edge" />
-  <text x="520.0" y="648.5" text-anchor="middle" class="small">provide evidence</text>
+  <text x="534.0" y="648.5" text-anchor="start" class="small">provide evidence</text>
 <path d="M 45 424 L 20 424 L 20 734 L 385 734" class="edge" />
 <text x="202.5" y="724" text-anchor="middle" class="small">trusted public-key source</text>
   <rect x="385" y="75" width="270" height="78" class="box protocol" />

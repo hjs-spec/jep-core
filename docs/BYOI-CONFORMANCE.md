@@ -1,7 +1,7 @@
 # Bring your own JEP Core 0.7 implementation
 
 This path runs a scoped suite against an implementation written in any language.
-No HJS service, account, hosted API or companion checkout is required. Choose
+No account, hosted API or companion checkout is required. Choose
 producer, verifier and/or acceptance processing. A verifier-only implementation
 need not implement a producer.
 

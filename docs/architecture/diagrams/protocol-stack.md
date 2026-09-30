@@ -1,17 +1,19 @@
-# Protocol responsibilities
+# Recording and verification
 
 ```mermaid
 flowchart TB
-    App["Application and SDK"]
-    JEP["JEP: signed atomic J/D/T/V"]
-    HJS["HJS: archives, privacy, receipts"]
-    JAC["JAC: declared dependencies"]
-    Policy["Application policy and identity"]
-    App -->|create and verify| JEP
-    App -->|enforce separately| Policy
-    JEP -->|archive evidence| HJS
-    JEP -->|declare relationships| JAC
-    HJS -->|reference evidence| JAC
+    App["Application"]
+    Local["Local Agent SDK"]
+    HTTP["HTTP API and clients"]
+    Event["Signed Core 0.7 event"]
+    Verifier["Core verifier"]
+    App -->|record locally| Local
+    App -->|request a service| HTTP
+    Local -->|sign and export| Event
+    HTTP -->|sign and export| Event
+    Event -->|check with public keys| Verifier
 ```
 
-JEP means Judgment Event Protocol. HJS and JAC add distinct contracts; they do not replace Core canonicalization or automatically authorize tool execution. These arrows show possible integration relationships, not a mandatory processing sequence.
+Choose local recording when the application owns its key, or HTTP when a service
+owns signing and acceptance state. Both paths export signed events that can be
+checked with the Core verifier. Applications configure key trust and authorization.

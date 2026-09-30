@@ -1,16 +1,16 @@
 # Architecture notes
 
-These implementation notes explain the diagrams. Protocol definitions remain in [JEP Core 0.7](https://github.com/hjs-spec/jep-core), [HJS 0.5](https://datatracker.ietf.org/doc/draft-wang-hjs-accountability/) and [JAC](https://github.com/hjs-spec/jac-agent-02).
+These notes explain current components. Protocol definitions are maintained in
+the [Core 0.7 specification sources](../SPECIFICATION-SOURCES.md).
 
 ## Responsibilities
 
 | Layer | Owns | Does not establish by itself |
 |---|---|---|
 | JEP: Judgment Event Protocol | Atomic signed J/D/T/V statements, Core canonicalization, signatures, event hashes and verification results | Truth, complete logging, identity binding or valid authority |
-| HJS | Archive, privacy, receipt and evidence lifecycle | New JEP verbs, signature rules, Core validation-check meanings or execution permissions |
-| JAC | Declared dependencies over JEP/HJS, including `ext["https://jac.org/chain"]` with `based_on`, `based_on_type`, `relation` | Core canonicalization or proof of real causality |
-| Application runtime | Tool dispatch, independently configured policy, identity resolution and storage integration | Automatic conformance to all three protocols |
-| SDK/API | Supported event creation and verification interfaces | Authority validation merely because a signature passes |
+| Local Agent SDK | Local signing, callable recording, supported chain checks and reports | Complete capture of external effects |
+| HTTP API and clients | Service-owned signing, verification, storage and acceptance state; client transport | Independent client-side verification |
+| Application | Tool execution, signing-key trust, authorization policy and retention | Authority validation merely because a signature passes |
 
 ## Format and verification matrix
 
@@ -21,7 +21,7 @@ Choose components by their actual format, not their repository name. JSONL descr
 | Core reference validator | Current 0.7 signed wire event; explicit legacy 0.6 path | Independent Core checks under the supplied keys/profile |
 | API + Python/JS/Go SDK + CLI | Current 0.7 wire event; clients delegate signing/verification to the API | Server-reported checks; clients do not independently verify signatures |
 | Agent SDK | Current 0.7 event plus local chain extensions | Core signatures and supported local checks; HTML export is an unverified projection |
-| Agent Blackbox | Core 0.7-style events plus local JAC/HJS conventions | Local hashes/signatures and incident links; not universal companion conformance |
+| Agent Blackbox | Core 0.7-style events plus local evidence and declared-link extensions | Integrity under the recorder's local key and recorded incident links |
 | JAC seed | JAC extension/fragment; historical unsigned demo events | Declaration structure and fragment hashes; not event signatures |
 
 Archived implementations and their original readers are listed in the
@@ -32,12 +32,7 @@ No automatic adapter connects these archive formats. A bridge must name the sour
 
 ## Component ownership
 
-Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language ergonomics. The Agent SDK owns local agent recording and reports. Quickstart owns the introductory workflow. Retired runtime experiments preserve only their historical envelopes, policies and readers; they are outside the active feature roadmap.
-
-The Agent SDK's finite-model determinability helpers are optional research
-APIs: they do not run during Core signing/verification or TSTO binding checks and
-do not establish real-world evidence sufficiency or completion. Keep these outside
-protocol requirements and the default integration path.
+Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language interfaces. The Agent SDK owns local agent recording and reports. Quickstart provides a runnable HTTP example.
 
 The [organization directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md) is the sole repository inventory. This document explains boundaries, rather than duplicating installation or release tables.
 

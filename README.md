@@ -1,5 +1,7 @@
 # JEP Core
 
+Create portable signed event records and verify their structure and signatures.
+
 Judgment Event Protocol defines signed statements of Judgment (J), Delegation (D),
 Termination (T) and Verification (V). Core defines event structure and observable
 checks. It does not decide truth, authority, legal effect, causality, policy or
@@ -20,28 +22,21 @@ Look for `status: "valid"` and `checks.cryptographic: "pass"`. The keys are publ
 synthetic fixtures: this verifies the sample's structure and signature, not trust
 in a real actor. Use a new export directory; an existing directory is not overwritten.
 
-To generate a complete reference demonstration report:
-
-```sh
-jep-byoi demo --report byoi-reference-report.json
-```
-
-The report identifies a reference wrapper and its exact code digests. It covers
-25 verifier assertions and four producer checks, with acceptance scenarios not
-selected. It is not evidence of an independent implementation or full conformance.
-
 Do not install historical `jep-v06-conformance-seed` alongside this package: they
 share the `jep_conformance` import namespace. The current package includes the
 explicit `jep-validate-06` compatibility command.
 
 ## Continue from here
 
-| Step | Entry |
+| I want to… | Entry |
 | --- | --- |
-| 1. Understand the contract | [One-page overview](https://github.com/hjs-spec/jep-core/blob/main/docs/ONE-PAGE-OVERVIEW.md) · [Exact specification sources](https://github.com/hjs-spec/jep-core/blob/main/docs/SPECIFICATION-SOURCES.md) |
-| 2. Implement your selected role | [Implementer guide](https://github.com/hjs-spec/jep-core/blob/main/docs/IMPLEMENTER-GUIDE.md) |
-| 3. Test your implementation | [BYOI adapter and test guide](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md) |
-| 4. Submit reproducible results | [Report guide](https://github.com/hjs-spec/jep-core/blob/main/docs/INTEROPERABILITY-REPORT.md) · [Contribution routes](https://github.com/hjs-spec/jep-core/blob/main/CONTRIBUTING.md) |
+| Record my own events locally | [Agent SDK example](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification): create, export and verify a signed event |
+| Use an HTTP service | [HTTP Quickstart](https://github.com/hjs-spec/jep-quickstart): start a local API, then create and verify through a client |
+| Build an independent implementation | [One-page overview](https://github.com/hjs-spec/jep-core/blob/main/docs/ONE-PAGE-OVERVIEW.md) → [Implementer guide](https://github.com/hjs-spec/jep-core/blob/main/docs/IMPLEMENTER-GUIDE.md) → [BYOI tests](https://github.com/hjs-spec/jep-core/blob/main/docs/BYOI-CONFORMANCE.md) |
+| Submit reproducible results | [Report guide](https://github.com/hjs-spec/jep-core/blob/main/docs/INTEROPERABILITY-REPORT.md) |
+
+For setup questions, bugs, documentation fixes and implementation reports, use the
+[contribution routes](https://github.com/hjs-spec/jep-core/blob/main/CONTRIBUTING.md).
 
 ## Current contract
 

@@ -16,4 +16,4 @@ flowchart TB
     Archive -->|load evidence| Replay
 ```
 
-The application enforces policy independently. Recording a signed statement does not grant execution permission or guarantee atomic capture of external side effects. HJS receipts and JAC declarations require their own explicit implementations. Replay does not invoke the tool.
+The application enforces policy independently. Recording a signed statement does not grant execution permission or guarantee atomic capture of external side effects. Replay does not invoke the tool.
