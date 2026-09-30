@@ -36,13 +36,13 @@ acceptance. It does not replace the original Binding/02 release reproduction:
 that release retains its original Core pin, fixtures, checksums and test report.
 The current gate uses its signed fixtures with the current Core implementation.
 
-> Historical **Core 0.6** regression harnesses. These scripts assume matching 0.6 API/SDK releases, pre-0.7 result shapes and a Core checkout named `jep-v06`. They are not a gate for current 0.7 packages. For the maintained 0.7 SDK/API flow use [Quickstart tests](https://github.com/hjs-spec/jep-quickstart#test); for current conformance use [Core checks](../README.md#validate-locally).
+> Historical **Core 0.6** regression harnesses. These scripts assume matching 0.6 API/SDK releases, pre-0.7 result shapes and a Core checkout named `jep-v06`. They are not a gate for current 0.7 packages. For the maintained 0.7 SDK/API flow use [Quickstart tests](https://github.com/hjs-spec/jep-quickstart#test); for current conformance use [Core checks](../README.md#develop-and-test-from-source).
 
 ## Historical 0.6 checks
 
 These checks start a temporary API on loopback with disposable state and a test bearer token. They do not deploy or call a live signing service.
 
-`verify_workspace.py` checks the sibling API, SDKs, reference validators and packaged GitHub Action, including restart/replay behavior. Node and Go must be on PATH; install the API/Python validator dependencies and build the TypeScript validator and Action first.
+`verify_workspace.py` checks the sibling API, SDKs, reference validators and packaged GitHub Action, including restart/replay behavior. The Action repository is archived; retain its matching historical source or release when reproducing this harness. Node and Go must be on PATH; install the API/Python validator dependencies and build the TypeScript validator and Action first.
 
 `verify_packages.py` checks installed Python and JavaScript distribution artifacts, plus the sibling Go module (or an explicitly released Go version). Each SDK creates and verifies all J/D/T/V verbs, preserves conformance metadata and diagnostics, and roundtrips hashes. Python also verifies the JavaScript/Go events.
 
@@ -71,10 +71,13 @@ transport/Binding checks and does not alter the frozen Binding/02 harness.
 
 ## Publication versus installation
 
-The pull-request installation matrix deliberately checks the already published
-0.7.4 baseline; it does not claim to install unpublished candidate code. After
-API 0.8.5 and Agent SDK 2.1.6 are released, Core's release workflow publishes its
-new wheel, then runs `check_registry_install.py --current-release` on Linux,
-Windows and macOS. Each report names the exact downloaded versions, platform
-and digests. Failed post-publication checks retain evidence and do not imply
-a successful installation or authorize replacing already-published artifacts.
+The [registry installation workflow](../.github/workflows/registry-install.yml)
+runs `check_registry_install.py --current-release` against the published release
+combination selected by that script. It downloads and installs actual registry
+and GitHub artifacts on Linux, Windows and macOS. Each report names the exact
+versions, platform and digests.
+
+The [release workflow](../.github/workflows/release.yml) runs the same checks after
+publishing a new Core wheel. Failed checks retain evidence and do not authorize
+replacing published artifacts. Candidate package behavior is checked separately
+by the [installed-wheel workflow](../.github/workflows/byoi-distribution.yml).
