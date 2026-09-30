@@ -36,7 +36,3 @@ These are separate choices, not prerequisites for the implementation path above.
 - [Repository consolidation and provenance](REPOSITORY-CONSOLIDATION-2026-09.md)
 - [Historical Core 0.6 documents and maintenance records](historical/0.6/)
 - [Abbreviated companion source seeds](historical/0.7-source-seeds/README.md)
-- [Portable evidence planning decision](decisions/portable-evidence-repository.md)
-
-Historical reports and planning notes do not define the current contract or
-establish that a proposed feature is implemented.
