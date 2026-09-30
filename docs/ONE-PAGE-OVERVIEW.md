@@ -34,5 +34,3 @@ mechanisms and chain/lifecycle effects belong to the applicable companion layer.
 This shape is not a signed test vector. Use the [BYOI fixtures and commands](BYOI-CONFORMANCE.md)
 for executable examples and [published specifications](SPECIFICATION-SOURCES.md)
 for requirements. Start implementation with the [implementer guide](IMPLEMENTER-GUIDE.md).
-
-[Historical 0.6 overview](historical/0.6/ONE-PAGE-OVERVIEW.md).

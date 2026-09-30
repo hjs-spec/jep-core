@@ -22,10 +22,6 @@ Look for `status: "valid"` and `checks.cryptographic: "pass"`. The keys are publ
 synthetic fixtures: this verifies the sample's structure and signature, not trust
 in a real actor. Use a new export directory; an existing directory is not overwritten.
 
-Do not install historical `jep-v06-conformance-seed` alongside this package: they
-share the `jep_conformance` import namespace. The current package includes the
-explicit `jep-validate-06` compatibility command.
-
 ## Continue from here
 
 | I want to… | Entry |
@@ -65,15 +61,21 @@ python -m pytest
 ```
 
 [Validator usage](https://github.com/hjs-spec/jep-core/blob/main/reference-validator/README.md)
-explains keys and acceptance storage. Go and TypeScript validators in this
-repository support **0.6 only**; select legacy tools explicitly. Never infer a
-legacy decoder from a current validation failure or rewrite historical signed events.
+explains keys, validation results and acceptance storage.
+
+## Compatibility
+
+For an existing 0.6 integration, follow the [migration guide](https://github.com/hjs-spec/jep-core/blob/main/docs/MIGRATION-0.7.md).
+Do not install historical `jep-v06-conformance-seed` alongside this package: they
+share the `jep_conformance` import namespace. Use the included `jep-validate-06`
+command for explicit legacy verification. The Go and TypeScript validators in
+this repository support **0.6 only**.
 
 ## More documentation
 
 The [documentation index](https://github.com/hjs-spec/jep-core/blob/main/docs/README.md)
 contains profile authoring, migration, architecture, optional SDK/API integrations
-and historical records. No companion repository is required for the path above.
+and historical records.
 [Current ecosystem delivery](https://github.com/hjs-spec/.github/blob/main/DELIVERY-CURRENT.md)
 tracks separately released components.
 

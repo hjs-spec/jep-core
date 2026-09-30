@@ -30,12 +30,6 @@ and [repository directory](https://github.com/hjs-spec/.github/blob/main/PROJECT
 
 No automatic adapter connects these archive formats. A bridge must name the source format, preserve original signed bytes, define its mapping and pass interoperability tests. A lifecycle label such as completion or failure is not automatically a Core `T` statement.
 
-## Component ownership
-
-Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language interfaces. The Agent SDK owns local agent recording and reports. Quickstart provides a runnable HTTP example.
-
-The [organization directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md) is the sole repository inventory. This document explains boundaries, rather than duplicating installation or release tables.
-
 ## Core objects and application envelopes
 
 Preserve signed Core members exactly when forwarding or archiving. The current protocol profile is `jep-core-0.7`, while its wire member remains `jep: "1"`. Event Identity is `(who,id)`; Event Hash identifies an exact signed artifact. Software version numbers are independent.
