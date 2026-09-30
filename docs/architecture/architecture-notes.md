@@ -22,16 +22,11 @@ Choose components by their actual format, not their repository name. JSONL descr
 | API + Python/JS/Go SDK + CLI | Current 0.7 wire event; clients delegate signing/verification to the API | Server-reported checks; clients do not independently verify signatures |
 | Agent SDK | Current 0.7 event plus local chain extensions | Core signatures and supported local checks; HTML export is an unverified projection |
 | Agent Blackbox | Core 0.7-style events plus local JAC/HJS conventions | Local hashes/signatures and incident links; not universal companion conformance |
-| Runtime | Own normalized/sorted JSON envelope and mock signatures | Local profile checks; not Core JCS/JWS conformance |
-| LangGraph / OpenAI Agents / MCP adapters | Three separate unsigned observation/archive formats | Each adapter's archive consistency checks; not Core signature verification |
-| Authority runtime / lineage explorer | Declared local scope and delegation records | Local policy-model consistency; not authenticated real-world authority |
-| Replay visualizer | Normalized projection of supplied records | Displayed links/results; no hash recomputation or JWS verification |
-| Claude replay | Own envelope, signatures and `.jcrpack` | Its declared replay/signature profile; not Core detached JWS |
-| AIP sidecar | `aip-sidecar-receipt-0.2`, sorted ASCII JSON | Receipt integrity under a caller-trusted key; not a Core event |
 | JAC seed | JAC extension/fragment; historical unsigned demo events | Declaration structure and fragment hashes; not event signatures |
-| GitHub Action | Historical 0.6-style workflow artifact or legacy API result | Mode-specific checks; unsigned artifacts are not signed Core events |
 
-The runtime, authority, lineage, replay and three observation-adapter experiments are retired from active development; their formats and readers remain available for historical reproduction. New signed recording and reports belong to the [Agent SDK](https://github.com/hjs-spec/jep-agent-sdk/blob/main/docs/INTEGRATIONS.md). Maintenance status is listed in the organization directory.
+Archived implementations and their original readers are listed in the
+[historical integration guide](https://github.com/hjs-spec/jep-agent-sdk/blob/main/docs/INTEGRATIONS.md#existing-experimental-archives)
+and [repository directory](https://github.com/hjs-spec/.github/blob/main/PROJECTS.md#historical-workflow-integration).
 
 No automatic adapter connects these archive formats. A bridge must name the source format, preserve original signed bytes, define its mapping and pass interoperability tests. A lifecycle label such as completion or failure is not automatically a Core `T` statement.
 
@@ -39,10 +34,7 @@ No automatic adapter connects these archive formats. A bridge must name the sour
 
 Core owns protocol definitions and conformance assets. The API owns shared service state; HTTP clients own transport and language ergonomics. The Agent SDK owns local agent recording and reports. Quickstart owns the introductory workflow. Retired runtime experiments preserve only their historical envelopes, policies and readers; they are outside the active feature roadmap.
 
-General MCP tool-list filtering (`shutup-mcp`) is unrelated to JEP/TSTO protocol
-implementation. The AIP sidecar is adjacent independent receipt research, not an
-optional Core component. Neither is imported by the maintained protocol path.
-The Agent SDK's finite-model determinability helpers are also optional research
+The Agent SDK's finite-model determinability helpers are optional research
 APIs: they do not run during Core signing/verification or TSTO binding checks and
 do not establish real-world evidence sufficiency or completion. Keep these outside
 protocol requirements and the default integration path.
