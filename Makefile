@@ -2,7 +2,7 @@ PYTHON ?= python
 NPM ?= npm
 GO ?= go
 
-.PHONY: validate validate-legacy test conformance conformance-legacy repository-check typescript go all
+.PHONY: validate validate-legacy test conformance conformance-legacy repository-check byoi-check typescript go all
 
 validate:
 	$(PYTHON) reference-validator/jep_validate_07.py validate test-vectors/0.7/valid/J-basic.json --keys test-vectors/0.7/keys.json
@@ -19,6 +19,10 @@ conformance-legacy:
 
 repository-check:
 	$(PYTHON) scripts/check_repository.py
+	$(PYTHON) scripts/check_adoption_assets.py
+
+byoi-check:
+	$(PYTHON) scripts/check_byoi_reference.py
 
 test:
 	$(PYTHON) -m pytest

@@ -3,6 +3,10 @@
 This guide describes the current JEP Core implementation path. For the
 normative definition, use `draft-wang-jep-judgment-event-protocol-07`.
 
+The [source map](SPECIFICATION-SOURCES.md) identifies exact published Core -07,
+Profiles -01 and Conformance -02. After implementing your selected role, use the
+[BYOI path](BYOI-CONFORMANCE.md) and [report guide](INTEROPERABILITY-REPORT.md).
+
 ## Produce
 
 A Core 0.7 producer:

@@ -1,0 +1,17 @@
+{
+  "document": "draft-wang-jep-profiles-01",
+  "retrieved_at": "2026-09-30",
+  "source": "IETF publication archive",
+  "artifacts": [
+    {
+      "file": "draft-wang-jep-profiles-01.xml",
+      "source": "https://www.ietf.org/archive/id/draft-wang-jep-profiles-01.xml",
+      "sha256": "f18f50ba52975ee82c0d36a8a8f5004135fbcfe8e60d4f84f79152cf638383a3"
+    },
+    {
+      "file": "draft-wang-jep-profiles-01.txt",
+      "source": "https://www.ietf.org/archive/id/draft-wang-jep-profiles-01.txt",
+      "sha256": "9cdf2dc7db3180ceaefe927cfe21d260f955a0298a9bf5f09bba7f4ea64c5c3c"
+    }
+  ]
+}

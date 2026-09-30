@@ -1,0 +1,5 @@
+# Preserve the exact bytes used by publication and suite SHA-256 records.
+/releases/** -text whitespace=-blank-at-eol
+/reference-validator/byoi_suite/** -text
+# Historical source copies preserve their original Markdown hard line breaks.
+/docs/historical/0.7-source-seeds/*.md whitespace=-blank-at-eol

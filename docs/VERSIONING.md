@@ -42,3 +42,14 @@ Profiles, Conformance, Semantic Interoperability, chain composition, bindings, S
 ## Historical material
 
 Pre-07 material remains available for migration and archival verification. Historical artifacts are not rewritten into JEP Core 0.7.
+
+## Core feature stability
+
+Core 0.7 remains the implementation target. Prioritize adoption and observable
+interoperability issues before proposing new Core capability. Security findings,
+normative contradictions and implementation bugs remain actionable. Published
+snapshots are immutable; normative corrections belong in later drafts.
+
+Companion publications also retain exact artifacts, checksums and provenance.
+BYOI suite versions and assertion identifiers evolve independently of Core.
+Never turn reference-implementation behavior into a new normative requirement.

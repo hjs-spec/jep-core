@@ -2,6 +2,9 @@
 
 Profiles add interoperability constraints without redefining Core.
 
+This is implementation guidance. The [exact published Profiles -01](../releases/profiles-01/)
+defines the profile contract, explicit selection and composition rules.
+
 ## A profile should declare
 
 - profile identifier and version;

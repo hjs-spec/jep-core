@@ -1,0 +1,1568 @@
+
+
+
+
+Network Working Group                                            Y. Wang
+Internet-Draft                                         26 September 2026
+Intended status: Experimental                                           
+Expires: 30 March 2027
+
+
+                   JEP Profiles and Interoperability
+                       draft-wang-jep-profiles-01
+
+Abstract
+
+   This document defines a profile model and optional interoperability
+   bindings for the Judgment Event Protocol (JEP) [JEP].  JEP-Core
+   defines a narrow signed event protocol.  Profiles define deployment-
+   specific rules for actor identifiers, key resolution, actor binding,
+   credentials, authorization context, attestation, freshness, audience,
+   replay-related mechanisms, archival evidence, chain interpretation,
+   and policy integration without changing JEP-Core semantics.
+
+   Profiles are optional.  A JEP-Core implementation MUST NOT require
+   DID, Verifiable Credentials, X.509, OAuth, OpenID Connect, RATS,
+   blockchain anchoring, HJS, JAC, a particular AI platform, or any
+   other optional profile for Core conformance.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 30 March 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+
+
+Wang                      Expires 30 March 2027                 [Page 1]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Requirements Language . . . . . . . . . . . . . . . . . . . .   4
+   3.  Profile Principles  . . . . . . . . . . . . . . . . . . . . .   4
+   4.  Profile Model . . . . . . . . . . . . . . . . . . . . . . . .   5
+     4.1.  Profile Categories  . . . . . . . . . . . . . . . . . . .   5
+     4.2.  Explicit Profile Selection  . . . . . . . . . . . . . . .   5
+     4.3.  Profile Versioning  . . . . . . . . . . . . . . . . . . .   7
+     4.4.  Profile Composition . . . . . . . . . . . . . . . . . . .   7
+     4.5.  Profile-Specific Checks . . . . . . . . . . . . . . . . .   8
+   5.  Trust Profile Interface . . . . . . . . . . . . . . . . . . .   8
+   6.  Acceptance, Freshness, and Replay Profiles  . . . . . . . . .   9
+     6.1.  Core Boundary . . . . . . . . . . . . . . . . . . . . . .   9
+     6.2.  Profile-Defined Mechanisms  . . . . . . . . . . . . . . .  10
+     6.3.  when and Freshness  . . . . . . . . . . . . . . . . . . .  10
+     6.4.  Audience  . . . . . . . . . . . . . . . . . . . . . . . .  11
+     6.5.  Acceptance Result . . . . . . . . . . . . . . . . . . . .  11
+   7.  DID / Verifiable Credential Profile Family  . . . . . . . . .  12
+     7.1.  Identifier  . . . . . . . . . . . . . . . . . . . . . . .  12
+     7.2.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     7.3.  DID Actor Binding . . . . . . . . . . . . . . . . . . . .  12
+     7.4.  Credential Use  . . . . . . . . . . . . . . . . . . . . .  13
+     7.5.  Privacy . . . . . . . . . . . . . . . . . . . . . . . . .  13
+   8.  X.509 / PKI Profile Family  . . . . . . . . . . . . . . . . .  13
+     8.1.  Identifier  . . . . . . . . . . . . . . . . . . . . . . .  13
+     8.2.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .  13
+   9.  OAuth / OpenID Connect Authorization Context Profile
+           Family  . . . . . . . . . . . . . . . . . . . . . . . . .  14
+     9.1.  Identifier  . . . . . . . . . . . . . . . . . . . . . . .  14
+     9.2.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+   10. RATS / Attestation Profile Family . . . . . . . . . . . . . .  15
+     10.1.  Identifier . . . . . . . . . . . . . . . . . . . . . . .  15
+     10.2.  Scope  . . . . . . . . . . . . . . . . . . . . . . . . .  15
+   11. Local IAM Profile Family  . . . . . . . . . . . . . . . . . .  16
+     11.1.  Identifier . . . . . . . . . . . . . . . . . . . . . . .  16
+     11.2.  Scope  . . . . . . . . . . . . . . . . . . . . . . . . .  16
+   12. HJS Archive and Privacy Profile Family  . . . . . . . . . . .  17
+     12.1.  Identifier . . . . . . . . . . . . . . . . . . . . . . .  17
+
+
+
+Wang                      Expires 30 March 2027                 [Page 2]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+     12.2.  Scope  . . . . . . . . . . . . . . . . . . . . . . . . .  17
+     12.3.  Event Identity and Artifact Binding  . . . . . . . . . .  17
+     12.4.  Time and Evidence Boundary . . . . . . . . . . . . . . .  18
+   13. JAC Chain Profile Family  . . . . . . . . . . . . . . . . . .  18
+     13.1.  Identifier . . . . . . . . . . . . . . . . . . . . . . .  18
+     13.2.  Scope  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     13.3.  References . . . . . . . . . . . . . . . . . . . . . . .  18
+     13.4.  Chain Result . . . . . . . . . . . . . . . . . . . . . .  19
+   14. Blockchain or Transparency Anchoring Profile Family . . . . .  19
+     14.1.  Identifier . . . . . . . . . . . . . . . . . . . . . . .  19
+     14.2.  Scope  . . . . . . . . . . . . . . . . . . . . . . . . .  19
+   15. AI Actor Profile Family . . . . . . . . . . . . . . . . . . .  20
+     15.1.  Identifier . . . . . . . . . . . . . . . . . . . . . . .  20
+     15.2.  Scope  . . . . . . . . . . . . . . . . . . . . . . . . .  20
+   16. Profile Registration Template . . . . . . . . . . . . . . . .  21
+   17. Security Considerations . . . . . . . . . . . . . . . . . . .  23
+   18. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  24
+   19. IANA and Registry Considerations  . . . . . . . . . . . . . .  24
+   20. Initial JEP-Core 0.7 Profile Families . . . . . . . . . . . .  25
+   21. Changes from -00  . . . . . . . . . . . . . . . . . . . . . .  26
+   22. Author's Address  . . . . . . . . . . . . . . . . . . . . . .  27
+   23. References  . . . . . . . . . . . . . . . . . . . . . . . . .  27
+     23.1.  Normative References . . . . . . . . . . . . . . . . . .  27
+     23.2.  Informative References . . . . . . . . . . . . . . . . .  28
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  28
+
+1.  Introduction
+
+   JEP-Core 0.7 defines signed J/D/T/V events, stable Event Identity,
+   signed-artifact Event Hashes, independent validation checks,
+   validation modes, and idempotent acceptance.
+
+   JEP-Core intentionally does not define a global identity, credential,
+   authorization, attestation, legal, archival, chain, or policy
+   framework.  It also does not mandate one freshness, challenge,
+   replay, transport, or storage mechanism.
+
+   Operational deployments often require such rules.  This document
+   defines a common profile contract so that those rules can be added
+   without capturing or redefining the JEP-Core narrow waist.
+
+   Conformance classes, schemas, test-vector structure, and reference-
+   validator behavior are defined in [JEP-CONFORMANCE].
+
+   Where this document conflicts with JEP-Core, JEP-Core controls.
+
+
+
+
+
+
+Wang                      Expires 30 March 2027                 [Page 3]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+2.  Requirements Language
+
+   The key words *MUST*, *MUST NOT*, *REQUIRED*, *SHALL*, *SHALL NOT*,
+   *SHOULD*, *SHOULD NOT*, *RECOMMENDED*, *NOT RECOMMENDED*, *MAY*, and
+   *OPTIONAL* in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals.
+
+3.  Profile Principles
+
+   A JEP profile MUST follow these principles:
+
+   *  It MUST NOT redefine JEP-Core J/D/T/V semantics.
+
+   *  It MUST NOT redefine Event Identity (who,id).
+
+   *  It MUST NOT redefine Event Hash as anything other than an
+      identifier for an exact signed artifact.
+
+   *  It MUST NOT redefine the JEP Signing Payload, Core
+      canonicalization requirements, or Core extension semantics.
+
+   *  It MAY make an otherwise optional validation check required for
+      that profile, but MUST NOT change the meaning of a Core check.
+
+   *  It MAY define profile-specific validation checks.  Such checks
+      MUST be clearly identified as profile-defined rather than JEP-
+      Core-defined.
+
+   *  It MAY define actor identifier forms, key-resolution mechanisms,
+      credential rules, attestation rules, acceptance requirements,
+      archival rules, chain rules, or policy hooks.
+
+   *  It MUST declare which validation modes and checks it requires.
+
+   *  It MUST declare whether it imposes an algorithm policy and, if so,
+      define that policy.  It MUST also define security considerations,
+      privacy considerations, and failure behavior.
+
+   *  It MUST NOT present profile validity as substantive truth, legal
+      effect, authorization, causality, or policy consequence beyond the
+      scope that the profile explicitly evaluates.
+
+   *  It SHOULD be independently implementable and testable.
+
+   *  It SHOULD minimize new top-level wire semantics.  Profile-specific
+      signed data SHOULD use registered JEP extensions or referenced
+      external objects.
+
+
+
+Wang                      Expires 30 March 2027                 [Page 4]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   Profiles MUST preserve the distinction between:
+
+   logical event identity  = Event Identity (who,id)
+   exact signed artifact   = Event Hash
+
+   A profile that refers to a logical JEP event SHOULD use Event
+   Identity.  A profile that must bind an exact signed representation
+   MAY additionally use an Event Hash.
+
+4.  Profile Model
+
+4.1.  Profile Categories
+
+   A profile MAY belong to one or more of the following categories:
+
+   *  *trust profile*: actor identifiers, key resolution, actor/key
+      binding, algorithm policy, revocation, and historical validity;
+
+   *  *acceptance profile*: audience, freshness, challenge-response,
+      replay-related mechanisms, acceptance-domain rules, or single-use
+      authority;
+
+   *  *credential or attestation profile*: credentials, presentations,
+      certificates, remote-attestation evidence, or equivalent evidence;
+
+   *  *archival profile*: receipt, archive, retention, custody,
+      redaction, selective disclosure, or long-term verification
+      context;
+
+   *  *chain profile*: dependency, delegation, termination, causality,
+      responsibility, or graph interpretation;
+
+   *  *policy profile*: domain, organizational, legal, regulatory, or
+      deployment-specific evaluation.
+
+   A profile category does not grant authority.  It identifies which
+   semantics the profile owns.
+
+4.2.  Explicit Profile Selection
+
+   The active profile set MUST be explicit to the verifier.
+
+   A profile MAY be selected by:
+
+   *  verifier configuration;
+
+   *  an API validation request;
+
+
+
+
+Wang                      Expires 30 March 2027                 [Page 5]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  a transport or application binding;
+
+   *  archive metadata;
+
+   *  a registered signed extension when the profile requires signed
+      profile intent.
+
+   A verifier MUST NOT silently infer a trust or acceptance profile
+   solely from:
+
+   *  the syntax of who;
+
+   *  the presence of a DID, certificate, credential, token, or
+      attestation reference;
+
+   *  the presence or absence of aud;
+
+   *  the presence of a nonce-like extension;
+
+   *  a failed attempt to validate under another profile.
+
+   For example, a DID-shaped who value does not by itself select the
+   DID/VC profile.
+
+   A deployment MAY define a deterministic mapping from an input context
+   or identifier form to a profile, provided that the mapping is
+   explicitly configured or published before validation and is reported
+   as part of the validation context.  Such a mapping is explicit
+   profile selection, not silent inference.
+
+   A verifier MUST NOT choose a different profile merely because
+   validation under the initially selected profile failed.
+
+   If a profile requires the producer's profile choice to be
+   cryptographically bound to the event, the profile MUST define a
+   signed extension carrying that choice.
+
+   The validation result SHOULD identify the active profile.
+
+   A verifier MAY apply multiple profiles internally.  For an
+   interoperable conformance claim, an otherwise ad hoc combination
+   SHOULD be represented by a named composed profile with its own
+   identifier.  If no composed identifier exists, the implementation
+   SHOULD report the component profiles in profile-specific result
+   metadata and MUST NOT imply that one constituent profile represents
+   the entire combination.
+
+
+
+
+
+Wang                      Expires 30 March 2027                 [Page 6]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+4.3.  Profile Versioning
+
+   A profile identifier MUST identify one defined semantic version of
+   the profile.
+
+   A materially different profile semantic contract SHOULD use a new
+   profile identifier or version.  Implementations MUST NOT silently
+   reinterpret an older profile identifier using newer incompatible
+   rules.
+
+   The :0 identifiers defined by draft-wang-jep-profiles-00 are
+   historical JEP-Core 0.6 profile seeds.  This revision defines :1
+   identifiers for the JEP-Core 0.7-aligned profile families below.
+
+   The :1 identifiers in this Experimental Internet-Draft are
+   provisional identifiers.  They are not IANA-registered identifiers.
+
+4.4.  Profile Composition
+
+   Multiple profiles MAY be active for one validation request.
+
+   Unless a composed profile explicitly specifies another rule:
+
+   *  required checks are the union of the checks required by all active
+      profiles;
+
+   *  algorithm acceptability is the intersection of the policies
+      imposed by active profiles that define an algorithm policy;
+
+   *  all active audience requirements MUST be satisfied;
+
+   *  all active freshness and challenge requirements MUST be satisfied;
+
+   *  all required actor-binding requirements MUST be satisfied;
+
+   *  all required critical extensions MUST be processed.
+
+   One profile MUST NOT weaken a JEP-Core requirement or a stricter
+   requirement of another active profile unless the composed profile is
+   explicitly defined as a new profile with its own identifier and
+   security analysis.
+
+   If active profiles impose irreconcilable requirements, the verifier
+   MUST NOT report successful validation.  It SHOULD report an
+   indeterminate overall status and a profile-specific conflict error
+   unless an independently required check has deterministically failed.
+
+
+
+
+
+Wang                      Expires 30 March 2027                 [Page 7]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   Profile composition MUST NOT silently change the semantics of
+   historical events.
+
+4.5.  Profile-Specific Checks
+
+   Profiles MAY define validation checks beyond the JEP-Core check
+   identifiers.
+
+   A profile-specific check identifier SHOULD be collision-resistant,
+   for example:
+
+   jep-profile:did-vc:1#credential_status
+   jep-profile:rats:1#attestation
+   jep-profile:blockchain-anchor:1#anchoring
+
+   A profile-specific check MUST NOT reuse the name of a JEP-Core check
+   with a different meaning.
+
+   A verifier MUST NOT report an unperformed profile-specific check as
+   pass.
+
+5.  Trust Profile Interface
+
+   A trust profile defines how a verifier evaluates the relationship
+   between the claimed actor, signing key, applicable algorithms, and
+   historical trust evidence.
+
+   Where applicable, a trust profile MUST define:
+
+   *  profile identifier and version;
+
+   *  supported actor identifier forms;
+
+   *  key identifier syntax and discovery;
+
+   *  binding rules between who and signing keys;
+
+   *  accepted signature algorithms;
+
+   *  downgrade policy;
+
+   *  key rotation handling;
+
+   *  revocation handling;
+
+   *  historical key-validity rules;
+
+   *  credential or attestation dependencies;
+
+
+
+Wang                      Expires 30 March 2027                 [Page 8]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  audience requirements;
+
+   *  freshness requirements;
+
+   *  challenge-response requirements;
+
+   *  acceptance-domain rules;
+
+   *  policy-evaluation hooks;
+
+   *  required validation checks;
+
+   *  profile-specific checks;
+
+   *  failure mappings;
+
+   *  security considerations;
+
+   *  privacy considerations;
+
+   *  conformance requirements.
+
+   A trust profile MUST distinguish cryptographic signature validity
+   from actor/key binding.
+
+   A valid signature by a key does not establish actor_binding: pass
+   unless the active trust profile establishes that the key is bound to
+   the actor claimed by who.
+
+6.  Acceptance, Freshness, and Replay Profiles
+
+6.1.  Core Boundary
+
+   JEP-Core does not mandate a nonce, challenge, sequence number,
+   counter, ledger, or transport mechanism.
+
+   JEP-Core requires idempotent acceptance: the same Event Identity MUST
+   NOT apply the same acceptance effect more than once within one
+   acceptance domain.
+
+   An acceptance profile MAY add stronger properties, including:
+
+   *  current liveness;
+
+   *  server-issued challenge freshness;
+
+   *  request ordering;
+
+
+
+
+Wang                      Expires 30 March 2027                 [Page 9]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  bounded freshness windows;
+
+   *  single-use authority;
+
+   *  transaction uniqueness;
+
+   *  monotonic ordering;
+
+   *  ledger-backed consumption.
+
+6.2.  Profile-Defined Mechanisms
+
+   An acceptance profile MAY require:
+
+   *  receiver-issued nonce;
+
+   *  sender-generated nonce;
+
+   *  challenge-response;
+
+   *  sequence number;
+
+   *  transaction identifier;
+
+   *  trusted timestamp;
+
+   *  audience-bound token;
+
+   *  monotonic counter;
+
+   *  ledger position;
+
+   *  previous-event commitment.
+
+   Such a mechanism SHOULD be carried in a registered JEP extension, a
+   transport binding, or a profile-defined external object rather than
+   added as a new JEP-Core top-level member.
+
+6.3.  when and Freshness
+
+   The JEP when member is actor-declared event time.  A profile MAY
+   evaluate a freshness window using when, but MUST NOT present when
+   alone as trusted wall-clock evidence.
+
+   If trusted time is required, the profile MUST define the external
+   timestamp, receipt, archive, transparency, challenge, or other
+   evidence that establishes the required property.
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 10]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+6.4.  Audience
+
+   A profile MAY require aud.
+
+   When aud is required, the profile MUST define:
+
+   *  acceptable audience syntax;
+
+   *  matching rules;
+
+   *  whether multiple audiences are supported;
+
+   *  whether audience is part of replay isolation;
+
+   *  failure behavior for absent or mismatched audience.
+
+   The presence of aud does not by itself enforce access control.
+
+6.5.  Acceptance Result
+
+   Profile-specific freshness, audience, challenge, or authorization
+   checks are additional requirements for the requested acceptance
+   context.
+
+   They do not replace the Core distinction among:
+
+   *  accepted;
+
+   *  already_accepted;
+
+   *  rejected;
+
+   *  indeterminate.
+
+   A valid retry of an already accepted Event Identity MUST NOT be
+   transformed into a cryptographic failure merely because the profile
+   also uses a nonce or challenge mechanism.
+
+   A profile that consumes a nonce, challenge, reservation, or similar
+   single-use value SHOULD define how the consumed value is associated
+   with Event Identity.  After an Event Identity has been accepted,
+   repeat delivery of the same signed event SHOULD be recognizable as
+   already_accepted rather than treated as a new authority-consumption
+   attempt.  Reuse of the same profile-specific value with a different
+   Event Identity MAY fail the relevant profile check.
+
+
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 11]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   A profile that defines single-use authority MUST distinguish
+   consumption of that authority from Core idempotent acceptance of an
+   event.
+
+7.  DID / Verifiable Credential Profile Family
+
+7.1.  Identifier
+
+   jep-profile:did-vc:1
+
+7.2.  Scope
+
+   This optional profile family defines how JEP deployments may use
+   Decentralized Identifiers [DID-CORE] and Verifiable Credentials
+   [VC-DATA-MODEL] as identity or credential evidence.
+
+   DID and VC support remains optional for JEP-Core.
+
+   A concrete profile instance MUST identify the DID methods, credential
+   formats, proof formats, status mechanisms, and trust rules it
+   supports.  The family identifier alone is not sufficient to make
+   every DID method or credential format interoperable.
+
+7.3.  DID Actor Binding
+
+   When a DID is used as who, the concrete profile MUST define:
+
+   *  supported DID methods;
+
+   *  DID document resolution;
+
+   *  verification-method selection;
+
+   *  controller or equivalent binding rules;
+
+   *  historical key validation;
+
+   *  caching and freshness of DID resolution;
+
+   *  deactivation or revocation handling;
+
+   *  failure behavior.
+
+   actor_binding MAY be reported pass only when the active profile has
+   bound the verified signing key to the claimed who.
+
+
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 12]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+7.4.  Credential Use
+
+   A JEP event MAY reference credential evidence by digest, URI,
+   presentation reference, archival reference, or another profile-
+   defined reference.
+
+   Credential evidence MAY support claims about role, affiliation,
+   qualification, authorization scope, certification, or other
+   attributes.
+
+   Credential validity is separate from JEP-Core event validity.  A
+   valid credential does not make the substantive JEP claim true, and a
+   valid JEP event does not make a credential claim true.
+
+   A concrete DID/VC profile SHOULD expose credential evaluation using a
+   profile-specific check such as:
+
+   jep-profile:did-vc:1#credential_status
+
+   If a credential is required only for policy rather than actor/key
+   binding, its result MUST NOT be reported as actor_binding.
+
+7.5.  Privacy
+
+   DID resolution and credential presentation can create correlation and
+   disclosure risks.  Profiles SHOULD minimize identifiers and claims,
+   avoid unnecessary credential embedding, and define selective-
+   disclosure or access-controlled evidence mechanisms where
+   appropriate.
+
+8.  X.509 / PKI Profile Family
+
+8.1.  Identifier
+
+   jep-profile:x509:1
+
+8.2.  Scope
+
+   This optional profile family defines how X.509 certificates and
+   Internet PKI concepts [RFC5280] may be used to bind a claimed JEP
+   actor to a signing key.
+
+   A concrete profile MUST define:
+
+   *  certification-path validation rules;
+
+   *  trust anchors;
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 13]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  name-to-actor mapping;
+
+   *  key-usage and extended-key-usage requirements;
+
+   *  certificate-status or revocation processing;
+
+   *  certificate validity for real-time and archival validation;
+
+   *  algorithm policy;
+
+   *  historical validation behavior.
+
+   A certificate path that validates cryptographically does not by
+   itself establish actor_binding: pass.  The profile's name-to-actor
+   mapping MUST also succeed.
+
+   Domain, regulatory, organizational, or legal conclusions remain
+   policy results rather than intrinsic properties of X.509 or JEP-Core.
+
+9.  OAuth / OpenID Connect Authorization Context Profile Family
+
+9.1.  Identifier
+
+   jep-profile:oauth-oidc:1
+
+9.2.  Scope
+
+   This optional profile family defines how OAuth 2.0 [RFC6749] or
+   OpenID Connect [OIDC-CORE] context may be referenced when validating
+   a JEP event.
+
+   Such evidence MAY describe:
+
+   *  authorization context;
+
+   *  client identity;
+
+   *  resource server;
+
+   *  subject;
+
+   *  consent or grant context;
+
+   *  token audience;
+
+   *  token-binding or proof-of-possession evidence.
+
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 14]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   A concrete profile MUST define the token or assertion format, issuer
+   trust, audience rules, lifetime rules, status or revocation behavior
+   where applicable, and binding between the authorization artifact and
+   the JEP event.
+
+   An OAuth or OpenID Connect artifact does not by itself prove that an
+   external action was authorized, lawful, completed, or policy-
+   compliant.
+
+   Unless the profile explicitly uses the artifact to bind the JEP
+   signing key to who, authorization-context validation MUST NOT be
+   reported as actor_binding.
+
+   A profile MAY define a profile-specific check such as:
+
+   jep-profile:oauth-oidc:1#authorization_context
+
+10.  RATS / Attestation Profile Family
+
+10.1.  Identifier
+
+   jep-profile:rats:1
+
+10.2.  Scope
+
+   This optional profile family defines how remote-attestation evidence,
+   including evidence modeled using the RATS architecture [RFC9334], may
+   be used in JEP validation.
+
+   Attestation evidence MAY support claims about:
+
+   *  runtime environment;
+
+   *  device identity;
+
+   *  secure enclave or trusted execution context;
+
+   *  software measurement;
+
+   *  model execution environment;
+
+   *  tool invocation environment.
+
+   A concrete profile MUST define evidence format, appraisal policy,
+   verifier trust, freshness, reference values, endorsement handling,
+   and binding between the attested environment and the relevant JEP
+   actor, signer, or event.
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 15]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   The profile SHOULD report attestation evaluation through a profile-
+   specific check such as:
+
+   jep-profile:rats:1#attestation
+
+   Attestation does not establish the substantive correctness of a
+   judgment.
+
+11.  Local IAM Profile Family
+
+11.1.  Identifier
+
+   jep-profile:local-iam:1
+
+11.2.  Scope
+
+   This optional profile family defines how an enterprise or local
+   identity and access-management system may bind local actor
+   identifiers to signing keys.
+
+   A concrete profile MUST define:
+
+   *  actor namespace;
+
+   *  key registry or key-discovery mechanism;
+
+   *  actor/key binding;
+
+   *  role and group interpretation where used;
+
+   *  revocation;
+
+   *  historical validation;
+
+   *  algorithm policy;
+
+   *  audit export behavior;
+
+   *  acceptance-domain boundaries where applicable.
+
+   Local authorization or role membership is not automatically a
+   portable or global authorization conclusion.
+
+
+
+
+
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 16]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+12.  HJS Archive and Privacy Profile Family
+
+12.1.  Identifier
+
+   jep-profile:hjs-archive:1
+
+12.2.  Scope
+
+   This optional profile family defines how HJS-like systems may
+   receive, store, archive, redact, selectively disclose, and preserve
+   JEP events and evidence.
+
+   An archival profile MAY define:
+
+   *  receipt records;
+
+   *  receipt time;
+
+   *  archive time;
+
+   *  evidence custody;
+
+   *  retention policy;
+
+   *  redaction policy;
+
+   *  selective disclosure;
+
+   *  long-term verification context.
+
+   HJS-like systems MUST NOT redefine JEP-Core Event Identity, Event
+   Hash, signature semantics, J/D/T/V semantics, or validation-check
+   meanings.
+
+12.3.  Event Identity and Artifact Binding
+
+   An archive receipt that identifies the logical event SHOULD record
+   Event Identity.
+
+   An archive receipt that asserts custody or preservation of an exact
+   signed artifact SHOULD additionally bind the Event Hash.
+
+   Thus:
+
+   Event Identity -> which JEP event
+   Event Hash     -> which exact signed artifact was archived
+
+   An archive MUST NOT silently replace one with the other.
+
+
+
+Wang                      Expires 30 March 2027                [Page 17]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+12.4.  Time and Evidence Boundary
+
+   Receipt time and archive time are distinct from JEP when.
+
+   An archival profile MAY provide stronger external time evidence, but
+   that evidence MUST be described according to the mechanism actually
+   used.
+
+   Receipt presence alone does not establish substantive truth, legal
+   effect, complete logging, or actor authority.
+
+   A profile MAY expose archival evaluation through a profile-specific
+   check such as:
+
+   jep-profile:hjs-archive:1#archival_integrity
+
+13.  JAC Chain Profile Family
+
+13.1.  Identifier
+
+   jep-profile:jac-chain:1
+
+13.2.  Scope
+
+   This optional profile family defines how JAC-like systems may compose
+   JEP events into dependency, delegation, termination, verification,
+   causality, responsibility, or workflow graphs.
+
+   JEP-Core defines atomic signed statements.  Chain interpretation
+   belongs to the chain profile.
+
+   A JAC-like profile MUST NOT redefine:
+
+   *  JEP Event Identity;
+
+   *  JEP Event Hash;
+
+   *  JEP J/D/T/V semantics;
+
+   *  JEP signing semantics;
+
+   *  Core validation checks.
+
+13.3.  References
+
+   A chain edge referring to a logical JEP event SHOULD use Event
+   Identity.
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 18]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   A chain profile MAY additionally pin an Event Hash when the exact
+   signed representation matters.
+
+   A JEP reference does not by itself prove causality, endorsement,
+   authorization, completeness, or responsibility.
+
+13.4.  Chain Result
+
+   A chain result SHOULD expose chain_integrity separately from JEP-Core
+   validity.
+
+   A concrete chain profile MUST define, where applicable:
+
+   *  edge types;
+
+   *  resolution rules;
+
+   *  observed-log assumptions;
+
+   *  complete-log assumptions;
+
+   *  cycle handling;
+
+   *  delegation-scope interpretation;
+
+   *  termination-cascade interpretation;
+
+   *  verification-path interpretation;
+
+   *  causal interpretation;
+
+   *  failure behavior.
+
+   Legal, moral, regulatory, or organizational responsibility remains a
+   policy determination unless an explicitly selected policy profile
+   defines the required evidence and rules.
+
+14.  Blockchain or Transparency Anchoring Profile Family
+
+14.1.  Identifier
+
+   jep-profile:blockchain-anchor:1
+
+14.2.  Scope
+
+   This optional profile family defines how an exact JEP signed artifact
+   may be anchored in a distributed ledger, transparency log, timestamp
+   service, or similar external system.
+
+
+
+Wang                      Expires 30 March 2027                [Page 19]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   Because anchoring ordinarily commits to exact bytes, the object
+   anchored SHOULD be the Event Hash or another profile-defined digest
+   of the exact signed artifact, not Event Identity alone.
+
+   A concrete profile MUST define:
+
+   *  anchoring system;
+
+   *  digest algorithm;
+
+   *  inclusion or commitment proof;
+
+   *  confirmation or finality rule, where applicable;
+
+   *  timestamp semantics, if any;
+
+   *  verifier procedure;
+
+   *  historical-verification behavior;
+
+   *  failure behavior.
+
+   A profile MAY expose this through a profile-specific check such as:
+
+   jep-profile:blockchain-anchor:1#anchoring
+
+   Anchoring may support existence, ordering, timestamp, or non-
+   equivocation evidence according to the selected system.  It does not
+   prove that the JEP claim is true, authorized, lawful, complete, or
+   externally effective.
+
+15.  AI Actor Profile Family
+
+15.1.  Identifier
+
+   jep-profile:ai-actor:1
+
+15.2.  Scope
+
+   This optional profile family defines actor-identifier and binding
+   conventions for AI-native actors, including:
+
+   *  model actors;
+
+   *  agent actors;
+
+   *  tool actors;
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 20]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  service actors;
+
+   *  workflow actors;
+
+   *  session actors;
+
+   *  human-agent composites;
+
+   *  organization-agent composites.
+
+   A concrete profile MUST define:
+
+   *  actor identifier syntax;
+
+   *  actor lifecycle;
+
+   *  signing-key ownership, control, or attestation model;
+
+   *  session or deployment binding where relevant;
+
+   *  key rotation and revocation;
+
+   *  historical validation;
+
+   *  algorithm policy.
+
+   An AI actor identifier does not prove internal model state, intent,
+   understanding, sentience, competence, correctness, or factual truth.
+
+   Where an AI actor is operated on behalf of another principal, the
+   profile MUST NOT infer delegated authority merely from operator,
+   deployment, or model identity.  Delegated authority requires the
+   applicable delegation, authorization, or mandate evidence.
+
+16.  Profile Registration Template
+
+   A profile specification or registration SHOULD define:
+
+   *  profile identifier;
+
+   *  profile name;
+
+   *  profile version;
+
+   *  profile category or categories;
+
+   *  description;
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 21]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  supported JEP-Core release;
+
+   *  compatible wire major;
+
+   *  applicable validation modes;
+
+   *  required JEP-Core checks;
+
+   *  optional JEP-Core checks;
+
+   *  profile-specific check identifiers;
+
+   *  actor identifier forms;
+
+   *  key resolution and actor-binding rules;
+
+   *  credential or attestation dependencies;
+
+   *  whether the profile imposes an algorithm policy and, if so, its
+      algorithm and downgrade rules;
+
+   *  audience requirements;
+
+   *  freshness requirements;
+
+   *  challenge or replay-related mechanisms;
+
+   *  acceptance-domain rules;
+
+   *  extension identifiers and whether they may be critical;
+
+   *  logical-reference rules;
+
+   *  exact-artifact pinning rules;
+
+   *  failure codes and status mapping;
+
+   *  dependencies on other profiles;
+
+   *  profile-composition rules;
+
+   *  historical-validation rules;
+
+   *  security considerations;
+
+   *  privacy considerations;
+
+   *  change controller;
+
+
+
+Wang                      Expires 30 March 2027                [Page 22]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  test vectors or reference implementation, if available.
+
+   A registration MUST identify which requirements are intrinsic to the
+   profile and which are deployment choices.
+
+   A registration MUST NOT claim JEP-Core semantics for a profile-
+   specific check.
+
+17.  Security Considerations
+
+   Profiles expand the trust and interpretation surface around JEP-Core.
+
+   A malicious, ambiguous, or poorly specified profile can cause:
+
+   *  actor misbinding;
+
+   *  key-substitution attacks;
+
+   *  algorithm downgrade;
+
+   *  stale credential acceptance;
+
+   *  replay or challenge confusion;
+
+   *  audience confusion;
+
+   *  authorization overclaim;
+
+   *  attestation overclaim;
+
+   *  chain overinterpretation;
+
+   *  archival substitution;
+
+   *  false policy conclusions;
+
+   *  excessive disclosure.
+
+   Profile selection MUST be explicit.  Silent profile inference can
+   cause a verifier to apply unintended trust or acceptance semantics.
+
+   Profile composition MUST be analyzed for conflicts and downgrade
+   paths.
+
+   A profile that uses external resolvers, credential issuers,
+   certificate authorities, authorization servers, attestation
+   verifiers, archives, transparency services, or ledgers MUST define
+   the trust and failure assumptions for those dependencies.
+
+
+
+Wang                      Expires 30 March 2027                [Page 23]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   Profiles MUST preserve the distinction between signature validity,
+   actor-binding validity, acceptance eligibility, chain interpretation,
+   policy outcome, and substantive external truth.
+
+18.  Privacy Considerations
+
+   Profiles can introduce identifiers, credentials, roles,
+   organizational relationships, token metadata, device measurements,
+   execution metadata, location information, archive links, and chain
+   relationships.
+
+   Profiles SHOULD apply data minimization and SHOULD avoid embedding
+   sensitive evidence when a digest, controlled reference, selective-
+   disclosure mechanism, or access-controlled evidence store is
+   sufficient.
+
+   Stable actor identifiers, Event IDs, Event Hashes, credential
+   identifiers, and archival references can create cross-context
+   correlation.
+
+   A profile SHOULD state:
+
+   *  which data is disclosed;
+
+   *  to whom it is disclosed;
+
+   *  how long it is retained;
+
+   *  whether correlation across audiences is expected;
+
+   *  whether selective disclosure or redaction is available;
+
+   *  whether digest references enable confirmation or dictionary
+      attacks.
+
+19.  IANA and Registry Considerations
+
+   This document requests no IANA actions.
+
+   A future standards-track revision may request registries for:
+
+   *  JEP profile identifiers;
+
+   *  profile categories;
+
+   *  profile-specific validation-check identifiers;
+
+   *  profile-specific failure codes;
+
+
+
+Wang                      Expires 30 March 2027                [Page 24]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  profile-specific verification scopes;
+
+   *  registered extension identifiers associated with profiles.
+
+   Until such registries exist, profile identifiers SHOULD be collision-
+   resistant and specifications SHOULD identify a change controller.
+   The identifiers defined by this document remain provisional and MUST
+   NOT be represented as IANA-registered values.
+
+20.  Initial JEP-Core 0.7 Profile Families
+
+    +==============+=================================+================+
+    | Profile      | Identifier                      | Primary        |
+    | family       |                                 | ownership      |
+    +==============+=================================+================+
+    | DID / VC     | jep-profile:did-vc:1            | identity /     |
+    |              |                                 | credential     |
+    +--------------+---------------------------------+----------------+
+    | X.509 / PKI  | jep-profile:x509:1              | trust / actor  |
+    |              |                                 | binding        |
+    +--------------+---------------------------------+----------------+
+    | OAuth / OIDC | jep-profile:oauth-oidc:1        | authorization  |
+    |              |                                 | context        |
+    +--------------+---------------------------------+----------------+
+    | RATS         | jep-profile:rats:1              | attestation    |
+    +--------------+---------------------------------+----------------+
+    | Local IAM    | jep-profile:local-iam:1         | local trust /  |
+    |              |                                 | actor binding  |
+    +--------------+---------------------------------+----------------+
+    | HJS Archive  | jep-profile:hjs-archive:1       | archival /     |
+    |              |                                 | privacy        |
+    +--------------+---------------------------------+----------------+
+    | JAC Chain    | jep-profile:jac-chain:1         | chain          |
+    |              |                                 | interpretation |
+    +--------------+---------------------------------+----------------+
+    | Blockchain / | jep-profile:blockchain-anchor:1 | exact-artifact |
+    | Transparency |                                 | anchoring      |
+    | Anchor       |                                 |                |
+    +--------------+---------------------------------+----------------+
+    | AI Actor     | jep-profile:ai-actor:1          | AI actor       |
+    |              |                                 | identity /     |
+    |              |                                 | binding        |
+    +--------------+---------------------------------+----------------+
+
+                                  Table 1
+
+
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 25]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   These profile-family sections define interoperability boundaries and
+   minimum requirements.  A deployment that requires additional method-
+   specific, credential-specific, issuer-specific, ledger-specific, or
+   policy-specific choices SHOULD publish a more specific profile
+   identifier.
+
+21.  Changes from -00
+
+   Major changes from draft-wang-jep-profiles-00:
+
+   *  aligned the companion Core reference with JEP-Core 0.7;
+
+   *  aligned conformance references with draft-wang-jep-conformance-01;
+
+   *  replaced validation-level impact with independent validation-check
+      requirements;
+
+   *  added explicit profile categories;
+
+   *  required explicit profile selection and prohibited silent profile
+      inference;
+
+   *  clarified that an explicitly configured or published deterministic
+      deployment mapping counts as explicit profile selection;
+
+   *  clarified that generic profiles only define algorithm policy when
+      they actually impose one;
+
+   *  marked the :1 profile-family identifiers as provisional and not
+      IANA-registered;
+
+   *  added profile versioning and composition rules;
+
+   *  added conflict and downgrade handling for composed profiles;
+
+   *  added profile-specific check identifiers;
+
+   *  added the acceptance/freshness/replay profile model;
+
+   *  moved nonce, challenge, counter, sequence, ledger, and similar
+      mechanisms explicitly outside JEP-Core;
+
+   *  clarified that when is declared event time rather than trusted
+      time;
+
+   *  clarified that profiles may require aud without making it a Core
+      requirement;
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 26]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   *  preserved Core idempotent acceptance independently of profile
+      replay mechanisms;
+
+   *  separated Event Identity from exact signed-artifact Event Hash
+      across HJS, JAC, and anchoring profiles;
+
+   *  mapped identity profiles to actor_binding rather than Validation
+      Level 2;
+
+   *  mapped chain profiles to chain_integrity rather than Validation
+      Level 3;
+
+   *  kept policy conclusions separate rather than Validation Level 4;
+
+   *  versioned the initial profile-family identifiers from :0 to :1 to
+      avoid semantic aliasing between the 0.6 and 0.7 profile contracts;
+
+   *  expanded the profile registration template;
+
+   *  changed IANA language to request no actions in this Experimental
+      revision.
+
+22.  Author's Address
+
+   Yuqiang Wang Email: signal@humanjudgment.org URI: https://github.com/
+   hjs-spec
+
+23.  References
+
+23.1.  Normative References
+
+   [JEP]      Wang, Y., "Judgment Event Protocol (JEP)", Work in
+              Progress, Internet-Draft, draft-wang-jep-judgment-event-
+              protocol-07, 26 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-wang-jep-
+              judgment-event-protocol-07>.
+
+   [JEP-CONFORMANCE]
+              Wang, Y., "JEP Conformance and Test Suite", Work in
+              Progress, Internet-Draft, draft-wang-jep-conformance-01,
+              26 September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-wang-jep-conformance-01>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 27]
+
+Internet-Draft                JEP Profiles                September 2026
+
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, May 2017,
+              <https://www.rfc-editor.org/rfc/rfc8174>.
+
+23.2.  Informative References
+
+   [DID-CORE] W3C, "Decentralized Identifiers (DIDs) v1.0", 19 July
+              2022, <https://www.w3.org/TR/did-core/>.
+
+   [OIDC-CORE]
+              OpenID Foundation, "OpenID Connect Core 1.0", 25 February
+              2014,
+              <https://openid.net/specs/openid-connect-core-1_0.html>.
+
+   [RFC5280]  Cooper, D., "Internet X.509 Public Key Infrastructure
+              Certificate and Certificate Revocation List (CRL)
+              Profile", RFC 5280, May 2008,
+              <https://www.rfc-editor.org/rfc/rfc5280>.
+
+   [RFC6749]  Hardt, D., "The OAuth 2.0 Authorization Framework",
+              RFC 6749, October 2012,
+              <https://www.rfc-editor.org/rfc/rfc6749>.
+
+   [RFC9334]  Birkholz, H., "Remote ATtestation procedureS (RATS)
+              Architecture", RFC 9334, January 2023,
+              <https://www.rfc-editor.org/rfc/rfc9334>.
+
+   [VC-DATA-MODEL]
+              W3C, "Verifiable Credentials Data Model v2.0", 15 May
+              2025, <https://www.w3.org/TR/vc-data-model-2.0/>.
+
+Author's Address
+
+   Yuqiang Wang
+   Email: signal@humanjudgment.org
+   URI:   https://github.com/hjs-spec
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wang                      Expires 30 March 2027                [Page 28]

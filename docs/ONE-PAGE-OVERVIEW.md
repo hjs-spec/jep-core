@@ -1,86 +1,38 @@
-# JEP v0.6 One-Page Overview
+# JEP Core 0.7: one-page overview
 
-> Historical Core 0.6 overview and illustrative event shape. For current Core 0.7 events, use the [implementer guide](IMPLEMENTER-GUIDE.md) and [Quickstart](https://github.com/hjs-spec/jep-quickstart).
+JEP is a compact signed event format for statements of Judgment (J), Delegation
+(D), Termination (T) and Verification (V). It helps implementations exchange the
+same event and report exactly which checks they performed.
 
-## What JEP is
+| Concept | Core meaning |
+| --- | --- |
+| Event Identity `(who,id)` | Stable identity across delivery, export and re-verification |
+| Event Hash | Identity of one exact signed artifact, not the stable event |
+| Validation | Independent checks and `valid`, `invalid` or `indeterminate` |
+| Acceptance | At-most-once effects per Event Identity within an acceptance domain |
+| Profiles | Explicit additional trust, freshness, audience or domain requirements |
 
-JEP is a neutral, signed, verifiable event protocol for judgment-related acts in human, organizational, software, and AI-agent systems.
+J/D/T/V have defined statement semantics. Their signatures do not establish
+external truth, authorization validity, legal effect or an executed workflow.
+Core requires no global identity system, runtime or mandatory nonce. Freshness
+mechanisms and chain/lifecycle effects belong to the applicable companion layer.
 
-JEP defines four event verbs:
-
-| Verb | Name | Meaning |
-|---|---|---|
-| J | Judgment | An actor made or endorsed a decision-related claim |
-| D | Delegation | An actor delegated a task, authority, capability, or context |
-| T | Termination | An actor terminated a delegation, authority, context, or reliance |
-| V | Verification | An actor verified something within a declared scope |
-
-## Three-document structure
-
-```text
-JEP-Core -06
-  Stable narrow-waist event protocol.
-
-JEP-Profiles -00
-  Optional interoperability profiles.
-
-JEP-Conformance -00
-  Schemas, test vectors, validators, and conformance classes.
-```
-
-## Core principle
-
-```text
-signature valid ≠ claim true ≠ legal liability ≠ policy compliance
-```
-
-## JEP / HJS / JAC
-
-```text
-JEP = atomic signed judgment events
-HJS = archival, privacy, evidence lifecycle
-JAC = causality and accountability chains
-```
-
-## What JEP does not replace
-
-JEP does not replace:
-
-- DID;
-- VC;
-- OAuth;
-- X.509;
-- RATS;
-- blockchain;
-- HJS;
-- JAC;
-- AI agent frameworks;
-- legal or regulatory systems.
-
-## Minimal event shape
+## Illustrative event
 
 ```json
 {
   "jep": "1",
+  "id": "urn:uuid:00000000-0000-4000-8000-000000000001",
   "verb": "J",
-  "who": "did:example:agent-789",
-  "when": 1742345678,
-  "what": "sha256:...",
-  "nonce": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-  "aud": "https://platform.example.com",
-  "ref": null,
-  "sig": "..."
+  "who": "example:actor",
+  "when": 1790726400,
+  "what": {"claim": "approve-result"},
+  "sig": "PLACEHOLDER_DETACHED_JWS"
 }
 ```
 
-## Why v0.6 matters
+This shape is not a signed test vector. Use the [BYOI fixtures and commands](BYOI-CONFORMANCE.md)
+for executable examples and [published specifications](SPECIFICATION-SOURCES.md)
+for requirements. Start implementation with the [implementer guide](IMPLEMENTER-GUIDE.md).
 
-v0.6 turns JEP from a compact event draft into a structured infrastructure set:
-
-- stable Core;
-- optional Profiles;
-- runnable Conformance seed;
-- signed test vectors;
-- Python / TypeScript / Go validator seeds;
-- security and privacy boundaries;
-- IETF-style rendered files.
+[Historical 0.6 overview](historical/0.6/ONE-PAGE-OVERVIEW.md).

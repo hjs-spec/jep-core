@@ -25,7 +25,15 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e '.[test]'
       - run: python scripts/check_repository.py
+      - run: python scripts/check_adoption_assets.py
       - run: python -m pytest
+      - name: Exercise external adapter path with disclosed reference wrapper
+        run: python scripts/check_byoi_reference.py --report byoi-reference-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: byoi-reference-python-${{ matrix.python-version }}
+          path: byoi-reference-report.json
       - name: Run current JEP 0.7 suite
         run: python reference-validator/jep_validate_07.py run-tests test-manifest-0.7.json
       - name: Run legacy JEP 0.6 suite

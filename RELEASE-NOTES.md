@@ -1,3 +1,18 @@
+# Unreleased: external implementation adoption
+
+- Add scoped BSD-3-Clause licensing and package notices.
+- Preserve exact Profiles -01 and Conformance -02 publications, with provenance
+  and immutable checksums; archive abbreviated companion seeds and 0.6 docs.
+- Add contribution, private security and implementation/interop report routes.
+- Add a self-contained BYOI suite and language-neutral adapter runner, with
+  separate producer/verifier/acceptance roles and observed acceptance effects.
+- Accept the single-string V verification scope shown in published Conformance
+  -02 while retaining existing signed array-scope artifacts. Core -07 is unchanged.
+
+The package VERSION is not bumped here. BYOI commands require this source
+revision until a subsequent package release is explicitly made. Existing release
+artifacts must not be overwritten.
+
 # Software 0.7.5
 
 Align structural schemas with current verifier boundaries: non-empty extension
