@@ -2,6 +2,16 @@
 
 Current Core: **JEP Core 0.7**.
 
+## Package and validator compatibility
+
+Install `jep-core-conformance` in a fresh Python environment.
+Do not install historical `jep-v06-conformance-seed` alongside this package: they
+share the `jep_conformance` import namespace.
+
+- Use `jep-validate validate` for Core 0.7 events.
+- Use the included `jep-validate-06` command for explicit legacy verification.
+- The Go and TypeScript validators in the Core repository support **0.6 only**.
+
 ## Current in this repository
 
 - Core 0.7 specification: current/frozen publication.

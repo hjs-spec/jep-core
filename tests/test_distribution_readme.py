@@ -16,7 +16,9 @@ def test_registry_install_is_distinct_from_source_development():
     text = (ROOT / 'README.md').read_text(encoding='utf-8')
     assert 'python -m pip install jep-core-conformance' in text
     assert '## Develop and test from source' in text
-    assert 'Do not install historical `jep-v06-conformance-seed` alongside' in text
+    assert 'https://github.com/hjs-spec/jep-core/blob/main/docs/MIGRATION-0.7.md' in text
+    migration = (ROOT / 'docs/MIGRATION-0.7.md').read_text(encoding='utf-8')
+    assert 'Do not install historical `jep-v06-conformance-seed` alongside' in migration
 
 
 def test_distribution_readme_uses_current_validator_subcommand():

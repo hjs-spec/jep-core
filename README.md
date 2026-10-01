@@ -3,9 +3,7 @@
 Create portable signed event records and verify their structure and signatures.
 
 Judgment Event Protocol defines signed statements of Judgment (J), Delegation (D),
-Termination (T) and Verification (V). Core defines event structure and observable
-checks. It does not decide truth, authority, legal effect, causality, policy or
-external consequences. JEP is an individual Internet-Draft, not an IETF-endorsed standard.
+Termination (T) and Verification (V). Start with the packaged sample below.
 
 [Website](https://www.judgmentevent.org/) · [Getting started](https://www.judgmentevent.org/developers)
 
@@ -40,11 +38,16 @@ For setup questions, bugs, documentation fixes and implementation reports, use t
 
 **Core 0.7 · wire major `jep: "1"` · published 2026-09-26.**
 
+JEP is an individual Internet-Draft, not an IETF-endorsed standard.
+
 - Event Identity `(who,id)` identifies an event; Event Hash identifies an exact signed artifact.
 - Acceptance is idempotent per Event Identity within an acceptance domain.
 - Validation reports independent checks and `valid`, `invalid` or `indeterminate`.
 - Freshness mechanisms belong to profiles; Core does not require a nonce.
 - Chain reconstruction, delegation enforcement and termination cascade belong to companion/application layers.
+
+Core checks event structure and signatures. Apply your own trust and authorization
+rules before acting on a record; see the [validation checks](https://github.com/hjs-spec/jep-core/blob/main/docs/VALIDATION-CHECKS.md).
 
 The [published -07 snapshot](https://github.com/hjs-spec/jep-core/tree/main/releases/draft-07/)
 is immutable. Its checksum and the current Profiles -01 and Conformance -02
@@ -65,19 +68,11 @@ python -m pytest
 [Validator usage](https://github.com/hjs-spec/jep-core/blob/main/reference-validator/README.md)
 explains keys, validation results and acceptance storage.
 
-## Compatibility
-
-For an existing 0.6 integration, follow the [migration guide](https://github.com/hjs-spec/jep-core/blob/main/docs/MIGRATION-0.7.md).
-Do not install historical `jep-v06-conformance-seed` alongside this package: they
-share the `jep_conformance` import namespace. Use the included `jep-validate-06`
-command for explicit legacy verification. The Go and TypeScript validators in
-this repository support **0.6 only**.
-
 ## More documentation
 
-The [documentation index](https://github.com/hjs-spec/jep-core/blob/main/docs/README.md)
-contains profile authoring, migration, architecture, optional SDK/API integrations
-and historical records.
+Use the [documentation index](https://github.com/hjs-spec/jep-core/blob/main/docs/README.md)
+for profile authoring, validator configuration and optional integrations.
+For an existing 0.6 integration, use the [migration guide](https://github.com/hjs-spec/jep-core/blob/main/docs/MIGRATION-0.7.md).
 [Current ecosystem delivery](https://github.com/hjs-spec/.github/blob/main/DELIVERY-CURRENT.md)
 tracks separately released components.
 
