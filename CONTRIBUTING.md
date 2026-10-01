@@ -32,7 +32,7 @@ maintainer to execute third-party code or access a submitter's deployment.
    distinct; add a regression check when behavior changes.
 3. Set up the [development environment](README.md#develop-and-test-from-source), then run `make repository-check conformance` and the relevant tests. BYOI changes
    also require `python -m pytest tests/test_byoi.py` and `make byoi-check`.
-4. Open a pull request with the result, evidence and known limitations.
+4. Open a pull request with the result, evidence and known limitations. Before merging, bring the branch up to date with `main`, pass the required GitHub Actions checks and resolve review conversations.
 
 Core 0.7 is in a feature-stability period: prioritize adoption, interoperability
 and implementation corrections. New Core capabilities require a concrete
