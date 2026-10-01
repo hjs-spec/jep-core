@@ -1,0 +1,57 @@
+name: First-use report
+description: Tell us whether you completed a documented task or where you got stuck.
+title: "First use: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Choose one task from the [first-use check](https://github.com/hjs-spec/jep-core/blob/main/docs/FIRST-USE-CHECK.md).
+        Completed attempts and blockers are both useful. Report security-sensitive details privately through [SECURITY.md](https://github.com/hjs-spec/jep-core/blob/main/SECURITY.md).
+  - type: dropdown
+    id: task
+    attributes:
+      label: Task
+      options:
+        - Verify an existing event
+        - Create and verify locally
+        - Connect over HTTP
+        - Check my implementation with BYOI
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Outcome
+      options:
+        - Completed without help
+        - Completed with help
+        - Blocked
+        - Not attempted
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and versions
+      description: OS, Python, package versions or source commits, and the instructions URL you followed.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Commands and results
+      description: Include the exact commands, expected and actual result. Identify steps you did not run. Attach synthetic examples or a BYOI report when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: help
+    attributes:
+      label: Where did you need help?
+      description: Identify any guess, missing step, extra page or explanation from someone else. Leave blank if none.
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Public report
+      options:
+        - label: I removed credentials, private keys and private data from this report.
+          required: true

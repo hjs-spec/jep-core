@@ -6,6 +6,7 @@ Choose a route below to report a problem, share an implementation or propose a c
 | --- | --- |
 | A setup question, software bug or documentation fix | [Open an issue](https://github.com/hjs-spec/jep-core/issues/new) with the package version, command, expected result and actual result; small documentation fixes can go directly to a pull request |
 | A specification ambiguity or conflicting implementation behavior | [Open an issue](https://github.com/hjs-spec/jep-core/issues/new); name the exact draft, section, expected behavior and minimal example |
+| A first attempt to use JEP | Choose a [first-use task](docs/FIRST-USE-CHECK.md) and submit its result or blocker through the linked form |
 | An independent implementation | [Implementation report](https://github.com/hjs-spec/jep-core/issues/new?template=independent-implementation.yml) |
 | Reproducible interoperability results | Run the [BYOI path](docs/BYOI-CONFORMANCE.md), then submit an [interoperability report](https://github.com/hjs-spec/jep-core/issues/new?template=interoperability-result.yml) |
 | A security-sensitive issue | Follow [SECURITY.md](SECURITY.md) and report privately |
