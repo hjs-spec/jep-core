@@ -6,6 +6,8 @@
 - [Record events with the local Agent SDK](https://github.com/hjs-spec/jep-agent-sdk#local-create--export--independent-verification)
 - [Use an HTTP service and clients](https://github.com/hjs-spec/jep-quickstart)
 
+For a reproducible first attempt or a blocker, use the [first-use check](FIRST-USE-CHECK.md).
+
 ## Main implementation path
 
 For an independent implementation:
