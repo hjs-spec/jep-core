@@ -7,6 +7,8 @@ Termination (T) and Verification (V). Core defines event structure and observabl
 checks. It does not decide truth, authority, legal effect, causality, policy or
 external consequences. JEP is an individual Internet-Draft, not an IETF-endorsed standard.
 
+[Website](https://www.judgmentevent.org/) · [Getting started](https://www.judgmentevent.org/developers)
+
 ## Verify your first event
 
 Use Python 3.10 or later in a fresh environment. These commands work without a
