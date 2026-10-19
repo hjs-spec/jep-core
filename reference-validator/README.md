@@ -2,7 +2,7 @@
 
 ## Current: JEP Core 0.7
 
-After installing `jep-core-conformance==0.7.7`, follow the
+After installing `jep-core-conformance==0.7.8`, follow the
 [packaged first-event example](../README.md#verify-your-first-event). For a full
 reference exchange, run `jep-byoi demo --report byoi-reference-report.json`.
 

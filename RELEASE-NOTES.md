@@ -1,3 +1,17 @@
+# Software 0.7.8: external implementation lifecycle and candidate checks
+
+- Add optional `jep-byoi run --state-setup` for adapters that require isolated
+  acceptance state before each test case.
+- Provide a JEP-owned bridge for the pinned independent Probity implementation;
+  its native BYOI run passes all 37 selected cases without modifying reader code.
+- Add candidate checks against the frozen agreed suite, current suite and pinned
+  reader, including deliberate source faults and changed-expectation controls.
+- Document the bridge boundary, reproducible commands and retained evidence.
+
+This is a software/tooling release. Core 0.7, frozen publications, signed vectors
+and BYOI suite bytes are unchanged. Fixture results do not imply certification
+or evidence of a real deployment.
+
 # Software 0.7.7: a direct first-use path
 
 - Start with a packaged signed sample and a four-step implementation/report path.
