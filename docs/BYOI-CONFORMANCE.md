@@ -14,7 +14,7 @@ or clarification requests, not permission to silently redefine Core.
 Use Python 3.10 or later in a fresh environment.
 
 ```sh
-python -m pip install jep-core-conformance==0.7.7
+python -m pip install jep-core-conformance==0.7.8
 jep-byoi export jep-example
 jep-validate validate jep-example/vectors/J-basic.json --keys jep-example/keys.json
 ```
