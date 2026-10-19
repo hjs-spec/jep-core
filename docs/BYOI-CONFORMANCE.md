@@ -174,3 +174,10 @@ exit 2 means a configuration/artifact problem. Default per-command timeout is
 [coverage](../reference-validator/byoi_suite/coverage.json); this suite does not
 claim complete Core or profile coverage. See the [report guide](INTEROPERABILITY-REPORT.md)
 and [contribution paths](../CONTRIBUTING.md).
+
+## Candidate compatibility
+
+[The candidate check](PROBITY-CANDIDATE-CHECK.md) runs current validator and
+producer code against frozen agreed cases, alongside the pinned separate reader.
+Candidate suite updates have their own native run. Fault controls check that
+changed candidate expectations cannot hide an existing regression.
