@@ -80,6 +80,41 @@ def test_acceptance_cannot_be_claimed_without_a_probe():
         byoi.run_suite(byoi.SUITE, REFERENCE, DISCLOSURE, ['acceptance'])
 
 
+def test_explicit_state_setup_precedes_read_only_probe_and_is_reported():
+    report = byoi.run_suite(byoi.SUITE, ACCEPTANCE + ['--require-prepared'], DISCLOSURE,
+                           ['acceptance'], probe=ACCEPTANCE + ['--probe', '--require-prepared'],
+                           state_setup=ACCEPTANCE, effect_scope='Synthetic SQLite receipts')
+    assert report['outcome'] == 'pass', report['results']
+    assert report['tests_passed'] == 33
+    assert report['commands']['state_setup'] == ACCEPTANCE
+    acceptance = [r for r in report['results'] if r['assertion_id'].startswith('JEP-A-ACC-')]
+    assert len(acceptance) == 8
+    assert all(r['observations'][0]['operation'] == 'prepare_state' for r in acceptance)
+
+
+def test_state_setup_cannot_hide_effects_from_initial_probe():
+    report = byoi.run_suite(byoi.SUITE, ACCEPTANCE, DISCLOSURE, ['acceptance'],
+                           probe=ACCEPTANCE + ['--probe'], state_setup=ACCEPTANCE + ['--prepare-effect'],
+                           effect_scope='Synthetic SQLite receipts')
+    assert report['tests_failed'] == 8
+    assert all('initially be empty' in r['problems'][0]
+               for r in report['results'] if r['assertion_id'].startswith('JEP-A-ACC-'))
+
+
+def test_state_setup_failure_cannot_pass_or_run_acceptance():
+    setup = [sys.executable, '-c', 'import json; print(json.dumps({"prepared": False}))']
+    report = byoi.run_suite(byoi.SUITE, ACCEPTANCE, DISCLOSURE, ['acceptance'],
+                           probe=ACCEPTANCE + ['--probe'], state_setup=setup,
+                           effect_scope='Synthetic SQLite receipts')
+    assert report['tests_failed'] == 8
+    assert all('did not acknowledge' in r['problems'][0] for r in report['results']
+               if r['assertion_id'].startswith('JEP-A-ACC-'))
+    assert all(not r['observations'] for r in report['results']
+               if r['assertion_id'].startswith('JEP-A-ACC-'))
+    with pytest.raises(ValueError, match='requires the acceptance role'):
+        byoi.run_suite(byoi.SUITE, REFERENCE, DISCLOSURE, ['verifier'], state_setup=setup)
+
+
 def test_unsupported_is_not_a_pass():
     adapter = [sys.executable, '-c', 'import json; print(json.dumps({"unsupported":"no producer"}))']
     report = byoi.run_suite(byoi.SUITE, adapter, DISCLOSURE, ['producer'])

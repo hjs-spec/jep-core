@@ -131,13 +131,17 @@ def validation(response, mode, expected=None):
     return result
 
 
-def run_suite(root, adapter, implementation, roles, *, probe=None, effect_scope=None, timeout=15):
+def run_suite(root, adapter, implementation, roles, *, probe=None, effect_scope=None,
+              state_setup=None, timeout=15):
     manifest, suite_digest = load_suite(root)
     adapter = command(adapter)
     probe = command(probe) if probe else None
     roles = sorted(set(roles))
+    state_setup = command(state_setup) if state_setup is not None else None
     if not roles or any(role not in {'producer', 'verifier', 'acceptance'} for role in roles):
         raise ValueError("Choose producer, verifier and/or acceptance roles")
+    if state_setup is not None and 'acceptance' not in roles:
+        raise ValueError("State setup requires the acceptance role")
     if 'acceptance' in roles:
         if probe is None or not effect_scope:
             raise ValueError("Acceptance testing requires a separate read-only effect probe and effect scope")
@@ -202,6 +206,12 @@ def run_suite(root, adapter, implementation, roles, *, probe=None, effect_scope=
             def check(observations, case=case):
                 with tempfile.TemporaryDirectory(prefix='jep-byoi-') as state_dir:
                     contexts = {domain: {'state_dir': state_dir, 'acceptance_domain': domain} for domain in ('a', 'b')}
+                    if state_setup is not None:
+                        reply = invoke(state_setup, {'operation': 'prepare_state', 'state_dir': state_dir,
+                                                     'acceptance_domains': list(contexts)}, timeout)
+                        if reply.get('prepared') is not True:
+                            raise ValueError("State setup did not acknowledge prepared test state")
+                        observations.append({'operation': 'prepare_state', 'response': reply})
                     for context in contexts.values():
                         if count(context) != 0:
                             raise ValueError("Test effect scope must initially be empty")
@@ -253,7 +263,7 @@ def run_suite(root, adapter, implementation, roles, *, probe=None, effect_scope=
             'runner': {'module_digest': digest(Path(__file__).read_bytes()),
                        'producer_oracle_digest': digest(Path(__file__).with_name('jep_validate_07.py').read_bytes())
                        if 'producer' in roles else None},
-            'commands': {'adapter': adapter, 'effect_probe': probe}, 'effect_scope': effect_scope,
+            'commands': {'adapter': adapter, 'effect_probe': probe, 'state_setup': state_setup}, 'effect_scope': effect_scope,
             'outcome': outcome, 'tests_passed': totals['pass'], 'tests_failed': totals['fail'],
             'tests_unsupported': totals['unsupported'], 'tests_not_selected': total_assertions - len(results),
             'certification': False, 'complete_core_coverage': False, 'coverage': coverage,
@@ -296,6 +306,7 @@ def main(argv=None):
     run.add_argument('--role', action='append', required=True, choices=['producer', 'verifier', 'acceptance'])
     run.add_argument('--effect-probe', help='Separate read-only effect observer command as a JSON argv array')
     run.add_argument('--effect-scope', help='Describe exactly which synthetic effect the probe observes')
+    run.add_argument('--state-setup', help='Optional trusted JSON argv command to prepare empty synthetic state once per acceptance scenario')
     run.add_argument('--timeout', type=float, default=15)
     run.add_argument('--suite', type=Path, default=SUITE)
     run.add_argument('--report', type=Path, required=True)
@@ -312,7 +323,8 @@ def main(argv=None):
             report = reference_demo(timeout=args.timeout)
         else:
             report = run_suite(args.suite, args.adapter, read_json(args.implementation), args.role,
-                               probe=args.effect_probe, effect_scope=args.effect_scope, timeout=args.timeout)
+                               probe=args.effect_probe, effect_scope=args.effect_scope,
+                               state_setup=args.state_setup, timeout=args.timeout)
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         print(json.dumps({key: report[key] for key in ('outcome', 'tests_passed', 'tests_failed', 'tests_unsupported', 'tests_not_selected')}))
         return 0 if report['outcome'] == 'pass' else 1

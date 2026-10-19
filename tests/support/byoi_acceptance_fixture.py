@@ -13,11 +13,20 @@ from jep_conformance import byoi_reference_adapter as reference
 from jep_conformance import jep_validate_07 as core
 
 
-def main(request, *, probe=False, duplicate_effects=False, no_effect=False):
+def main(request, *, probe=False, duplicate_effects=False, no_effect=False,
+         require_prepared=False, prepare_effect=False):
     if not probe and request.get('operation') == 'validate' and request.get('mode') == 'archival':
         return reference.respond(request)
     state = Path(request['state_dir'])
     database = state / 'synthetic-effects.sqlite'
+    if request['operation'] == 'prepare_state':
+        with sqlite3.connect(database) as connection:
+            connection.execute('CREATE TABLE effects (domain TEXT, who TEXT, event_id TEXT)')
+            if prepare_effect:
+                connection.execute("INSERT INTO effects VALUES ('a', 'setup', 'forbidden-effect')")
+        return {'prepared': True}
+    if require_prepared and not database.exists():
+        raise ValueError('Synthetic state must be explicitly prepared')
     domain = request['acceptance_domain']
     if probe:
         if not database.exists():
@@ -71,4 +80,6 @@ def main(request, *, probe=False, duplicate_effects=False, no_effect=False):
 
 if __name__ == '__main__':
     print(json.dumps(main(json.load(sys.stdin), probe='--probe' in sys.argv,
-                          duplicate_effects='--duplicate-effects' in sys.argv, no_effect='--no-effect' in sys.argv)))
+                          duplicate_effects='--duplicate-effects' in sys.argv, no_effect='--no-effect' in sys.argv,
+                          require_prepared='--require-prepared' in sys.argv,
+                          prepare_effect='--prepare-effect' in sys.argv)))

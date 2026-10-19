@@ -4,6 +4,11 @@ For an external implementation with no companion checkouts, start with the
 [BYOI conformance path](../docs/BYOI-CONFORMANCE.md). The ecosystem gates below
 remain separate regression evidence, not independent-adopter certification.
 
+The [pinned Probity native-BYOI integration](../docs/PROBITY-NATIVE-BYOI.md)
+exercises an unchanged separate reader through an explicitly disclosed JEP-owned
+diagnostics/state-lifecycle bridge. It remains distinct from the original fixed
+pilot and does not claim unassisted adoption or external business effects.
+
 ## Current Core 0.7 / Binding/02
 
 `verify_current_07.py` checks signed artifacts against current implementations. The
