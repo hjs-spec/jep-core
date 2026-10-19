@@ -71,6 +71,15 @@ Use `{"unsupported":"reason"}` for unsupported operations; this cannot pass.
 The command line is a JSON argv array. Do not put credentials in it. Do not run
 unreviewed adapters or point this harness at production data/effects.
 
+The result envelope requires `status`, `mode`, `profile`, `checks`, `warnings`
+and `errors`. Diagnostics are arrays of objects with string `code` and `message`;
+use empty arrays when the selected implementation reports no diagnostics.
+Conformance -02 section 5.4 distinguishes warnings and errors. The exact stdin/
+stdout envelope and array encoding are this runner's adapter contract; passing
+an implementation's own script does not establish compatibility with that contract.
+An explicit adapter may complete omitted empty arrays, but must disclose that
+mapping and preserve all measured statuses, checks and existing diagnostics.
+
 | Operation | Input | Response |
 | --- | --- | --- |
 | `validate` | `event_json` raw string, public JWK `keys` map, `mode`, explicit `profile`, `signature_class` | `{"result": <structured validation result>}` |
@@ -89,6 +98,29 @@ In acceptance scenarios, both archival and acceptance requests also carry
 steps within it share state across fresh processes. Map domains to distinct
 acceptance contexts. The availability hook must disable only synthetic acceptance
 state while leaving the read-only effect probe usable. Restore it when requested.
+
+### Explicit synthetic-state setup
+
+If the implementation requires an initialized database, add
+`--state-setup '["./prepare-empty-test-state"]'` to the acceptance command.
+Before the first read-only probe, once per isolated scenario, the runner sends:
+
+```json
+{"adapter_protocol":"jep-byoi/1","operation":"prepare_state","state_dir":"/temporary/scenario","acceptance_domains":["a","b"]}
+```
+
+The trusted setup command must initialize only disposable state and return
+`{"prepared":true}`. It must not accept an event or create a protected effect.
+Both domains must subsequently have zero effects in the original read-only
+probe. A setup error, timeout, unsupported reply or missing acknowledgment cannot
+pass the scenario. Setup is never retried midway through a scenario or used to
+reset unavailable/corrupt state. The command and successful response are retained
+in the scoped report. Existing adapters need no setup flag.
+
+This optional test lifecycle hook is not a JEP event operation or a new Core,
+profile or conformance requirement. A read-only probe must not initialize, reset
+or repair a missing store. When no setup is selected, an adapter must document
+its own lifecycle and any meaning it assigns to an absent store.
 
 ## Run against your implementation
 
@@ -118,6 +150,10 @@ must observe the protected effect's actual committed records, not sum
 `effect_applied` flags or count requests in the runner. Both adapter and probe
 need review; separating the commands alone does not prove the observer correct.
 If no effect observer is available, run the verifier role and disclose the gap.
+
+For a concrete separate implementation, see the [pinned Probity native-BYOI
+integration](PROBITY-NATIVE-BYOI.md). Its JEP-owned bridge is disclosed separately
+from the unchanged reader and the original fixed pilot.
 
 The suite exercises archival non-consumption, safe retry across fresh processes,
 identity conflicts, re-signing unchanged unsigned content, the same ID under a
